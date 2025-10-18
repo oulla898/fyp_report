@@ -1,0 +1,32 @@
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.gz
+*.log
+*.nav
+*.out
+*.snm
+*.synctex*
+*.toc
+*.lof
+*.lot
+*.run.xml
+*.xdv
+*.pdf
+
+# Build folders
+_build/
+latex.out/
+
+# VS Code
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/

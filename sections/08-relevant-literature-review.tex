@@ -1,0 +1,183 @@
+\section{Relevant Literature Review}
+
+
+
+\subsection{The Evolution and Limitations of Clinical Telepresence Robots}
+
+Telepresence robots, often described as a screen on a mobile base, have been the primary robotic solution for remote medical consultations. Commercial systems like the InTouch Health RP-VITA and the VGo robot have been successfully deployed to provide "telestroke" care, enabling neurologists to remotely assess stroke patients in emergency rooms, thereby reducing diagnosis time and improving patient outcomes \cite{garingo2016}. Studies have shown that these systems can effectively facilitate remote rounds, specialist consultations, and family visits, reducing travel costs and exposure to infectious diseases.
+
+However, the literature also highlights significant limitations. A systematic review by Kristoffersson et al. \cite{kristoffersson2013} on the user experience of telepresence robots found that while functional, they often feel impersonal and cumbersome. Clinicians report a high cognitive load associated with manually navigating the robot through cluttered hospital environments, which detracts from their ability to focus on the patient. Furthermore, patients, particularly the elderly and children, perceive the interaction as less engaging than a face-to-face visit, citing the lack of physical embodiment and expressive cues \cite{sabanovic2013}. This "presence gap" limits the robot's utility beyond simple video conferencing, failing to provide the comfort and reassurance crucial for effective care.
+
+\subsection{The Role of Socially Assistive Robotics (SAR) in Patient Engagement}
+
+In parallel, the field of Socially Assistive Robotics (SAR) has focused on the psycho-social aspects of patient care. These robots are designed not to perform physical tasks but to engage, encourage, and comfort patients through social interaction.
+
+For pediatric patients, robots like NAO and PARO (a therapeutic baby seal robot) have been shown to significantly reduce pain perception and anxiety during painful medical procedures such as vaccinations and chemotherapy \cite{beran2013}. The robot acts as a coach and a distractor, creating a more positive and cooperative atmosphere. For elderly populations, SARs have been explored for companionship to combat loneliness, provide cognitive stimulation for dementia patients, and deliver medication reminders to improve treatment adherence \cite{broekens2009}. These studies confirm that a robot's ability to interact socially is a powerful tool for improving patient well-being and clinical outcomes. The primary limitation of SARs, however, is that they are typically specialized, non-mobile or semi-autonomous platforms that lack the high-fidelity telepresence capabilities needed for direct clinical consultation.
+
+\subsection{Autonomous Navigation in Dynamic Healthcare Environments}
+
+The challenge of manual navigation highlighted in telepresence research is being addressed by autonomous mobile robots (AMRs). Systems like the Aethon TUG and the Swisslog Relay are now commonly used in hospitals to transport meals, lab samples, linens, and medications. These robots utilize technologies like LiDAR, SLAM (Simultaneous Localization and Mapping), and dynamic obstacle avoidance algorithms to navigate complex and crowded hospital corridors safely and efficiently \cite{ollikkala2020}.
+
+The success of these logistic robots demonstrates that robust autonomous navigation in clinical settings is a solved engineering problem. However, their application has been almost exclusively logistical. They are designed as "workhorses" that follow predefined paths and have minimal interaction with patients or staff. There is a clear disconnect between the advanced mobility of these AMRs and the patient-facing applications of telepresence and social robotics.
+
+\subsection{Success Stories: Autonomous Robots in Consumer and Industrial Sectors}
+
+\subsubsection{Consumer Market: The Robotic Vacuum Revolution}
+
+The most successful deployment of autonomous mobile robots to the general public has been robotic vacuum cleaners, which dominate the consumer robotics market without serious competition from traditional cleaning methods. The global robotic vacuum cleaner market has experienced explosive growth, with projections indicating expansion from \$9.07 billion in 2024 to \$31.79 billion by 2033, representing a compound annual growth rate (CAGR) of 16.97\% \cite{imarc2024}. Global shipments reached 15.35 million units in the first half of recent years, demonstrating a 33\% year-over-year growth \cite{scmp2024}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.6\textwidth]{figures/vacuum-cleaner.jpg}
+\caption{Modern robotic vacuum cleaners utilize SLAM and localization technologies to autonomously navigate residential spaces, representing the most successful consumer robotics application to date.}
+\label{fig:vacuum}
+\end{figure}
+
+The key to their success lies in the sophisticated implementation of SLAM (Simultaneous Localization and Mapping) and localization technologies. Modern robotic vacuum cleaners employ LiDAR sensors, visual SLAM (VSLAM), and advanced mapping algorithms to create real-time maps of residential environments, enabling efficient path planning and obstacle avoidance \cite{neato2025}. This technology has proven so reliable that robotic vacuums have achieved nearly 40\% of the service robot market share \cite{trendforce2024}, demonstrating that autonomous navigation, when properly implemented, is mature enough for widespread consumer adoption.
+
+\subsubsection{Industrial Market: Amazon's Warehouse Robotics Dominance}
+
+In the industrial sector, the most successful application of autonomous mobile robots has been in warehouse automation, with Amazon leading the field. Amazon has deployed over 750,000 to 1 million robots across its fulfillment network, making it the world's largest fleet of industrial mobile robots \cite{amazon2025}. These include various AMR systems such as:
+
+\begin{itemize}
+\item \textbf{Proteus}: Amazon's first fully autonomous mobile robot designed to work collaboratively with human workers in shared spaces, utilizing advanced sensors and safety features \cite{robotsguide2023}.
+\item \textbf{Pegasus}: A drive unit optimized for transporting larger inventory pods, part of Amazon's goods-to-person automation strategy \cite{amazon2022}.
+\item \textbf{Hercules}: High-capacity drive units capable of lifting heavier loads within the warehouse environment.
+\item \textbf{Kiva Systems}: The foundational robotic platform (acquired in 2012) that initiated Amazon's warehouse automation revolution, using QR code fiducials for localization \cite{agv2024}.
+\end{itemize}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.6\textwidth]{figures/Amazon-Pegasus.jpg}
+\caption{Amazon's Pegasus drive units represent the cutting edge of warehouse AMR technology, demonstrating the commercial viability of autonomous robots in high-traffic industrial environments.}
+\label{fig:amazon}
+\end{figure}
+
+These systems employ sophisticated navigation technologies including fiducial markers, LiDAR, computer vision, and increasingly AI-powered decision-making to navigate crowded warehouse environments with human workers \cite{amazon2024ai}. The success of Amazon's robotics program demonstrates that autonomous mobile robots can operate safely, efficiently, and cost-effectively in complex, dynamic environments with significant human interaction—precisely the conditions found in healthcare settings.
+
+The parallel between warehouse logistics and hospital logistics is striking: both require navigation through cluttered, high-traffic environments, interaction with human workers, precision in delivery tasks, and high reliability. This industrial success provides a strong proof-of-concept that similar AMR technology can be successfully adapted for healthcare applications.
+
+\subsection{Conversational AI and Triage Systems}
+
+With the advent of advanced Large Language Models (LLMs), the potential for intelligent, on-device dialogue has grown exponentially. Current research explores using conversational AI for preliminary patient triage, answering frequently asked questions about conditions or medications, and providing mental health support \cite{laranjo2018}. These systems can offload repetitive communication tasks from nurses and provide patients with instant access to information. However, these solutions are predominantly screen-based (chatbots on websites or apps) and lack a physical presence, which, as established by SAR research, is critical for building trust and providing comfort. Integrating this conversational intelligence into a mobile, embodied platform is the next logical step.
+
+\subsection{Current State of Hospital Robotics: Global Competitive Landscape}
+
+The hospital robotics market has matured significantly, with several manufacturers deploying autonomous mobile robots at scale. Table \ref{tab:competitive} presents a comprehensive comparison of the leading hospital robot platforms currently deployed globally.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{|p{0.5cm}|p{3cm}|p{2cm}|p{3cm}|p{5.5cm}|}
+\hline
+\textbf{Rank} & \textbf{Manufacturer \& Model} & \textbf{Est. Deploy-ments} & \textbf{Key Hospital Applications} & \textbf{Features \& Notes} \\
+\hline
+1 & Pudu Robotics – PuduBot 2 & 15,000–20,000 units (~5,000 healthcare) & Medication/meal delivery, linen transport, waste collection & Multi-floor navigation (elevator integration), VSLAM+LiDAR, 40 kg payload, 6–8 hr battery. Deployed in 100+ hospitals globally (China, Singapore, U.S.); customizable trays, infection-resistant coating. \\
+\hline
+2 & Keenon Robotics – M2 Medical Robot & 8,000–10,000 units (healthcare-focused) & UV-C disinfection, medication/lab sample delivery, patient room cleaning & UV sterilization (99.9\% pathogen kill rate), 40 kg payload, voice interaction, 10 hr runtime. Used in 100+ Chinese hospitals during COVID; exported to U.S./Europe (HIPAA-compliant). \\
+\hline
+3 & Pudu Robotics – PUDU CC1 & 5,000–7,000 units (healthcare + hospitality) & Floor cleaning, disinfection, material transport & Autonomous scrubbing (1,500 m²/hr), self-charging, obstacle avoidance. Popular in Chinese/U.S. hospitals for large-scale sanitation; integrates with PuduBot for hybrid tasks. \\
+\hline
+4 & Keenon Robotics – Peanut Medical & 3,000–5,000 units & Medication/meal delivery, patient guidance, telepresence & Compact (59 cm wide), multi-modal navigation, 30 kg payload. Deployed in Asia-Pacific hospitals; supports remote doctor-patient interaction via screen. \\
+\hline
+\end{tabular}
+\caption{Competitive analysis of leading hospital AMR platforms by global deployment and capabilities.}
+\label{tab:competitive}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/pudubot-sante.png}
+\caption{Pudu Robotics PuduBot 2}
+\label{fig:pudubot}
+\end{minipage}\hfill
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/KEENON-M2-Disinfection-Robot.jpg}
+\caption{Keenon M2 Medical Robot}
+\label{fig:keenon}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/pudu-cc1.jpeg}
+\caption{Pudu Robotics PUDU CC1}
+\label{fig:cc1}
+\end{minipage}\hfill
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{figures/peanut.jpg}
+\caption{Keenon Peanut Medical}
+\label{fig:peanut}
+\end{minipage}
+\end{figure}
+
+\clearpage
+\subsection{Core Technologies Breakdown}
+       The challenge of manual navigation highlighted in telepresence research is being addressed by autonomous mobile robots (AMRs). Systems like the Aethon TUG and the Swisslog Relay are now commonly used in hospitals to transport meals, lab samples, linens, and medications. These robots utilize technologies like LiDAR, SLAM (Simultaneous Localization and Mapping), and dynamic obstacle avoidance algorithms to navigate complex and crowded hospital corridors safely and efficiently.
+
+
+
+
+The successful deployment of Autonomous Mobile Robots (AMRs) in operational environments presents significant challenges, particularly concerning safety and effective navigation within dynamic settings, which can lead to system failures and, notably, often results in user discomfort. A study examining three KMP AMRs successfully demonstrated the ability to navigate a static environment without collisions or safety events. However, this controlled environment exposed critical performance issues, including significant time variability between identical trips, poor docking accuracy required for recharging, and a relatively low average operating speed of 0.5 m/s substantially slower than the average human speed of 1.5 m/s. These robots, designed for predictable goods transport within product stores, contrast sharply with the objective of designing safe autonomous systems for highly dynamic and non-predictable environments.
+Furthermore, the physical characteristics and cost of current industrial AMRs pose a barrier to wider adoption. The tested KMP robot models, with large dimensions (1.080mlength, 0.700m height, and 0.640m width), necessitate complex components and extensive sensor arrays, contributing to a high unit cost. For instance, a basic navigation model like the KMP 600 is priced between $80,000 and $120,000, making it unaffordable for many potential users.
+
+Accurate, real-time positioning is one of the key elements for successive AMR navigation, enabling both correct path-following and simultaneous map building. Real industrial robots often combine multiple solutions to enhance localization accuracy.
+\textbf{Radio Frequency (RF) Localization Technologies}
+
+\subsection{Benefits of Autonomous Mobile Robots in Healthcare Settings}
+
+Recent literature and deployment data reveal multiple evidence-based benefits of AMRs in hospital environments:
+
+\subsubsection{Infection Control and Reduced Human Contact}
+
+AMRs significantly minimize human-to-human contact, reducing cross-contamination risks—a critical advantage demonstrated during the COVID-19 pandemic \cite{intel2024, frontiers2024}. Autonomous delivery robots eliminate the need for multiple staff members to handle potentially contaminated materials, reducing occupational exposure and conserving personal protective equipment. UV-C disinfection robots have been shown to achieve 99.9\% pathogen kill rates on environmental surfaces, helping reduce hospital-acquired infections (HAIs) \cite{sciencedirect2021}.
+
+\subsubsection{Wayfinding and Visitor Guidance}
+
+Intelligent hospital guidance robots provide accurate navigation assistance to visitors and patients, reducing confusion and staff burden \cite{pmc2024nursing}. These robots can escort visitors to patient rooms, provide multilingual directions, and answer frequently asked questions about hospital facilities, allowing staff to focus on clinical care.
+
+\subsubsection{Material Transport and Delivery}
+
+AMRs excel at routine delivery tasks including medications, meals, linens, laboratory specimens, and medical supplies \cite{mdpi2024}. This automation frees nursing staff from non-clinical transport duties, allowing them to spend more time on direct patient care. Studies indicate that delivery robots can reduce staff time spent on logistics by up to 30\%.
+
+\subsubsection{Psychological Support and Patient Morale}
+
+Research consistently demonstrates that pediatric patients exhibit positive emotional responses to robot interactions \cite{beran2013}. Socially interactive robots reduce anxiety, provide distraction during painful procedures, and improve treatment compliance in children. Studies show that patients perceive robotic companions as non-judgmental, reducing psychological barriers to seeking help or expressing concerns \cite{ahu2024}.
+
+\subsubsection{Autonomous Disinfection and Cleaning}
+
+Cleaning and disinfection robots can be equipped with UV-C light systems at relatively low cost, providing continuous environmental sanitation \cite{intel2024}. These robots operate during off-peak hours without human supervision, ensuring consistent hygiene standards while minimizing disruption to clinical workflows.
+
+\subsubsection{Telepresence and Virtual Presence}
+
+AMRs with integrated telepresence capabilities enable remote consultations, family visits, and specialist rounds without requiring travel \cite{garingo2016}. This technology proved invaluable during pandemic restrictions and continues to provide value for rural healthcare access and specialist consultations.
+
+\subsubsection{Waste Collection and Handling}
+
+Some advanced AMR systems are deployed for biohazardous waste collection and disposal, reducing staff exposure to potentially infectious materials. In China and other Asian markets, robots have been successfully implemented for collecting and transporting medical waste from patient rooms to centralized disposal areas.
+
+\subsection{Challenges in Hospital AMR Deployment}
+
+Despite the significant benefits, several challenges remain:
+
+\subsubsection{Cost and Return on Investment}
+
+Hospital-grade AMRs represent substantial capital investments, typically ranging from \$50,000 to \$150,000 per unit depending on capabilities. Healthcare administrators require clear ROI demonstration through labor savings, efficiency gains, and improved outcomes to justify procurement \cite{mdpi2024}.
+
+\subsubsection{System Integration Complexity}
+
+Integrating AMRs with existing hospital information systems (HIS), electronic health records (EHR), elevator controls, automatic doors, and staff communication systems presents significant technical challenges. Interoperability standards are still evolving, requiring custom integration work for each deployment \cite{frontiers2024}.
+
+\subsubsection{Safety, Privacy, and Trust}
+
+Regulatory compliance (HIPAA, GDPR), patient data security, and physical safety in crowded environments remain critical concerns. Healthcare facilities must ensure that robots can safely navigate around patients, visitors, and medical equipment while maintaining patient privacy and data security \cite{jmir2024}. Building trust among staff and patients requires careful change management and demonstration of reliability.
+
+\subsubsection{Regulatory and Liability Issues}
+
+Medical device regulations, liability frameworks for autonomous systems, and insurance considerations create additional barriers to widespread adoption. Healthcare organizations must navigate complex approval processes and establish clear accountability frameworks for robot operations.
