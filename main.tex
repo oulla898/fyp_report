@@ -11,42 +11,74 @@
 \usepackage{tabularx} 
 \usepackage{caption}
 \usepackage{float}
+\usepackage{hyperref} % For clickable table of contents
 \graphicspath{{figures/}} % For including images
 
-\setlength{\droptitle}{-2cm}
-
-\title{\ Smart Healthcare Robot: Bringing Care Closer to Patients in Oman}
-\author{} % Hides the default author
-\date{\today}
+% Configure hyperref for better appearance
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    urlcolor=black,
+    pdfborder={0 0 0}
+}
 
 \begin{document}
 
-\maketitle
+% --- Custom Title Page ---
+\begin{titlepage}
+\centering
 
-% --- Student and Supervisor Tables on the First Page ---
-\vspace*{2cm} % Add some space after the title
+\vspace*{1cm}
 
-\begin{center}
-\begin{tabular}{|l|l|l|}
-\hline
-\textbf{SNo.} & \textbf{Student's Name} & \textbf{ID} \\
-\hline
-1 & Almoulla Talal Almaawali& 135591\\\hline
-2 & Abdulmunim Khamis Albusaidi& 133225\\\hline
-3 & & \\
-\hline
-\end{tabular}
-\end{center}
+% University Header
+{\Large\textbf{SULTAN QABOOS UNIVERSITY}}\\[0.4cm]
+{\large College of Engineering}\\[0.3cm]
+{\large Department of Electrical and Computer Engineering}\\[0.2cm]
+{\normalsize Computer Systems and Networks}
 
-\vspace*{3cm} % Space between tables
+\vspace{3cm}
 
+% Project Title
+{\Huge\textbf{Smart Healthcare Robot}}\\[0.8cm]
+{\LARGE Bringing Care Closer to Patients in Oman}
+
+\vspace{3cm}
+
+% Project Type
+{\large\textbf{Final Year Project Report}}
+
+\vspace{2.5cm}
+
+% Students
 \begin{flushleft}
-\textbf{Supervisor:} \\
-Ahmed Chehib Ammari
+\hspace{3cm}\textbf{Submitted by:}\\[0.5cm]
+\hspace{4cm}Almoulla Talal Almaawali \hfill 135591\\[0.3cm]
+\hspace{4cm}Abdulmunim Khamis Albusaidi \hfill 133225\\[0.3cm]
+\hspace{4cm}\hfill \\
 \end{flushleft}
 
-\vfill % Fills the rest of the page with whitespace
-\newpage % Starts the next section on a new page
+\vspace{1.5cm}
+
+% Supervisor
+\begin{flushleft}
+\hspace{3cm}\textbf{Supervised by:}\\[0.5cm]
+\hspace{4cm}Ahmed Chehib Ammari
+\end{flushleft}
+
+\vfill
+
+% Date
+{\large Academic Year 2024--2025}\\[0.4cm]
+{\normalsize\today}
+
+\end{titlepage}
+
+% --- Table of Contents ---
+\tableofcontents
+\thispagestyle{empty}
+\newpage
+\setcounter{page}{1}
 
 % --- Main Sections Structure ---
 \section{Introduction}

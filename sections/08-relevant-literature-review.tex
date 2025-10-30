@@ -151,6 +151,74 @@ Beyond external RF systems, autonomous navigation heavily relies on SLAM with mu
 \label{fig:slam}
 \end{figure}
 
+\subsubsection{Mobile Robot Platform Selection}
+
+The selection of an appropriate mobile robot platform is a critical decision that directly impacts system reliability, development time, and operational costs. For a healthcare telepresence robot operating in hospital corridors and patient rooms, the platform must satisfy several essential technical and operational requirements while remaining within practical budget constraints.
+
+\paragraph{Platform Requirements.}
+The system requires a wheeled mobile robot platform with the following capabilities:
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Autonomous docking and charging}: The platform must support autonomous return-to-base functionality with a charging dock, enabling unattended operation and automatic battery management. High-level API commands such as \texttt{dock()} or \texttt{return\_to\_charge()} are essential for seamless integration with the navigation stack.
+    
+    \item \textbf{ROS/ROS 2 compatibility}: Native support for the Robot Operating System is required to leverage existing navigation packages (Nav2, SLAM Toolbox, AMCL) and facilitate rapid development and integration of custom behaviors.
+    
+    \item \textbf{Payload capacity}: The platform must support 5--10~kg of additional payload to accommodate a telepresence screen (tablet or monitor), onboard computer (Raspberry Pi or Jetson Nano), camera system, and potential accessories such as speakers or mounting hardware.
+    
+    \item \textbf{Indoor navigation sensors}: Integration points for LiDAR (2D or 3D), depth cameras, or other sensors required for SLAM-based autonomous navigation in dynamic hospital environments.
+    
+    \item \textbf{Safety and reliability}: Cliff detection, bumper sensors, emergency stop functionality, and predictable motion control to ensure safe operation around patients, visitors, and medical staff.
+\end{itemize}
+
+\paragraph{Project Constraints.}
+Budget constraints significantly influence platform selection. The target budget for the mobile base, charging dock, and core sensors is approximately \$1,000--\$1,500 USD, recognizing that higher-cost industrial platforms (\$5,000+) exceed the scope of an educational research project. Additional constraints include global availability (shipping to Oman), vendor support and documentation quality, and community resources for troubleshooting and development.
+
+\paragraph{Platform Comparison.}
+Table~\ref{tab:platforms} presents a comparative analysis of commercially available mobile robot platforms evaluated against the project requirements. Platforms are categorized by cost tier and assessed on key criteria including autonomous docking capability, ROS compatibility, payload capacity, and suitability for healthcare telepresence applications.
+
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabular}{|p{3.2cm}|l|c|c|c|p{4.5cm}|}
+\hline
+\textbf{Platform} & \textbf{Price (USD)} & \textbf{Dock} & \textbf{ROS} & \textbf{Payload} & \textbf{Notes} \\
+\hline
+\multicolumn{6}{|c|}{\textit{Budget Tier (\$500--\$1,000)}} \\
+\hline
+iRobot Create 3 & \$549 & Yes & ROS 2 & 9~kg & Roomba-based, proven docking, ideal for education \\
+\hline
+Kobuki Base (used) & \$500--700 & Yes & ROS 1/2 & 5~kg & TurtleBot 2 base, discontinued but widely available \\
+\hline
+Yahboom ROSMASTER X3 & \$699 & DIY & ROS 1 & 5--8~kg & Mecanum wheels, requires custom docking solution \\
+\hline
+Elephant Robotics MyAGV 2023 & \$899 & DIY & ROS 1 & 8~kg & Mecanum wheels, 2D SLAM ready, Python/ROS compatible \\
+\hline
+\multicolumn{6}{|c|}{\textit{Mid Tier (\$1,000--\$2,000)}} \\
+\hline
+SLAMTEC Apollo & \$1,200 & Yes & ROS 1/2 & 50~kg & Same platform as Pudu/Keenon hospital robots \\
+\hline
+TurtleBot 4 Standard & \$1,400 & Yes & ROS 2 & 9~kg & Research-grade, Nav2 pre-configured, Lidar included \\
+\hline
+Husarion ROSbot 2R & \$1,600 & Optional & ROS 2 & 10~kg & Mecanum wheels, hospital navigation demos available \\
+\hline
+AgileX LIMO Pro & \$1,799 & Optional & ROS 2 & 10~kg & 4-mode steering, Jetson Nano, research platform \\
+\hline
+\multicolumn{6}{|c|}{\textit{High-End / Not Suitable}} \\
+\hline
+Clearpath Jackal & \$18,000+ & Optional & ROS 1/2 & 20~kg & Industrial-grade, exceeds budget \\
+\hline
+Rover Robotics Zero & \$2,500+ & \$950 & ROS 1/2 & 22~kg & Outdoor-rated, dock sold separately \\
+\hline
+\end{tabular}
+\caption{Comparative analysis of mobile robot platforms for healthcare telepresence applications \cite{irobot2024create3, slamtec2024, turtlebot2024, yahboom2024, elephantrobotics2024, agilex2024, husarion2024}.}
+\label{tab:platforms}
+\end{table}
+
+\paragraph{Platform Selection Rationale.}
+The \textbf{iRobot Create 3} is selected as the optimal platform based on cost-effectiveness, proven reliability, and feature completeness \cite{irobot2024create3}. At \$549 with an included autonomous charging dock, it eliminates the \$800--\$950 docking station costs required by competing platforms. The platform leverages Roomba's decade-proven docking technology, offers native ROS 2 support with Nav2 compatibility, and provides sufficient 9~kg payload for a tablet display, Raspberry Pi 4, and camera system. Safety features including cliff detection and bump sensors ensure safe operation in patient areas.
+
+While alternatives like SLAMTEC Apollo (\$1,200) \cite{slamtec2024} offer higher payload (50~kg) and are deployed in hospital robots, or TurtleBot 4 (\$1,400) \cite{turtlebot2024} provides integrated LiDAR, both exceed budget constraints. Budget options like Yahboom ROSMASTER X3 (\$699) \cite{yahboom2024} or Elephant Robotics MyAGV (\$899) \cite{elephantrobotics2024} offer mecanum mobility but lack proven autonomous docking, introducing development risk.
+
 \subsubsection{Conversational AI and Large Language Models (LLMs)}
 The field of large language models (LLMs) has witnessed transformative advancements, establishing them as a core technology for conversational AI. An LLM is a sophisticated artificial intelligence system trained on vast datasets of text and code, enabling it to understand, generate, and interact with human language in a nuanced manner. These models have rapidly transitioned from research prototypes to industrial-scale technologies, resulting in a proliferation of models with distinct strengths and commercial terms.
 The LLM landscape is broadly divided into two categories: open-source and proprietary. Open-source models, such as Meta's Llama series and the DeepSeek series, offer significant flexibility, allowing for deep customization and fine-tuning to meet specific application needs, often at a lower cost \cite{civo2024}. However, they may require more complex setup and can sometimes lag behind proprietary counterparts in raw performance. In contrast, privately-owned models like OpenAI's GPT series and Google's Gemini series typically offer state-of-the-art performance and are adept at handling highly complex tasks. This performance comes with trade-offs, including higher operational costs and potential data privacy concerns, which are critical considerations in healthcare applications \cite{musick2025}. The selection of an LLM depends on a careful balance between performance requirements, budget, customizability, and data governance policies. The following table provides a consolidated overview of the key characteristics for each of those 4 LLMs.
