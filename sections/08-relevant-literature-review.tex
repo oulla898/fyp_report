@@ -1,16 +1,14 @@
 
 
-\subsection{Introduction}
+\subsection{Motivation and State of the Field}
 
-The integration of robotics and artificial intelligence into healthcare is advancing rapidly, driven by challenges such as aging populations, rising healthcare costs, and medical staff shortages. Researchers have developed various robotic solutions, including telepresence robots for remote consultations, autonomous robots for logistics, and socially assistive robots (SARs) for patient engagement. While each type has proven useful, they often function in isolation, addressing only part of patients’ and clinicians’ overall needs. The goal is to show that although the components for such a system already exist, combining them into a single, user-friendly, and autonomous platform remains an underexplored area with high potential, especially for improving healthcare accessibility in regions like Oman.
+The integration of robotics and artificial intelligence into healthcare is advancing rapidly, driven by challenges such as aging populations, rising healthcare costs, and medical staff shortages. Researchers have developed various robotic solutions, including telepresence robots for remote consultations, autonomous robots for logistics, and socially assistive robots (SARs) for patient engagement. While each type has proven useful, they often function in isolation, addressing only part of patients' and clinicians' overall needs. The goal is to show that although the components for such a system already exist, combining them into a single, user-friendly, and autonomous platform remains an underexplored area with high potential, especially for improving healthcare accessibility in regions like Oman.
 
-Telepresence robots, often described as a mobile screen, are widely used for remote medical consultations. Systems such as InTouch Health RP-VITA and the VGo robot have been used successfully in “telestroke” care, allowing neurologists to assess patients remotely, reduce diagnosis time, and improve outcomes \cite{garingo2016}. These systems support remote rounds, specialist consultations, and family visits, cutting travel costs and reducing infection risks. However, studies also note several drawbacks. A review by Kristoffersson et al. \cite{kristoffersson2013} found that telepresence robots, though functional, often feel impersonal and difficult to control. Clinicians report high cognitive load when navigating cluttered hospital spaces. Patients, especially the elderly and children, also find these robots less engaging than in-person visits due to limited physical embodiment and lack of expressive cues \cite{sabanovic2013}. This “presence gap” limits their effectiveness beyond basic video conferencing, reducing their ability to offer comfort and reassurance during care.
+Telepresence robots, often described as a mobile screen, are widely used for remote medical consultations. Systems such as InTouch Health RP-VITA and the VGo robot have been used successfully in "telestroke" care, allowing neurologists to assess patients remotely, reduce diagnosis time, and improve outcomes \cite{garingo2016}. These systems support remote rounds, specialist consultations, and family visits, cutting travel costs and reducing infection risks. However, studies also note several drawbacks. A review by Kristoffersson et al. \cite{kristoffersson2013} found that telepresence robots, though functional, often feel impersonal and difficult to control. Clinicians report high cognitive load when navigating cluttered hospital spaces. Patients, especially the elderly and children, also find these robots less engaging than in-person visits due to limited physical embodiment and lack of expressive cues \cite{sabanovic2013}. This "presence gap" limits their effectiveness beyond basic video conferencing, reducing their ability to offer comfort and reassurance during care.
 
 This literature review aims to build a comprehensive case for the development of an integrated, autonomous healthcare robotics platform. It begins by examining the current state and limitations of distinct domains within healthcare robotics: telepresence for remote consultation, socially assistive robots for patient engagement, and autonomous mobile robots for logistics. The review then draws parallels with the consumer and industrial sectors, where autonomous navigation has reached maturity and widespread adoption. By systematically analyzing the strengths and weaknesses of these disparate technologies, this survey identifies a critical research gap: the absence of a unified system that synthesizes clinical telepresence, social interaction, and autonomous mobility. The purpose is to establish a clear rationale for a novel robotic solution that merges these capabilities to create a more holistic and effective tool for patient care.
 
-\subsection{Literature Survey}
-
-\subsection{Success Stories: Autonomous Robots in Consumer and Industrial Sectors}
+\subsubsection{Success Stories: Autonomous Robots in Consumer and Industrial Sectors}
 
 %\subsubsection{Consumer Market: The Robotic Vacuum Revolution}
 
@@ -25,48 +23,48 @@ The most successful deployment of autonomous mobile robots to the general public
 
 The key to their success lies in the sophisticated implementation of SLAM (Simultaneous Localization and Mapping) and localization technologies. Modern robotic vacuum cleaners employ LiDAR sensors, visual SLAM (VSLAM), and advanced mapping algorithms to create real-time maps of residential environments, enabling efficient path planning and obstacle avoidance \cite{neato2025}. This technology has proven so reliable that robotic vacuums have achieved nearly 40\% of the service robot market share \cite{trendforce2024}, demonstrating that autonomous navigation, when properly implemented, is mature enough for widespread consumer adoption.
 
-\subsection{Benefits of Autonomous Mobile Robots in Healthcare Settings}
+\subsubsection{Benefits of Autonomous Mobile Robots in Healthcare Settings}
 
 Recent literature and deployment data reveal multiple evidence-based benefits of AMRs in hospital environments:
 
-\subsubsection{Infection Control and Reduced Human Contact}
+\paragraph{Infection Control and Reduced Human Contact.}
 AMRs significantly minimize human-to-human contact, reducing cross-contamination risks—a critical advantage demonstrated during the COVID-19 pandemic \cite{intel2024, frontiers2024}. Autonomous delivery robots eliminate the need for multiple staff members to handle potentially contaminated materials, reducing occupational exposure and conserving personal protective equipment. UV-C disinfection robots have been shown to achieve 99.9\% pathogen kill rates on environmental surfaces, helping reduce hospital-acquired infections (HAIs) \cite{sciencedirect2021}.
 
-\subsubsection{Wayfinding and Visitor Guidance}
+\paragraph{Wayfinding and Visitor Guidance.}
 Intelligent hospital guidance robots provide accurate navigation assistance to visitors and patients, reducing confusion and staff burden \cite{pmc2024nursing}. These robots can escort visitors to patient rooms, provide multilingual directions, and answer frequently asked questions about hospital facilities, allowing staff to focus on clinical care.
 
-\subsubsection{Material Transport and Delivery}
+\paragraph{Material Transport and Delivery.}
 AMRs excel at routine delivery tasks including medications, meals, linens, laboratory specimens, and medical supplies \cite{mdpi2024}. This automation frees nursing staff from non-clinical transport duties, allowing them to spend more time on direct patient care. Studies indicate that delivery robots can reduce staff time spent on logistics by up to 30\%.
 
-\subsubsection{Psychological Support and Patient Morale}
+\paragraph{Psychological Support and Patient Morale.}
 Research consistently demonstrates that pediatric patients exhibit positive emotional responses to robot interactions \cite{beran2013}. Socially interactive robots reduce anxiety, provide distraction during painful procedures, and improve treatment compliance in children. Studies show that patients perceive robotic companions as non-judgemental, reducing psychological barriers to seeking help or expressing concerns \cite{ahu2024}.
 
-\subsubsection{Autonomous Disinfection and Cleaning}
+\paragraph{Autonomous Disinfection and Cleaning.}
 Cleaning and disinfection robots can be equipped with UV-C light systems at relatively low cost, providing continuous environmental sanitation \cite{intel2024}. These robots operate during off-peak hours without human supervision, ensuring consistent hygiene standards while minimizing disruption to clinical workflows.
 
-\subsubsection{Telepresence and Virtual Presence}
+\paragraph{Telepresence and Virtual Presence.}
 AMRs with integrated telepresence capabilities enable remote consultations, family visits, and specialist rounds without requiring travel \cite{garingo2016}. This technology proved invaluable during pandemic restrictions and continues to provide value for rural healthcare access and specialist consultations.
 
-\subsubsection{Waste Collection and Handling}
+\paragraph{Waste Collection and Handling.}
 Some advanced AMR systems are deployed for biohazardous waste collection and disposal, reducing staff exposure to potentially infectious materials. In China and other Asian markets, robots have been successfully implemented for collecting and transporting medical waste from patient rooms to centralized disposal areas.
 
-\subsection{Challenges in Hospital AMR Deployment}
+\subsubsection{Challenges in Hospital AMR Deployment}
 
 Despite the significant benefits, several challenges remain:
 
-\subsubsection{Cost and Return on Investment}
+\paragraph{Cost and Return on Investment.}
 Hospital-grade AMRs represent substantial capital investments, typically ranging from \$50,000 to \$150,000 per unit depending on capabilities. Healthcare administrators require clear ROI demonstration through labor savings, efficiency gains, and improved outcomes to justify procurement \cite{mdpi2024}.
 
-\subsubsection{System Integration Complexity}
+\paragraph{System Integration Complexity.}
 Integrating AMRs with existing hospital information systems (HIS), electronic health records (EHR), elevator controls, automatic doors, and staff communication systems presents significant technical challenges. Interoperability standards are still evolving, requiring custom integration work for each deployment \cite{frontiers2024}.
 
-\subsubsection{Safety, Privacy, and Trust}
+\paragraph{Safety, Privacy, and Trust.}
 Regulatory compliance (HIPAA, GDPR), patient data security, and physical safety in crowded environments remain critical concerns. Healthcare facilities must ensure that robots can safely navigate around patients, visitors, and medical equipment while maintaining patient privacy and data security \cite{jmir2024}. Building trust among staff and patients requires careful change management and demonstration of reliability.
 
-\subsubsection{Regulatory and Liability Issues}
+\paragraph{Regulatory and Liability Issues.}
 Medical device regulations, liability frameworks for autonomous systems, and insurance considerations create additional barriers to widespread adoption. Healthcare organizations must navigate complex approval processes and establish clear accountability frameworks for robot operations.
 
-\subsection{Overview of Existing Robots in Healthcare}
+\subsubsection{Overview of Existing Robots in Healthcare}
 The hospital robotics market has matured significantly, with several manufacturers deploying autonomous mobile robots at scale. Table~\ref{tab:competitive} presents a comprehensive comparison of leading hospital robot platforms currently deployed in eastern markets.
 
 \begin{table}[H]
@@ -85,7 +83,7 @@ The hospital robotics market has matured significantly, with several manufacture
 4 & Keenon Robotics – Peanut Medical & 3,000–5,000 units & Medication/meal delivery, patient guidance, telepresence & Compact (59 cm wide), multi-modal navigation, 30 kg payload. Deployed in Asia-Pacific hospitals; supports remote doctor-patient interaction via screen. \\
 \hline
 \end{tabular}
-\caption{Competitive analysis of leading hospital AMR platforms by global deployment and capabilities.}
+\caption{Competitive analysis of leading hospital AMR platforms by global deployment and capabilities \cite{mdpi2024, intel2024, frontiers2024}.}
 \label{tab:competitive}
 \end{table}
 
@@ -121,21 +119,21 @@ The hospital robotics market has matured significantly, with several manufacture
 
 In parallel, the field of Socially Assistive Robotics (SAR) has focused on the psycho-social aspects of patient care. These robots are designed not to perform physical tasks but to engage, encourage, and comfort patients through social interaction. For pediatric patients, robots like NAO and PARO (a therapeutic baby seal robot) have been shown to significantly reduce pain perception and anxiety during painful medical procedures such as vaccinations and chemotherapy \cite{beran2013}. The robot acts as a coach and a distractor, creating a more positive and cooperative atmosphere. For elderly populations, SARs have been explored for companionship to combat loneliness, provide cognitive stimulation for dementia patients, and deliver medication reminders to improve treatment adherence \cite{broekens2009}. These studies confirm that a robot's ability to interact socially is a powerful tool for improving patient well-being and clinical outcomes. The primary limitation of SARs, however, is that they are typically specialized, non-mobile or semi-autonomous platforms that lack the high-fidelity telepresence capabilities needed for direct clinical consultation.
 
-\subsection{Core Technologies Breakdown}
-This section deconstructs the essential technologies that form the foundation of an advanced autonomous healthcare robot. It explores supplementary localization methods, including Radio Frequency (RF) Technologies like UWB and AoA, followed by a deeper dive into SLAM-Based Sensor Fusion Techniques that integrate multiple data streams for robust performance. Finally, it examines the role of Conversational AI and Large Language Models (LLMs), which provide the intelligence for human-robot interaction
+\subsection{Technical Building Blocks}
+This section deconstructs the essential technologies that form the foundation of an advanced autonomous healthcare robot. It explores supplementary localization methods, including Radio Frequency (RF) Technologies like UWB and AoA, followed by a deeper dive into SLAM-Based Sensor Fusion Techniques that integrate multiple data streams for robust performance. Finally, it examines the role of Conversational AI and Large Language Models (LLMs), which provide the intelligence for human-robot interaction.
+
 \subsubsection{Navigation System}
 The challenge of manual navigation highlighted in telepresence research is being addressed by autonomous mobile robots (AMRs). Systems like the Aethon TUG and the Swisslog Relay are now commonly used in hospitals to transport meals, lab samples, linens, and medications. These robots utilize technologies like LiDAR, SLAM (Simultaneous Localization and Mapping), and dynamic obstacle avoidance algorithms to navigate complex and crowded hospital corridors safely and efficiently. The successful deployment of AMRs in operational environments presents significant challenges, particularly concerning safety and effective navigation within dynamic settings, which can lead to system failures and user discomfort. A study examining three KMP AMRs demonstrated navigation in a static environment without collisions or safety events, but exposed performance issues: significant time variability between identical trips, poor docking accuracy for recharging, and relatively low average operating speed (~0.5 m/s) compared to ~1.5 m/s human walking speed. These platforms, designed for predictable goods transport, contrast with the goal of safe autonomy in highly dynamic, non-predictable environments. Moreover, the physical characteristics and cost of industrial AMRs (e.g., large footprints and complex sensor stacks) raise barriers to adoption; a basic navigation model such as the KMP 600 is often priced in the \$80,000 to \$120,000 range.
 
 \subsubsection{Radio Frequency (RF) Localization Technologies}
-Various RF technologies including Wi-Fi, RFID, Bluetooth Low Energy (BLE), ZigBee, and Ultra-Wideband (UWB) are employed, with selection criteria based on coverage, scalability, battery life, accuracy, and cost.
-\paragraph{Ultra-Wideband (UWB).} UWB solutions offer extended coverage and strong scalability due to multiple nodes sharing spectrum. UWB tags typically achieve multi-year battery life. Cost is somewhat higher; for example, instrumenting a 5000m² facility may cost up to \$20,000. Reported accuracy in industrial scenarios varies (approximately 20cm to greater than 1~m) and degrades in cluttered/metallic environments or very large warehouses.
+Various RF technologies including Wi-Fi, RFID, Bluetooth Low Energy (BLE), ZigBee, and Ultra-Wideband (UWB) are employed, with selection criteria based on coverage, scalability, battery life, accuracy, and cost. UWB solutions offer extended coverage and strong scalability due to multiple nodes sharing spectrum. UWB tags typically achieve multi-year battery life. Cost is somewhat higher; for example, instrumenting a 5000m² facility may cost up to \$20,000. Reported accuracy in industrial scenarios varies (approximately 20cm to greater than 1~m) and degrades in cluttered/metallic environments or very large warehouses.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.6\textwidth]{figures/uwb.png}
 \caption{UWB anchor–tag geometry for ranging and multilateration-based localization in indoor environments.}
 \label{fig:uwb}
 \end{figure}
-\paragraph{Angle of Arrival (AoA).} AoA (often via BLE 5.1+ or UWB Direction Finding) estimates a target’s angle using a beacon/tag and a robot-mounted antenna array, reducing reliance on dense static infrastructure. BLE-based tags offer excellent battery life (years). Limitations include line-of-sight sensitivity and variable accuracy; hybrid AoA + RSSI filtering can improve precision, achieving mean errors on the order of 12 cm in simulation even in cluttered settings \cite{weinmann2023}.
+AoA (often via BLE 5.1+ or UWB Direction Finding) estimates a target's angle using a beacon/tag and a robot-mounted antenna array, reducing reliance on dense static infrastructure. BLE-based tags offer excellent battery life (years). Limitations include line-of-sight sensitivity and variable accuracy; hybrid AoA + RSSI filtering can improve precision, achieving mean errors on the order of 12 cm in simulation even in cluttered settings \cite{weinmann2023}.
 
 \begin{figure}[H]
 \centering
@@ -145,15 +143,14 @@ Various RF technologies including Wi-Fi, RFID, Bluetooth Low Energy (BLE), ZigBe
 \end{figure}
 
 \subsubsection{SLAM-Based Sensor Fusion Techniques}
-Beyond external RF systems, autonomous navigation heavily relies on SLAM with multi-sensor fusion for robustness.
-\paragraph{LiDAR, IMU, and Odometry Fusion.} A common stack fuses 2D LiDAR with an IMU and wheel odometry. IMU and odometry constrain motion, correcting LiDAR motion distortion and mitigating slip-induced drift. Studies report substantial gains—for example, approximately 27\% improvement in rotation error and greater than 67\% reduction in position error—relative to LiDAR-only SLAM, at the expense of added system complexity and compute \cite{doduc2024}.
-\paragraph{Visual SLAM (VSLAM).} VSLAM leverages monocular/stereo/RGB-D cameras for localization and mapping with low-cost, lightweight hardware and richer scene semantics. Challenges include texture-poor or repetitive environments and scale ambiguity in monocular pipelines (e.g., early ORB-SLAM 2.0). Modern trends favor hybrid Visual–Inertial–Ranging–LiDAR (VIRAL) SLAM to boost robustness in complex settings \cite{tourani2022}.
+Beyond external RF systems, autonomous navigation heavily relies on SLAM with multi-sensor fusion for robustness. A common stack fuses 2D LiDAR with an IMU and wheel odometry. IMU and odometry constrain motion, correcting LiDAR motion distortion and mitigating slip-induced drift. Studies report substantial gains—for example, approximately 27\% improvement in rotation error and greater than 67\% reduction in position error—relative to LiDAR-only SLAM, at the expense of added system complexity and compute \cite{doduc2024}. VSLAM leverages monocular/stereo/RGB-D cameras for localization and mapping with low-cost, lightweight hardware and richer scene semantics. Challenges include texture-poor or repetitive environments and scale ambiguity in monocular pipelines (e.g., early ORB-SLAM 2.0). Modern trends favor hybrid Visual–Inertial–Ranging–LiDAR (VIRAL) SLAM to boost robustness in complex settings \cite{tourani2022}.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.75\textwidth]{figures/slam.png}
 \caption{Illustration of SLAM fusion: visual/laser perception integrated with inertial and odometric constraints for robust state estimation.}
 \label{fig:slam}
 \end{figure}
+
 \subsubsection{Conversational AI and Large Language Models (LLMs)}
 The field of large language models (LLMs) has witnessed transformative advancements, establishing them as a core technology for conversational AI. An LLM is a sophisticated artificial intelligence system trained on vast datasets of text and code, enabling it to understand, generate, and interact with human language in a nuanced manner. These models have rapidly transitioned from research prototypes to industrial-scale technologies, resulting in a proliferation of models with distinct strengths and commercial terms.
 The LLM landscape is broadly divided into two categories: open-source and proprietary. Open-source models, such as Meta's Llama series and the DeepSeek series, offer significant flexibility, allowing for deep customization and fine-tuning to meet specific application needs, often at a lower cost \cite{civo2024}. However, they may require more complex setup and can sometimes lag behind proprietary counterparts in raw performance. In contrast, privately-owned models like OpenAI's GPT series and Google's Gemini series typically offer state-of-the-art performance and are adept at handling highly complex tasks. This performance comes with trade-offs, including higher operational costs and potential data privacy concerns, which are critical considerations in healthcare applications \cite{musick2025}. The selection of an LLM depends on a careful balance between performance requirements, budget, customizability, and data governance policies. The following table provides a consolidated overview of the key characteristics for each of those 4 LLMs.
@@ -176,7 +173,7 @@ Meta Llama 3.1 405B & Meta & Llama 3.1 Community License & 128,000--131,072 & \t
 DeepSeek V3 & DeepSeek & MIT (Code) / DeepSeek Model & 128,000--164,000 & \textasciitilde\$0.14--\$0.48 & \textasciitilde\$0.28--\$1.10 \\
 \hline
 \end{tabularx}
-\caption{Comparative analysis of leading Large Language Models. Data compiled from early 2025 period.}
+\caption{Comparative analysis of leading Large Language Models. Data compiled from early 2025 period \cite{civo2024, musick2025}.}
 \label{tab:llm_comparison}
 \end{table}
 
