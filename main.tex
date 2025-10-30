@@ -10,6 +10,7 @@
 \usepackage{graphicx}
 \usepackage{tabularx} 
 \usepackage{caption}
+\usepackage{tocloft} % Control Table of Contents spacing
 \usepackage{float}
 \usepackage{hyperref} % For clickable table of contents
 \graphicspath{{figures/}} % For including images
@@ -75,6 +76,10 @@
 \end{titlepage}
 
 % --- Table of Contents ---
+% Increase spacing between entries in the Table of Contents only
+\setlength{\cftbeforesecskip}{10pt}
+\setlength{\cftbeforesubsecskip}{6pt}
+\setlength{\cftbeforesubsubsecskip}{4pt}
 \tableofcontents
 \thispagestyle{empty}
 \newpage
@@ -101,5 +106,6 @@
 
 
 
-\input{bib/references}
+\bibliographystyle{unsrt}
+\bibliography{references/references}
 \end{document}
