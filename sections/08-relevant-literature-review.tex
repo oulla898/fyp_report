@@ -8,11 +8,11 @@ Telepresence robots, often described as a mobile screen, are widely used for rem
 
 This literature review aims to build a comprehensive case for the development of an integrated, autonomous healthcare robotics platform. It begins by examining the current state and limitations of distinct domains within healthcare robotics: telepresence for remote consultation, socially assistive robots for patient engagement, and autonomous mobile robots for logistics. The review then draws parallels with the consumer and industrial sectors, where autonomous navigation has reached maturity and widespread adoption. By systematically analyzing the strengths and weaknesses of these disparate technologies, this survey identifies a critical research gap: the absence of a unified system that synthesizes clinical telepresence, social interaction, and autonomous mobility. The purpose is to establish a clear rationale for a novel robotic solution that merges these capabilities to create a more holistic and effective tool for patient care.
 
-\subsubsection{Success Stories: Autonomous Robots in Consumer and Industrial Sectors}
+\subsubsection{Success Stories: Consumer, Industrial, and Quadruped Robotics}
 
-%\subsubsection{Consumer Market: The Robotic Vacuum Revolution}
-
-The most successful deployment of autonomous mobile robots to the general public has been robotic vacuum cleaners, which dominate the consumer robotics market without serious competition from traditional cleaning methods. The global robotic vacuum cleaner market has experienced explosive growth, with projections indicating expansion from \$9.07 billion in 2024 to \$31.79 billion by 2033, representing a compound annual growth rate (CAGR) of 16.97\% \cite{imarc2024}. Global shipments reached 15.35 million units in the first half of recent years, demonstrating a 33\% year-over-year growth \cite{scmp2024}.
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Consumer Market: The Robotic Vacuum Revolution.}\newline
+    The most successful deployment of autonomous mobile robots to the general public has been robotic vacuum cleaners, which dominate the consumer robotics market without serious competition from traditional cleaning methods. The global robotic vacuum cleaner market has experienced explosive growth, with projections indicating expansion from \$9.07 billion in 2024 to \$31.79 billion by 2033, representing a compound annual growth rate (CAGR) of 16.97\% \cite{imarc2024}. Global shipments reached 15.35 million units in the first half of recent years, demonstrating a 33\% year-over-year growth \cite{scmp2024}.
 
 \begin{figure}[H]
 \centering
@@ -22,6 +22,27 @@ The most successful deployment of autonomous mobile robots to the general public
 \end{figure}
 
 The key to their success lies in the sophisticated implementation of SLAM (Simultaneous Localization and Mapping) and localization technologies. Modern robotic vacuum cleaners employ LiDAR sensors, visual SLAM (VSLAM), and advanced mapping algorithms to create real-time maps of residential environments, enabling efficient path planning and obstacle avoidance \cite{neato2025}. This technology has proven so reliable that robotic vacuums have achieved nearly 40\% of the service robot market share \cite{trendforce2024}, demonstrating that autonomous navigation, when properly implemented, is mature enough for widespread consumer adoption.
+
+    \item \textbf{Industrial Market: Amazon's Warehouse Robotics Dominance.}\newline
+    In the industrial sector, the most successful large-scale application of AMRs has been warehouse automation, with Amazon leading the field. Amazon reports more than 750,000 to over one million robots across its fulfillment network, including drive units, mobile manipulators, and next-generation platforms such as Pegasus and Xanthus \cite{amazon2024ai, amazon2022}. These fleets demonstrate reliable fleet management, safe human–robot collaboration, and 24/7 uptime in highly dynamic environments.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/Amazon-Pegasus.jpg}
+\caption{Amazon Pegasus drive unit used in high-throughput fulfillment centers \cite{amazon2024ai}.}
+\label{fig:amazon-pegasus}
+\end{figure}
+
+    \item \textbf{Quadruped Robotics: Unitree Go2 as a Robust Mobility Platform.}\newline
+    State-of-the-art quadruped robots such as Unitree Go2 demonstrate robust mobility on unpredictable terrain using reinforcement learning for locomotion policy optimization, advanced multi-sensor perception (3D LiDAR + depth/RGB cameras), and high-performance onboard compute for real-time planning and control. These capabilities enable operation on stairs, slopes, and uneven surfaces, with compelling applications in inspection, security, and emergency response \cite{unitreeGo2spec, unitreeRL2024}. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/Unitree-Go2-6-copy-1080x675.png}
+\caption{Unitree Go2: quadruped platform featuring RL locomotion, multi-sensor perception, and high-performance compute \cite{unitreeGo2spec}.}
+\label{fig:unitree-go2}
+\end{figure}
+\end{enumerate}
 
 \subsubsection{Benefits of Autonomous Mobile Robots in Healthcare Settings}
 

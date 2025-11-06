@@ -86,6 +86,21 @@
 \setcounter{page}{1}
 
 % --- Main Sections Structure ---
+% Chapter intro page macro (book-like divider)
+\newcommand{\chapterintro}[3]{%
+\clearpage
+\thispagestyle{empty}%
+\vspace*{2cm}%
+\begin{center}
+    {\fontsize{72}{72}\selectfont \textbf{#1}}\\[0.6cm]
+    {\LARGE\bfseries #2}\\[0.6cm]
+    \rule{0.75\textwidth}{0.6pt}\\[0.6cm]
+    \parbox{0.75\textwidth}{\large #3}
+\end{center}
+\vfill
+\clearpage
+}
+\chapterintro{1}{Introduction}{This chapter establishes the project context, problem statement, motivation, objectives, methodology overview, and the project management plan that frames execution for the rest of the report.}
 \section{Introduction}
 \input{sections/01-project-aim.tex}
 
@@ -101,6 +116,7 @@
 
 %\input{sections/07-introduction-these-sections-are-not-ready-just-draft.tex}
 
+\chapterintro{2}{Literature Review}{This chapter surveys consumer, industrial, and healthcare robotics; documents benefits and challenges of AMRs in hospitals; analyzes core technologies (navigation, RF localization, SLAM, LLMs); and motivates the platform choices and research gap.}
 \section{Literature Review}
 \input{sections/08-relevant-literature-review.tex}
 
