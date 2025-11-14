@@ -1,5 +1,3 @@
-
-
 \subsection{Motivation and State of the Field}
 
 The integration of robotics and artificial intelligence into healthcare is advancing rapidly, driven by challenges such as aging populations, rising healthcare costs, and medical staff shortages. Researchers have developed various robotic solutions, including telepresence robots for remote consultations, autonomous robots for logistics, and socially assistive robots (SARs) for patient engagement. While each type has proven useful, they often function in isolation, addressing only part of patients' and clinicians' overall needs. The goal is to show that although the components for such a system already exist, combining them into a single, user-friendly, and autonomous platform remains an underexplored area with high potential, especially for improving healthcare accessibility in regions like Oman.
@@ -144,17 +142,17 @@ In parallel, the field of Socially Assistive Robotics (SAR) has focused on the p
 This section deconstructs the essential technologies that form the foundation of an advanced autonomous healthcare robot. It explores supplementary localization methods, including Radio Frequency (RF) Technologies like UWB and AoA, followed by a deeper dive into SLAM-Based Sensor Fusion Techniques that integrate multiple data streams for robust performance. Finally, it examines the role of Conversational AI and Large Language Models (LLMs), which provide the intelligence for human-robot interaction.
 
 \subsubsection{Navigation System}
-The challenge of manual navigation highlighted in telepresence research is being addressed by autonomous mobile robots (AMRs). Systems like the Aethon TUG and the Swisslog Relay are now commonly used in hospitals to transport meals, lab samples, linens, and medications. These robots utilize technologies like LiDAR, SLAM (Simultaneous Localization and Mapping), and dynamic obstacle avoidance algorithms to navigate complex and crowded hospital corridors safely and efficiently. The successful deployment of AMRs in operational environments presents significant challenges, particularly concerning safety and effective navigation within dynamic settings, which can lead to system failures and user discomfort. A study examining three KMP AMRs demonstrated navigation in a static environment without collisions or safety events, but exposed performance issues: significant time variability between identical trips, poor docking accuracy for recharging, and relatively low average operating speed (~0.5 m/s) compared to ~1.5 m/s human walking speed. These platforms, designed for predictable goods transport, contrast with the goal of safe autonomy in highly dynamic, non-predictable environments. Moreover, the physical characteristics and cost of industrial AMRs (e.g., large footprints and complex sensor stacks) raise barriers to adoption; a basic navigation model such as the KMP 600 is often priced in the \$80,000 to \$120,000 range.
+The challenge of manual navigation highlighted in telepresence research is being addressed by autonomous mobile robots (AMRs). Modern AMRs employ a combination of SLAM, path planning, and obstacle avoidance to navigate complex environments without human intervention. The core navigation stack typically includes:
 
 \subsubsection{Radio Frequency (RF) Localization Technologies}
-Various RF technologies including Wi-Fi, RFID, Bluetooth Low Energy (BLE), ZigBee, and Ultra-Wideband (UWB) are employed, with selection criteria based on coverage, scalability, battery life, accuracy, and cost. UWB solutions offer extended coverage and strong scalability due to multiple nodes sharing spectrum. UWB tags typically achieve multi-year battery life. Cost is somewhat higher; for example, instrumenting a 5000m² facility may cost up to \$20,000. Reported accuracy in industrial scenarios varies (approximately 20cm to greater than 1~m) and degrades in cluttered/metallic environments or very large warehouses.
+Radio frequency (RF) refers to electromagnetic waves used for wireless communication (roughly 3 kHz--300 GHz). Works where GPS cannot provide reliable positioning, such as indoor coverage through walls/obstacles and large areas. Various RF technologies including Wi-Fi, RFID, Bluetooth Low Energy (BLE), ZigBee, and Ultra-Wideband (UWB) are employed, with selection criteria based on coverage, scalability, battery life, accuracy, and cost. UWB solutions offer extended coverage and strong scalability due to multiple nodes sharing spectrum. UWB tags typically achieve multi-year battery life. Cost is somewhat higher; for example, instrumenting a 5000m² facility may cost up to \$20,000. Reported accuracy in industrial scenarios varies (approximately 20cm to greater than 1~m) and degrades in cluttered or metallic environments or very large warehouses \cite{chen2022}. The general structure of these systems is to use static reference sensor locations, or anchors, within an environment, along with beacons or tags fixed to the objects with desired tracking. The location of the tracked object can be estimated using readings from the anchors. Mathematically, this estimation is commonly called multilateration (also called trilateration) when using distance measurements
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.6\textwidth]{figures/uwb.png}
-\caption{UWB anchor–tag geometry for ranging and multilateration-based localization in indoor environments.}
+\caption{UWB anchor--tag geometry for ranging and multilateration-based localization in indoor environments.}
 \label{fig:uwb}
 \end{figure}
-AoA (often via BLE 5.1+ or UWB Direction Finding) estimates a target's angle using a beacon/tag and a robot-mounted antenna array, reducing reliance on dense static infrastructure. BLE-based tags offer excellent battery life (years). Limitations include line-of-sight sensitivity and variable accuracy; hybrid AoA + RSSI filtering can improve precision, achieving mean errors on the order of 12 cm in simulation even in cluttered settings \cite{weinmann2023}.
+AoA measures the direction (bearing) from which a radio signal arrives at a receiver. An antenna array senses time differences across elements and apply signal-processing algorithms such MUSIC or ESPRIT convert those differences into an angle. AoA (often via BLE 5.1+ or UWB Direction Finding) estimates a target's angle using a beacon or tag and a robot-mounted antenna array, reducing reliance on dense static infrastructure. BLE-based tags offer excellent battery life (years). Limitations include line-of-sight sensitivity and variable accuracy; hybrid AoA + RSSI filtering can improve precision, achieving mean errors on the order of 12 cm in simulation even in cluttered settings \cite{weinmann2023}. AoA could be used to implement a soultion that doesnt count on localization or positioning infrastructure in the environment, instead having the robot home in on a beacon worn by the user. This would be similar to how some Bluetooth trackers work for finding lost items. The robot would use the angle of arrival data to determine the direction to move towards the beacon signal, allowing it to autonomously navigate to the user's location. This approach could be particularly useful in dynamic environments like hospitals where fixed infrastructure may not be feasible. Figure~\ref{fig:amr-stack} illustrates a proposed setup where a Bluetooth homing controller on the robot uses AoA data from a wearable beacon to guide navigation towards the target.
 
 \begin{figure}[H]
 \centering
@@ -164,7 +162,7 @@ AoA (often via BLE 5.1+ or UWB Direction Finding) estimates a target's angle usi
 \end{figure}
 
 \subsubsection{SLAM-Based Sensor Fusion Techniques}
-Beyond external RF systems, autonomous navigation heavily relies on SLAM with multi-sensor fusion for robustness. A common stack fuses 2D LiDAR with an IMU and wheel odometry. IMU and odometry constrain motion, correcting LiDAR motion distortion and mitigating slip-induced drift. Studies report substantial gains—for example, approximately 27\% improvement in rotation error and greater than 67\% reduction in position error—relative to LiDAR-only SLAM, at the expense of added system complexity and compute \cite{doduc2024}. VSLAM leverages monocular/stereo/RGB-D cameras for localization and mapping with low-cost, lightweight hardware and richer scene semantics. Challenges include texture-poor or repetitive environments and scale ambiguity in monocular pipelines (e.g., early ORB-SLAM 2.0). Modern trends favor hybrid Visual–Inertial–Ranging–LiDAR (VIRAL) SLAM to boost robustness in complex settings \cite{tourani2022}.
+Simultaneous Localization and Mapping (SLAM) is a critical technology for autonomous navigation, enabling robots to build maps of unknown environments while simultaneously keeping track of their own location. Its effectiveness hinges on robust sensor fusion techniques that integrate data from various sources such as camera(s), IMU, wheel odometry, or RF ranging . Beyond external RF systems, autonomous navigation heavily relies on SLAM with multi-sensor fusion for robustness. A common stack fuses 2D LiDAR with an IMU and wheel odometry. IMU and odometry constrain motion, correcting LiDAR motion distortion and mitigating slip-induced drift. Studies report substantial gains—for example, approximately 27\% improvement in rotation error and greater than 67\% reduction in position error—relative to LiDAR-only SLAM, at the expense of added system complexity and compute \cite{doduc2024}. VSLAM leverages monocular/stereo/RGB-D cameras for localization and mapping with low-cost, lightweight hardware and richer scene semantics. Challenges include texture-poor or repetitive environments and scale ambiguity in monocular pipelines (e.g., early ORB-SLAM 2.0). Modern trends favor hybrid Visual–Inertial–Ranging–LiDAR (VIRAL) SLAM to boost robustness in complex settings \cite{tourani2022}. figure~\ref{fig:slam} illustrates the fusion of visual/laser perception with inertial and odometric constraints for robust state estimation. Advanced SLAM toolkits like Google Cartographer used to build 2D/3D maps in real-time, integrating LiDAR, IMU, and odometry data. 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.75\textwidth]{figures/slam.png}
@@ -206,23 +204,23 @@ Table~\ref{tab:platforms} presents a comparative analysis of commercially availa
 \hline
 \multicolumn{6}{|c|}{\textit{Budget Tier (\$500--\$1,000)}} \\
 \hline
-iRobot Create 3 & \$549 & Yes & ROS 2 & 9~kg & Roomba-based, proven docking, ideal for education \\
+iRobot Create 3 \cite{irobot2024create3} & \$549 & Yes & ROS 2 & 9~kg & Roomba-based, proven docking, ideal for education \\
 \hline
 Kobuki Base (used) & \$500--700 & Yes & ROS 1/2 & 5~kg & TurtleBot 2 base, discontinued but widely available \\
 \hline
-Yahboom ROSMASTER X3 & \$699 & DIY & ROS 1 & 5--8~kg & Mecanum wheels, requires custom docking solution \\
+Yahboom ROSMASTER X3 \cite{yahboom2024} & \$699 & DIY & ROS 1 & 5--8~kg & Mecanum wheels, requires custom docking solution \\
 \hline
-Elephant Robotics MyAGV 2023 & \$899 & DIY & ROS 1 & 8~kg & Mecanum wheels, 2D SLAM ready, Python/ROS compatible \\
+Elephant Robotics MyAGV 2023 \cite{elephantrobotics2024} & \$899 & DIY & ROS 1 & 8~kg & Mecanum wheels, 2D SLAM ready, Python/ROS compatible \\
 \hline
 \multicolumn{6}{|c|}{\textit{Mid Tier (\$1,000--\$2,000)}} \\
 \hline
-SLAMTEC Apollo & \$1,200 & Yes & ROS 1/2 & 50~kg & Same platform as Pudu/Keenon hospital robots \\
+SLAMTEC Apollo \cite{slamtec2024} & \$1,200 & Yes & ROS 1/2 & 50~kg & Same platform as Pudu/Keenon hospital robots \\
 \hline
-TurtleBot 4 Standard & \$1,400 & Yes & ROS 2 & 9~kg & Research-grade, Nav2 pre-configured, Lidar included \\
+TurtleBot 4 Standard \cite{turtlebot2024} & \$1,400 & Yes & ROS 2 & 9~kg & Research-grade, Nav2 pre-configured, Lidar included \\
 \hline
-Husarion ROSbot 2R & \$1,600 & Optional & ROS 2 & 10~kg & Mecanum wheels, hospital navigation demos available \\
+Husarion ROSbot 2R \cite{husarion2024} & \$1,600 & Optional & ROS 2 & 10~kg & Mecanum wheels, hospital navigation demos available \\
 \hline
-AgileX LIMO Pro & \$1,799 & Optional & ROS 2 & 10~kg & 4-mode steering, Jetson Nano, research platform \\
+AgileX LIMO Pro \cite{agilex2024} & \$1,799 & Optional & ROS 2 & 10~kg & 4-mode steering, Jetson Nano, research platform \\
 \hline
 \multicolumn{6}{|c|}{\textit{High-End / Not Suitable}} \\
 \hline
@@ -235,10 +233,8 @@ Rover Robotics Zero & \$2,500+ & \$950 & ROS 1/2 & 22~kg & Outdoor-rated, dock s
 \label{tab:platforms}
 \end{table}
 
-\paragraph{Platform Selection Rationale.}
-The \textbf{iRobot Create 3} is selected as the optimal platform based on cost-effectiveness, proven reliability, and feature completeness \cite{irobot2024create3}. At \$549 with an included autonomous charging dock, it eliminates the \$800--\$950 docking station costs required by competing platforms. The platform leverages Roomba's decade-proven docking technology, offers native ROS 2 support with Nav2 compatibility, and provides sufficient 9~kg payload for a tablet display, Raspberry Pi 4, and camera system. Safety features including cliff detection and bump sensors ensure safe operation in patient areas.
-
-While alternatives like SLAMTEC Apollo (\$1,200) \cite{slamtec2024} offer higher payload (50~kg) and are deployed in hospital robots, or TurtleBot 4 (\$1,400) \cite{turtlebot2024} provides integrated LiDAR, both exceed budget constraints. Budget options like Yahboom ROSMASTER X3 (\$699) \cite{yahboom2024} or Elephant Robotics MyAGV (\$899) \cite{elephantrobotics2024} offer mecanum mobility but lack proven autonomous docking, introducing development risk.
+\paragraph{Platforms Table Discussion.}
+Table~\ref{tab:platforms} provides a compact comparison of candidate mobile bases across price tiers, emphasising the primary trade-offs faced during platform selection: cost versus out-of-the-box capabilities (autonomous docking, ROS/ROS2 support, payload capacity, and built-in sensors). Budget platforms offer low acquisition cost and strong community resources but typically require additional engineering (docking solutions, sensor integration). Mid‑tier platforms reduce integration risk by providing native docking and ROS support at higher cost, while high‑end bases deliver industrial reliability that exceeds the project's budget. 
 
 \subsubsection{Conversational AI and Large Language Models (LLMs)}
 The field of large language models (LLMs) has witnessed transformative advancements, establishing them as a core technology for conversational AI. An LLM is a sophisticated artificial intelligence system trained on vast datasets of text and code, enabling it to understand, generate, and interact with human language in a nuanced manner. These models have rapidly transitioned from research prototypes to industrial-scale technologies, resulting in a proliferation of models with distinct strengths and commercial terms.
@@ -266,9 +262,12 @@ DeepSeek V3 & DeepSeek & MIT (Code) / DeepSeek Model & 128,000--164,000 & \texta
 \label{tab:llm_comparison}
 \end{table}
 
+\paragraph{LLM Discussion and Cost Considerations.}
+Table~\ref{tab:llm_comparison} summarizes key characteristics of leading LLM options. OpenAI's GPT-4o offers strong performance with a 128k token context window, while Google's Gemini 2.5 Pro stands out with exceptional context length (over 1M tokens) and competitive API pricing. Notably, Google's Gemini API is available at no cost for requests under 60 requests per minute (RPM), making it an attractive option for development and testing phases. Meta's Llama 3.1 405B provides an open-source alternative with flexible licensing, while DeepSeek V3 offers the most economical API costs, particularly beneficial for cost-sensitive deployments. Even that llama and DeepSeek are open-source models, they still have associated costs when using hosted APIs, which can vary based on usage volume and specific service providers.
+
 \clearpage
 
-\subsection{Conclusion and Identification of the Research Gap}
+\subsection{Conclusion}
 
 The literature presents a clear picture:
 \begin{enumerate}
