@@ -10,10 +10,16 @@
 \usepackage{graphicx}
 \usepackage{tabularx} 
 \usepackage{caption}
-% \usepackage{tocloft} % Control Table of Contents spacing
+\usepackage{pgfgantt} % Added for Gantt charts
+\usepackage{tocloft} % Control Table of Contents spacing
 \usepackage{float}
 \usepackage{hyperref} % For clickable table of contents
 \graphicspath{{figures/}} % For including images
+
+% Configure Table of Contents to add "Chapter" prefix
+\renewcommand{\cftsecpresnum}{Chapter }
+\renewcommand{\cftsecnumwidth}{6em} % Adjust width to fit "Chapter X"
+\renewcommand{\cftsecaftersnum}{:}
 
 % Configure hyperref for better appearance
 \hypersetup{
@@ -83,6 +89,7 @@
 % \setlength{\cftbeforesecskip}{10pt}
 % \setlength{\cftbeforesubsecskip}{6pt}
 % \setlength{\cftbeforesubsubsecskip}{4pt}
+
 \tableofcontents
 \thispagestyle{empty}
 \newpage
