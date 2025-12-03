@@ -130,12 +130,35 @@ This alternative combines a commercial robot base platform with custom-developed
 \subsubsection{Robot Platform Selection Using AHP}
 To systematically select the most appropriate robot platform alternative, we employ the Analytic Hierarchy Process (AHP), a structured decision-making methodology. Four key criteria are identified: \textbf{Cost}, \textbf{Development Time}, \textbf{Customizability}, and \textbf{Reliability}.
 
+\paragraph{Platform Comparison Summary}
+\begin{table}[H]
+\centering
+\caption{Robot Platform Feature Comparison}
+\small
+\begin{tabularx}{\textwidth}{l X X X}
+\toprule
+\textbf{Feature} & \textbf{A: Commercial} & \textbf{B: Custom-Built} & \textbf{C: Hybrid} \\
+\midrule
+\textbf{Motors Integrated} & Yes (pre-installed DC motors with encoders) & No (requires selection \& integration) & Yes (commercial base motors) \\
+\textbf{Sensors Integrated} & Yes (LiDAR, IMU, odometry pre-calibrated) & No (procure \& calibrate separately) & Yes (base sensors included) \\
+\textbf{Computer Integrated} & Yes (RPi 4/5 or NUC pre-configured) & No (requires setup \& ROS installation) & Yes (base computer + optional upgrade) \\
+\textbf{LLM Integrated} & No (requires custom integration) & No (requires custom integration) & No (custom Gemini integration) \\
+\textbf{ROS~2 Compatibility} & Yes (native support) & Yes (manual configuration) & Yes (native + custom nodes) \\
+\textbf{CE/EMC Standards} & Yes (commercial certification) & No (requires testing) & Partial (base certified, additions not) \\
+\textbf{IP Rating} & IP42--IP54 (varies by model) & None (custom design) & Base platform rating (IP42) \\
+\textbf{Safety Standards} & ISO 13482 compliance typical & None (requires validation) & Base compliant, custom features TBD \\
+\textbf{Documentation} & Comprehensive (manuals, ROS packages) & Community resources only & Base docs + custom development \\
+\textbf{Warranty/Support} & 1--2 years commercial warranty & None & Base warranty only \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
 \paragraph{Criteria Pairwise Comparison}
 The pairwise comparison matrix for criteria (scale: 1 = equal importance, 3 = moderate importance, 5 = strong importance, 7 = very strong importance, 9 = extreme importance):
 
 \begin{table}[H]
 \centering
-\caption{Criteria Pairwise Comparison Matrix}
+\caption{Platform Criteria Pairwise Comparison Matrix}
 \begin{tabular}{lcccc}
 \toprule
 \textbf{Criterion} & \textbf{Cost} & \textbf{Dev. Time} & \textbf{Customizability} & \textbf{Reliability} \\
@@ -164,7 +187,7 @@ Each alternative is scored against each criterion (scale: 1--9, where 9 = best):
 
 \begin{table}[H]
 \centering
-\caption{Alternative Scores by Criterion}
+\caption{Platform Alternative Scores by Criterion}
 \begin{tabular}{lcccc}
 \toprule
 \textbf{Alternative} & \textbf{Cost} & \textbf{Dev. Time} & \textbf{Customizability} & \textbf{Reliability} \\
@@ -195,8 +218,92 @@ B: Custom-Built Modular & 5.55 \\
 
 While Alternative A (Commercial) scores highest, \textbf{Alternative C (Hybrid)} is selected as it offers the best balance of reliability (47\% weight) and development speed (30\% weight) while maintaining sufficient customizability for healthcare-specific AI features. The modest score difference (7.11 vs 6.76) is acceptable given that Alternative C enables innovation in HRI—the project's primary differentiator—while leveraging proven navigation hardware.
 
+\subsubsection{Computing Platform Selection Using AHP}
+Three computing platforms are evaluated for the main onboard computer: Raspberry Pi 5, NVIDIA Jetson Nano, and Intel NUC.
+
+\paragraph{Computing Platform Criteria}
+\begin{itemize}
+    \item \textbf{Processing Power}: CPU/GPU performance for ROS~2 and AI workloads
+    \item \textbf{Power Consumption}: Battery life impact
+    \item \textbf{Cost}: Hardware acquisition cost
+    \item \textbf{Ecosystem Support}: ROS~2 compatibility, community, documentation
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{Computing Platform AHP Summary}
+\small
+\begin{tabular}{lcccc|c}
+\toprule
+\textbf{Platform} & \textbf{Power (40\%)} & \textbf{Consumption (25\%)} & \textbf{Cost (20\%)} & \textbf{Ecosystem (15\%)} & \textbf{Final Score} \\
+\midrule
+Raspberry Pi 5 & 6 & 9 & 9 & 9 & \textbf{7.65} \\
+Jetson Nano & 8 & 7 & 5 & 7 & 7.05 \\
+Intel NUC & 9 & 4 & 3 & 8 & 6.55 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Selected: Raspberry Pi 5} — Optimal balance of sufficient processing power for ROS~2 Nav2, excellent power efficiency (critical for battery operation), low cost, and extensive ROS community support.
+
+\subsubsection{Navigation Approach Selection Using AHP}
+Three navigation approaches are compared: LiDAR-based SLAM, Visual SLAM, and Hybrid SLAM.
+
+\paragraph{Navigation Criteria}
+\begin{itemize}
+    \item \textbf{Accuracy}: Localization precision in hospital corridors
+    \item \textbf{Robustness}: Performance in dynamic/challenging environments
+    \item \textbf{Computational Cost}: Processing requirements
+    \item \textbf{Sensor Cost}: Hardware acquisition cost
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{Navigation Approach AHP Summary}
+\small
+\begin{tabular}{lcccc|c}
+\toprule
+\textbf{Approach} & \textbf{Accuracy (35\%)} & \textbf{Robustness (35\%)} & \textbf{Comp. Cost (15\%)} & \textbf{Sensor Cost (15\%)} & \textbf{Final} \\
+\midrule
+LiDAR SLAM & 9 & 8 & 7 & 6 & \textbf{7.95} \\
+Visual SLAM & 7 & 6 & 5 & 9 & 6.65 \\
+Hybrid SLAM & 8 & 9 & 4 & 5 & 7.35 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Selected: LiDAR-based SLAM (Nav2 + RPLIDAR A1)} — Superior accuracy and robustness in structured indoor environments, well-established ROS~2 Nav2 integration, acceptable sensor cost.
+
+\subsubsection{Localization Sensor Selection Using AHP}
+Three primary localization sensor configurations are evaluated.
+
+\paragraph{Localization Sensor Criteria}
+\begin{itemize}
+    \item \textbf{Precision}: Pose estimation accuracy
+    \item \textbf{Update Rate}: Sensor refresh frequency
+    \item \textbf{Integration Complexity}: Software and hardware setup difficulty
+    \item \textbf{Cost}: Total sensor package cost
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{Localization Sensor AHP Summary}
+\small
+\begin{tabular}{lcccc|c}
+\toprule
+\textbf{Configuration} & \textbf{Precision (40\%)} & \textbf{Update (20\%)} & \textbf{Integration (20\%)} & \textbf{Cost (20\%)} & \textbf{Final} \\
+\midrule
+LiDAR + Odom + IMU & 9 & 8 & 8 & 7 & \textbf{8.20} \\
+Vision + Odom + IMU & 7 & 7 & 6 & 8 & 7.00 \\
+UWB + Odom + IMU & 6 & 9 & 5 & 4 & 6.10 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Selected: LiDAR + Odometry + IMU} — Best precision for structured hospital environments, proven ROS~2 sensor fusion with robot\_localization package, extensive Nav2 support.
+
 \subsubsection{LLM Selection Using AHP}
-For the conversational AI component, three state-of-the-art LLM options are evaluated: OpenAI GPT-4 Turbo, Anthropic Claude 3.5 Sonnet, and Google Gemini 3.0 pro (announced December 2024).
+For the conversational AI component, three state-of-the-art LLM options are evaluated: OpenAI GPT-4 Turbo, Anthropic Claude 3.5 Sonnet, and Google Gemini 2.0 Flash (announced December 2024).
 
 \paragraph{LLM Evaluation Criteria}
 Four criteria are defined:
@@ -271,7 +378,7 @@ Claude 3.5 Sonnet & 7.54 \\
 \end{tabular}
 \end{table}
 
-\textbf{Google Gemini 3.0 pro} is selected based on its superior AHP score. Key advantages include:
+\textbf{Google Gemini 2.0 Flash} is selected based on its superior AHP score. Key advantages include:
 \begin{itemize}
     \item Team's extensive experience with Google Cloud Platform and Gemini API
     \item Optimized for low-latency real-time conversational AI (critical for natural HRI)
@@ -280,6 +387,23 @@ Claude 3.5 Sonnet & 7.54 \\
     \item Significantly lower cost enables extensive testing and development iterations
     \item Announced Flash variant (Dec 2024) specifically designed for speed-critical applications
 \end{itemize}
+
+\subsubsection{System Selection Summary}
+\begin{table}[H]
+\centering
+\caption{Final System Component Selection Summary}
+\begin{tabular}{lll}
+\toprule
+\textbf{Component} & \textbf{Selected Option} & \textbf{AHP Score} \\
+\midrule
+Robot Platform & Hybrid (Commercial Base + Custom AI) & 6.76 \\
+Computing Platform & Raspberry Pi 5 (4GB) & 7.65 \\
+Navigation Approach & LiDAR-based SLAM (Nav2) & 7.95 \\
+Localization Sensors & LiDAR + Odometry + IMU & 8.20 \\
+LLM & Google Gemini 2.0 Flash & 8.44 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Selected System Architecture}
 Based on the AHP analysis, the final system architecture combines:
