@@ -1,0 +1,317 @@
+\subsection{Introduction}
+
+The success of any engineering project hinges on a clear, comprehensive understanding of the requirements that guide design, implementation, and evaluation. This chapter formalizes the requirement specification for the smart healthcare robot project, translating stakeholder needs and technical constraints into measurable, verifiable criteria. The requirements are systematically categorized into customer requirements, engineering requirements, and engineering constraints, ensuring alignment between user expectations and technical feasibility.
+
+Customer requirements capture the high-level needs and expectations of primary stakeholders—hospital administrators, clinical staff, patients, and support personnel. These requirements reflect the functional and operational capabilities that directly impact system value and user satisfaction. Engineering requirements translate customer needs into quantifiable, testable technical specifications that guide system architecture and component selection. Engineering constraints define the boundaries within which the system must operate, including budget limitations, timeline restrictions, regulatory compliance, and environmental conditions specific to hospital deployment in Oman.
+
+This chapter also presents a structured analysis of design alternatives, trade-offs, and selection criteria through comparative tables with metrics and scores. These analyses document the rationale for key architectural decisions, including mobile platform selection, sensor configuration, computing architecture, and AI integration strategy. The systematic evaluation ensures that design choices are transparent, justified, and optimized for the project's objectives and constraints.
+
+By establishing a rigorous requirement framework, this chapter provides the foundation for subsequent design, implementation, and validation activities, ensuring that the final system meets stakeholder needs while remaining technically feasible and economically viable.
+
+\subsection{Customer Requirements}
+
+Customer requirements represent the high-level needs and expectations of the robot's primary users and stakeholders in hospital environments. These requirements are derived from literature review findings (Chapter 2), observations of existing hospital robotics deployments, and anticipated use cases in Omani healthcare facilities.
+
+\subsubsection{CR1: Autonomous Navigation and Mobility}
+\textbf{Requirement Statement:} The robot must autonomously navigate hospital corridors, patient rooms, and common areas without human intervention, avoiding static and dynamic obstacles.
+
+\textbf{Rationale:} Manual navigation of telepresence robots has been identified as a significant limitation, increasing cognitive load on clinicians and reducing system usability \cite{kristoffersson2013}. Autonomous navigation frees clinical staff from control tasks and enables efficient, reliable point-to-point movement.
+
+\textbf{Stakeholders:} Nursing staff, physicians, hospital administrators, patients.
+
+\subsubsection{CR2: Remote Telepresence Capabilities}
+\textbf{Requirement Statement:} The robot must enable high-quality remote video and audio communication between healthcare providers and patients, supporting remote consultations, rounds, and family visits.
+
+\textbf{Rationale:} Telepresence has been validated as effective for remote diagnosis, specialist consultations, and reducing travel costs \cite{garingo2016}. The robot must provide a mobile "presence" for clinicians who are not physically at the patient's bedside.
+
+\textbf{Stakeholders:} Physicians, specialist consultants, patients, families.
+
+\subsubsection{CR3: Patient Engagement and Social Interaction}
+\textbf{Requirement Statement:} The robot must engage with patients through natural language conversation, providing information, companionship, and emotional support, particularly for pediatric and elderly populations.
+
+\textbf{Rationale:} Socially assistive robots have demonstrated significant benefits in reducing patient anxiety, improving treatment compliance, and enhancing overall patient experience \cite{beran2013, broekens2009}.
+
+\textbf{Stakeholders:} Patients (pediatric, elderly, general), nursing staff.
+
+\subsubsection{CR4: Medication and Material Delivery}
+\textbf{Requirement Statement:} The robot must safely transport and deliver small items such as medications, laboratory samples, medical supplies, and patient meals between designated locations.
+
+\textbf{Rationale:} Delivery robots reduce staff time spent on logistics by up to 30\%, allowing nurses to focus on direct patient care \cite{mdpi2024}. This functionality has been successfully deployed in leading hospital AMRs worldwide.
+
+\textbf{Stakeholders:} Nursing staff, pharmacy personnel, laboratory technicians, support staff.
+
+\subsubsection{CR5: Multi-Floor Operation}
+\textbf{Requirement Statement:} The robot must autonomously call and enter elevators to navigate between multiple hospital floors.
+
+\textbf{Rationale:} Hospital facilities are typically multi-story structures. Multi-floor capability is essential for comprehensive coverage and utility, as demonstrated by successful deployments of PuduBot 2 and similar platforms \cite{pudubot2}.
+
+\textbf{Stakeholders:} Hospital administrators, clinical staff, logistics coordinators.
+
+\subsubsection{CR6: Infection Control and Hygiene}
+\textbf{Requirement Statement:} The robot must be designed with materials and surfaces that are easy to clean and disinfect, minimizing cross-contamination risks.
+
+\textbf{Rationale:} Hospital-acquired infections (HAIs) are a critical concern. Robots must be compatible with standard hospital cleaning protocols and potentially integrate UV-C disinfection capabilities \cite{intel2024, sciencedirect2021}.
+
+\textbf{Stakeholders:} Infection control personnel, environmental services, nursing staff.
+
+\subsubsection{CR7: User-Friendly Interface}
+\textbf{Requirement Statement:} The robot must provide intuitive interfaces (touchscreen, mobile app, voice control) accessible to users with varying technical expertise.
+
+\textbf{Rationale:} Ease of use directly impacts adoption rates and operational efficiency. Interfaces must accommodate diverse user groups including elderly patients, clinicians with minimal robotics experience, and administrative staff.
+
+\textbf{Stakeholders:} All users (patients, clinical staff, administrators).
+
+\subsubsection{CR8: Continuous Operation and Autonomous Charging}
+\textbf{Requirement Statement:} The robot must operate throughout the day with minimal downtime, autonomously returning to a charging dock when battery levels are low.
+
+\textbf{Rationale:} Hospital operations are 24/7. The robot must support continuous availability without requiring manual intervention for battery management, as implemented in commercial platforms \cite{irobot2024create3, turtlebot2024}.
+
+\textbf{Stakeholders:} Hospital administrators, IT support, clinical staff.
+
+\subsection{Engineering Requirements}
+
+Engineering requirements translate customer needs into quantifiable, testable technical specifications that directly inform system design and validation. Each engineering requirement is mapped to one or more customer requirements, ensuring traceability and alignment.
+
+\subsubsection{Navigation and Mobility Requirements}
+
+\textbf{ER1.1: Localization Accuracy}\\
+\textbf{Specification:} The robot shall achieve position accuracy of $\pm$20~cm in mapped indoor environments.\\
+\textbf{Mapped to:} CR1 (Autonomous Navigation)\\
+\textbf{Verification Method:} Experimental validation using ground-truth positioning system (UWB or motion capture).
+
+\textbf{ER1.2: Maximum Linear Velocity}\\
+\textbf{Specification:} The robot shall maintain a maximum linear velocity of 0.5--1.0~m/s in hospital corridors.\\
+\textbf{Mapped to:} CR1 (Autonomous Navigation)\\
+\textbf{Verification Method:} Speed measurement tests in controlled environments and hospital corridors.
+
+\textbf{ER1.3: Obstacle Detection and Avoidance}\\
+\textbf{Specification:} The robot shall detect and avoid static and dynamic obstacles (people, equipment, walls) with a minimum detection range of 3~meters and reaction time $<$1~second.\\
+\textbf{Mapped to:} CR1 (Autonomous Navigation)\\
+\textbf{Verification Method:} Obstacle avoidance tests with various object types and approach angles.
+
+\textbf{ER1.4: Multi-Floor Navigation}\\
+\textbf{Specification:} The robot shall autonomously interface with elevator systems via API or IoT integration to call and enter elevators.\\
+\textbf{Mapped to:} CR5 (Multi-Floor Operation)\\
+\textbf{Verification Method:} Demonstration of successful elevator calls and multi-floor navigation sequences.
+
+\textbf{ER1.5: Payload Capacity}\\
+\textbf{Specification:} The robot platform shall support a minimum payload of 5~kg to accommodate onboard computers, sensors, and delivery items.\\
+\textbf{Mapped to:} CR4 (Delivery), CR2 (Telepresence)\\
+\textbf{Verification Method:} Load testing with representative payload configurations.
+
+\subsubsection{Telepresence and Communication Requirements}
+
+\textbf{ER2.1: Video Quality}\\
+\textbf{Specification:} The telepresence system shall support minimum 720p (1280$\times$720) video resolution at 30~fps.\\
+\textbf{Mapped to:} CR2 (Telepresence)\\
+\textbf{Verification Method:} Video quality assessment tests under typical hospital lighting and network conditions.
+
+\textbf{ER2.2: Audio Quality}\\
+\textbf{Specification:} The audio system shall provide bidirectional communication with noise cancellation and echo reduction, maintaining intelligibility in hospital environments (ambient noise up to 70~dB).\\
+\textbf{Mapped to:} CR2 (Telepresence)\\
+\textbf{Verification Method:} Audio quality tests (speech intelligibility index, background noise rejection).
+
+\textbf{ER2.3: Network Latency}\\
+\textbf{Specification:} The telepresence system shall operate with end-to-end latency $<$200~ms over hospital Wi-Fi networks.\\
+\textbf{Mapped to:} CR2 (Telepresence)\\
+\textbf{Verification Method:} Network performance testing and latency measurements.
+
+\subsubsection{Social Interaction and AI Requirements}
+
+\textbf{ER3.1: Natural Language Understanding}\\
+\textbf{Specification:} The conversational AI system shall accurately interpret user intent in English and Arabic with $>$90\% accuracy for common healthcare queries.\\
+\textbf{Mapped to:} CR3 (Patient Engagement)\\
+\textbf{Verification Method:} User testing with standardized query sets and intent classification metrics.
+
+\textbf{ER3.2: Response Time}\\
+\textbf{Specification:} The AI system shall generate conversational responses within 3~seconds of user input.\\
+\textbf{Mapped to:} CR3 (Patient Engagement)\\
+\textbf{Verification Method:} Response latency measurements under typical operating conditions.
+
+\textbf{ER3.3: Voice Recognition}\\
+\textbf{Specification:} The voice interface shall support speech recognition in hospital environments with word error rate (WER) $<$10\%.\\
+\textbf{Mapped to:} CR7 (User Interface)\\
+\textbf{Verification Method:} Speech recognition testing with diverse speakers and noise levels.
+
+\subsubsection{Power and Endurance Requirements}
+
+\textbf{ER4.1: Battery Life}\\
+\textbf{Specification:} The robot shall operate continuously for a minimum of 4--6~hours under typical usage (mixed navigation, telepresence, and idle states).\\
+\textbf{Mapped to:} CR8 (Continuous Operation)\\
+\textbf{Verification Method:} Endurance testing with simulated clinical workflows.
+
+\textbf{ER4.2: Autonomous Docking}\\
+\textbf{Specification:} The robot shall autonomously locate and dock with the charging station when battery level reaches 20\%, with 95\% success rate.\\
+\textbf{Mapped to:} CR8 (Continuous Operation)\\
+\textbf{Verification Method:} Repeated docking trials under various initial positions and orientations.
+
+\subsubsection{Safety and Reliability Requirements}
+
+\textbf{ER5.1: Emergency Stop}\\
+\textbf{Specification:} The robot shall include physical emergency stop button(s) and remote e-stop capability via software interface.\\
+\textbf{Mapped to:} CR1 (Navigation Safety)\\
+\textbf{Verification Method:} Functional testing of emergency stop mechanisms.
+
+\textbf{ER5.2: Cliff Detection}\\
+\textbf{Specification:} The robot shall detect and avoid stairs, ramps $>$15° incline, and drop-offs $>$2~cm.\\
+\textbf{Mapped to:} CR1 (Navigation Safety)\\
+\textbf{Verification Method:} Edge detection tests on stairs and elevated platforms.
+
+\textbf{ER5.3: System Uptime}\\
+\textbf{Specification:} The robot shall achieve $>$95\% uptime during operational hours, excluding scheduled maintenance.\\
+\textbf{Mapped to:} CR8 (Continuous Operation)\\
+\textbf{Verification Method:} Long-term reliability testing and failure logging.
+
+\subsection{Engineering Constraints}
+
+Engineering constraints define the boundaries within which the system must be designed and operated. These constraints reflect real-world limitations in budget, timeline, technology maturity, regulatory environment, and deployment context specific to Oman.
+
+\subsubsection{EC1: Budget Constraints}
+\textbf{Constraint:} Total system cost must not exceed \$2,500 USD, including mobile platform, sensors, computing hardware, and accessories.\\
+\textbf{Rationale:} As an educational research project with limited funding, the system must demonstrate feasibility and functionality within academic budget constraints while remaining representative of scalable commercial solutions.\\
+\textbf{Impact:} Limits selection to budget and mid-tier commercial platforms; excludes high-end industrial robots; requires prioritization of essential features.
+
+\subsubsection{EC2: Development Timeline}
+\textbf{Constraint:} System design, implementation, and validation must be completed within one academic year (9--10 months).\\
+\textbf{Rationale:} Final year project timeline constraints necessitate realistic scope and phased development approach.\\
+\textbf{Impact:} Prioritization of core functionalities (navigation, telepresence, basic AI); potential deferral of advanced features (UV-C disinfection, complex HIS integration) to future work.
+
+\subsubsection{EC3: Hospital Environment Compatibility}
+\textbf{Constraint:} The robot must operate safely in hospital environments with corridor widths $\geq$1.5~m, elevator access, and typical hospital flooring (tile, linoleum).\\
+\textbf{Rationale:} Omani hospital infrastructure follows international standards with standard corridor dimensions and flooring materials.\\
+\textbf{Impact:} Robot base width limited to $<$60~cm; wheel system must handle smooth indoor surfaces; turning radius must accommodate corridor navigation.
+
+\subsubsection{EC4: Network Infrastructure}
+\textbf{Constraint:} The robot must operate on standard hospital Wi-Fi networks (802.11n/ac) without requiring dedicated network infrastructure.\\
+\textbf{Rationale:} Deployment feasibility requires compatibility with existing IT infrastructure; hospitals cannot always support custom networking solutions.\\
+\textbf{Impact:} System must tolerate variable network quality, latency, and temporary disconnections; requires local processing capabilities for critical functions.
+
+\subsubsection{EC5: Regulatory and Privacy Compliance}
+\textbf{Constraint:} The system must comply with patient privacy requirements and avoid collection or storage of protected health information (PHI) without proper authorization.\\
+\textbf{Rationale:} Healthcare robotics must respect patient privacy and data security regulations (similar to HIPAA/GDPR principles).\\
+\textbf{Impact:} No persistent storage of patient conversations or video recordings; encrypted communication channels; clear data handling policies.
+
+\subsubsection{EC6: User Expertise Level}
+\textbf{Constraint:} The system must be operable by users with minimal technical training (hospital staff, patients) without requiring robotics expertise.\\
+\textbf{Rationale:} Clinical adoption depends on ease of use and minimal training burden.\\
+\textbf{Impact:} Intuitive UI design; pre-configured waypoints; automated error recovery; comprehensive user documentation.
+
+\subsubsection{EC7: Environmental Operating Conditions}
+\textbf{Constraint:} The robot must operate reliably in indoor environments with temperature range 18--28°C, humidity 30--60\%, and typical hospital lighting conditions.\\
+\textbf{Rationale:} Hospital climate control maintains stable environmental conditions; sensors and electronics must function within this range.\\
+\textbf{Impact:} Standard commercial-grade components acceptable; no specialized environmental hardening required.
+
+\subsubsection{EC8: Maintenance and Spare Parts}
+\textbf{Constraint:} The robot must utilize commercially available, globally sourced components with accessible supply chains for replacement parts.\\
+\textbf{Rationale:} Long-term operational viability requires availability of replacement components in Oman or via international suppliers.\\
+\textbf{Impact:} Preference for mainstream platforms (ROS 2, Raspberry Pi, common sensors) over proprietary or region-specific components.
+
+\subsection{Comparative Performance Metrics}
+
+This section presents quantitative performance data and trade-off metrics for critical system components. The data, derived from technical specifications and benchmark studies, provides the empirical basis for architectural decisions.
+
+\subsubsection{Navigation Sensor Performance}
+Table~\ref{tab:sensor_metrics} compares the performance of different sensor modalities in typical hospital environments.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|c|c|c|c|c|}
+\hline
+\textbf{Sensor Type} & \textbf{Scenario} & \textbf{Range (m)} & \textbf{Accuracy (cm)} & \textbf{FOV (deg)} & \textbf{Power (W)} & \textbf{Cost (\$)} \\
+\hline
+2D LiDAR (RPLiDAR) & Corridor (Static) & 12.0 & $\pm$1.0 & 360 & 1.5 & 100 \\
+2D LiDAR (RPLiDAR) & Waiting Room (Dynamic) & 10.0 & $\pm$2.5 & 360 & 1.5 & 100 \\
+RGB-D (RealSense) & Corridor (Static) & 4.0 & $\pm$2.0 & 87$\times$58 & 3.5 & 250 \\
+RGB-D (RealSense) & Waiting Room (Dynamic) & 3.5 & $\pm$4.0 & 87$\times$58 & 3.5 & 250 \\
+3D LiDAR (Velodyne) & Corridor (Static) & 100.0 & $\pm$2.0 & 360$\times$30 & 8.0 & 4000 \\
+\hline
+\end{tabularx}
+\caption{Performance metrics of navigation sensors in static and dynamic hospital scenarios.}
+\label{tab:sensor_metrics}
+\end{table}
+
+\subsubsection{Computing Platform Benchmarks}
+Table~\ref{tab:compute_metrics} details the computational capabilities and power efficiency of candidate onboard computers.
+
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|c|c|c|c|c|}
+\hline
+\textbf{Platform} & \textbf{Workload Type} & \textbf{CPU Perf.} & \textbf{AI Perf. (TOPS)} & \textbf{RAM (GB)} & \textbf{Power (W)} & \textbf{Cost (\$)} \\
+\hline
+Raspberry Pi 5 & SLAM + Nav2 & High & N/A & 8 & 5--8 & 80 \\
+Raspberry Pi 5 & LLM Inference (Tiny) & Medium & 0.5 & 8 & 7--9 & 80 \\
+Jetson Nano & SLAM + Nav2 & Medium & 0.5 & 4 & 5--10 & 150 \\
+Jetson Nano & Vision AI (YOLO) & High & 0.5 & 4 & 8--12 & 150 \\
+Jetson Orin Nano & Advanced AI & Very High & 20--40 & 8 & 7--15 & 499 \\
+\hline
+\end{tabular}
+\caption{Computational performance and power consumption benchmarks for embedded platforms.}
+\label{tab:compute_metrics}
+\end{table}
+
+\subsubsection{LLM Performance and Cost Analysis}
+Table~\ref{tab:llm_metrics} compares Large Language Models based on context handling, latency, and operational cost.
+
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|c|c|c|c|}
+\hline
+\textbf{Model} & \textbf{Deployment Mode} & \textbf{Context (Tokens)} & \textbf{Latency (s)} & \textbf{Cost/1M In (\$)} & \textbf{Cost/1M Out (\$)} \\
+\hline
+Gemini 2.5 Pro & Cloud API & 1,000,000 & 1.5--2.5 & 0.00 (Free Tier) & 0.00 (Free Tier) \\
+GPT-4o & Cloud API & 128,000 & 0.8--1.5 & 2.50 & 10.00 \\
+Llama 3.1 8B & Local (Orin) & 8,000 & 5.0--8.0 & 0.00 & 0.00 \\
+DeepSeek V3 & Cloud API & 128,000 & 1.0--2.0 & 0.14 & 0.28 \\
+\hline
+\end{tabular}
+\caption{Performance and cost metrics for conversational AI models.}
+\label{tab:llm_metrics}
+\end{table}
+
+\subsection{Analysis and Discussion}
+
+This section analyzes the performance data presented in Section 4 to derive optimal system configurations. The discussion focuses on interpreting the trade-offs between performance, power, and cost to satisfy the engineering requirements and constraints.
+
+\subsubsection{Navigation Sensor Analysis}
+The data in Table~\ref{tab:sensor_metrics} reveals a clear trade-off between range, field of view (FOV), and cost.
+\begin{itemize}
+    \item \textbf{2D LiDAR} offers superior range (12m) and 360-degree FOV at a low power cost (1.5W), making it ideal for primary localization in long hospital corridors (ER1.1). However, its inability to detect 3D obstacles limits safety in dynamic environments.
+    \item \textbf{RGB-D Cameras} provide essential 3D depth data but suffer from limited range (<4m) and higher power consumption (3.5W). They are insufficient for long-range mapping but critical for close-range obstacle avoidance (ER1.3).
+    \item \textbf{3D LiDAR} provides the best performance but is disqualified by its prohibitive cost (\$4000) and high power draw (8W), which violates EC1 (Budget) and impacts ER4.1 (Battery Life).
+\end{itemize}
+\textbf{Conclusion:} A hybrid approach combining 2D LiDAR for long-range SLAM and RGB-D for near-field safety offers the best balance, maximizing coverage while keeping total sensor cost under \$400.
+
+\subsubsection{Computing Platform Analysis}
+Table~\ref{tab:compute_metrics} highlights the efficiency of the Raspberry Pi 5 for general robotics tasks.
+\begin{itemize}
+    \item \textbf{Raspberry Pi 5} delivers "High" CPU performance sufficient for ROS 2 navigation stacks at a low cost (\$80) and moderate power (5-8W). It meets the budget constraint (EC1) and power requirements (ER4.1).
+    \item \textbf{Jetson Nano} offers GPU acceleration but is limited by older CPU architecture and 4GB RAM, which can be a bottleneck for modern ROS 2 applications.
+    \item \textbf{Jetson Orin Nano} provides superior AI performance (20-40 TOPS) but at significantly higher cost (\$499), consuming 20\% of the total project budget.
+\end{itemize}
+\textbf{Conclusion:} The Raspberry Pi 5 is the most balanced choice for the core navigation controller. AI tasks can be offloaded to the cloud (via API) to avoid the need for expensive onboard GPU hardware, aligning with EC1 and EC4.
+
+\subsubsection{Conversational AI Analysis}
+Table~\ref{tab:llm_metrics} demonstrates the significant cost and performance advantages of cloud-based models for this application.
+\begin{itemize}
+    \item \textbf{Local Execution (Llama 3.1)} on edge hardware incurs high latency (5-8s), violating the 3-second response requirement (ER3.2).
+    \item \textbf{GPT-4o} offers excellent latency but high operational costs, which may not be sustainable for a student project.
+    \item \textbf{Gemini 2.5 Pro} provides a unique advantage with its Free Tier for low-volume usage, massive context window (1M tokens) for maintaining long conversation history, and acceptable latency.
+\end{itemize}
+\textbf{Conclusion:} Cloud-based inference using Gemini 2.5 Pro is the optimal strategy, satisfying performance requirements (ER3.1, ER3.2) while eliminating operational costs during the development phase.
+
+\subsection{Conclusion}
+
+This chapter established the requirement specification for the smart healthcare robot, defining clear customer needs, engineering specifications, and system constraints. The comparative performance analysis in Section 4 provided empirical data on component trade-offs, highlighting the tension between performance, power, and cost.
+
+The subsequent analysis in Section 5 demonstrated that no single component satisfies all requirements perfectly. Instead, a system-level optimization approach is required:
+\begin{itemize}
+    \item \textbf{Sensing:} Fusing 2D LiDAR (range/efficiency) with RGB-D (3D safety) to meet navigation and safety goals.
+    \item \textbf{Computing:} Utilizing efficient CPU-based processing (Pi 5) for real-time control while leveraging cloud resources for heavy AI workloads.
+    \item \textbf{Intelligence:} Adopting a hybrid architecture where critical safety functions run locally, and high-level social interaction relies on powerful cloud LLMs.
+\end{itemize}
+
+These data-driven decisions form the basis for the detailed system architecture and component integration strategies that will be presented in the System Conceptual Design chapter.
