@@ -420,7 +420,16 @@ Based on the AHP analysis, the final system architecture combines:
 \subsection{Functional Decomposition}
 
 \subsubsection{System Level 0: Black Box View}
-At the highest abstraction level, the smart healthcare robot can be represented as a single system with external interfaces:
+At the highest abstraction level, the smart healthcare robot can be represented as a single system with external interfaces. Figure~\ref{fig:level0-black-box} summarizes the Level~0 functional view, grouping the main inputs, outputs, and primary functions.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{level0-functional-view-1765609410658.png}
+    \caption{System Level~0 black-box view of the smart healthcare robot, showing external inputs, outputs, and primary functions.}
+    \label{fig:level0-black-box}
+\end{figure}
+
+For clarity, the main interfaces can be described textually as follows:
 
 \begin{itemize}
     \item \textbf{Inputs}:
@@ -450,7 +459,16 @@ At the highest abstraction level, the smart healthcare robot can be represented 
 \end{itemize}
 
 \subsubsection{System Level 1: Subsystem Decomposition}
-The system is decomposed into six major subsystems, each with defined responsibilities:
+The system is decomposed into seven major subsystems, each with defined responsibilities. Figure~\ref{fig:level1-subsystems} presents the Level~1 functional decomposition and the main interfaces between subsystems.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{level1-subsystem-decomposition-1765609443106.png}
+    \caption{System Level~1 subsystem decomposition of the smart healthcare robot, highlighting the seven functional subsystems and key data/control flows.}
+    \label{fig:level1-subsystems}
+\end{figure}
+
+The subsystems are defined textually as follows:
 
 \paragraph{1. Mobility Subsystem}
 \begin{itemize}
@@ -500,6 +518,9 @@ The system is decomposed into six major subsystems, each with defined responsibi
     \item \textbf{Functions}: Distribute power to all subsystems, monitor battery status, initiate autonomous docking when low, manage charging process
     \item \textbf{Interfaces}: Provides power to all subsystems, sends battery status to Task Management and Interface, receives docking commands from Task Management
 \end{itemize}
+
+\paragraph{Subsystem Interaction Flow}
+As summarized in Figure~\ref{fig:level1-subsystems}, the robot operates in a closed loop of sensing, decision-making, and actuation. The Perception subsystem collects sensor data and forwards it to Navigation for localisation and path planning, while also sending audio and video streams to the Intelligence subsystem. Intelligence interprets user intent and generates high-level task requests, which are queued and coordinated by Task Management. Task Management issues navigation goals to Navigation, which computes velocity commands for the Mobility subsystem and receives odometry feedback in return. Interface and Communication exposes task requests, status information, and telemetry to users and remote dashboards, while Power Management responds to dock/charge commands and reports battery status to both Task Management and the interface layer. This interaction pattern ensures that environmental sensing, user intent, motion control, and power management remain synchronised during hospital missions.
 
 \subsection{Conclusion}
 This chapter presented a systematic approach to the conceptual design of the smart healthcare robot. Through AHP-based evaluation of three platform alternatives (commercial, custom-built, and hybrid), the hybrid approach was selected as it balances reliability with customizability for healthcare-specific AI features. A second AHP analysis selected Google Gemini 3.0 pro as the optimal LLM for conversational AI due to team familiarity, low latency, and cost-effectiveness.
