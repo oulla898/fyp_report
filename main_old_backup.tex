@@ -1,0 +1,142 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+% Use a cleaner, lighter font and better typography
+\usepackage{lmodern}
+\usepackage[protrusion=true,expansion=true]{microtype}
+\usepackage{titling}
+\usepackage{enumitem}
+\usepackage{longtable} % Added for the WBS table
+\usepackage{booktabs}  % Added for professional table lines (\toprule, \midrule)
+\usepackage{graphicx}
+\usepackage{tabularx} 
+\usepackage{caption}
+\usepackage{pgfgantt} % Added for Gantt charts
+\usepackage{tocloft} % Control Table of Contents spacing
+\usepackage{float}
+\usepackage{amsmath} % For \text command in math mode
+\usepackage{hyperref} % For clickable table of contents
+\graphicspath{{figures/}} % For including images
+
+% Configure Table of Contents to add "Chapter" prefix
+\renewcommand{\cftsecpresnum}{Chapter }
+\renewcommand{\cftsecnumwidth}{6em} % Adjust width to fit "Chapter X"
+\renewcommand{\cftsecaftersnum}{:}
+
+% Configure hyperref for better appearance
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    urlcolor=black,
+    pdfborder={0 0 0}
+}
+
+\begin{document}
+
+% --- Custom Title Page ---
+\begin{titlepage}
+\centering
+
+\vspace*{0.5cm}
+
+% University Logo
+\includegraphics[width=5cm]{squ-logo.png}\\[0.5cm]
+
+% University Header
+{\Large\textbf{SULTAN QABOOS UNIVERSITY}}\\[0.4cm]
+{\large College of Engineering}\\[0.3cm]
+{\large Department of Electrical and Computer Engineering}\\[0.2cm]
+{\normalsize Computer Systems and Networks}
+
+\vspace{2cm}
+
+% Project Title
+{\Huge\textbf{Smart Healthcare Robot}}\\[0.8cm]
+{\LARGE Bringing Care Closer to Patients in Oman}
+
+\vspace{1cm}
+
+% Project Type
+{\large\textbf{Final Year Project Report}}
+
+\vspace{1cm}
+
+% Students
+\begin{flushleft}
+\hspace{3cm}\textbf{Submitted by:}\\[0.5cm]
+\hspace{4cm}Almoulla Talal Almaawali \hfill 135591\\[0.3cm]
+\hspace{4cm}Abdulmunim Khamis Albusaidi \hfill 133225\\[0.3cm]
+\hspace{4cm}\hfill \\
+\end{flushleft}
+
+%\vspace{0.5cm}
+
+% Supervisor
+\begin{flushleft}
+\hspace{3cm}\textbf{Supervised by:}\\[0.5cm]
+\hspace{4cm}Ahmed Chehib Ammari
+\end{flushleft}
+
+\vfill
+
+% Date
+{\large Academic Year 2025--2026}\\[0.4cm]
+{\normalsize\today}
+
+\end{titlepage}
+
+% --- Table of Contents ---
+% Increase spacing between entries in the Table of Contents only
+% \setlength{\cftbeforesecskip}{10pt}
+% \setlength{\cftbeforesubsecskip}{6pt}
+% \setlength{\cftbeforesubsubsecskip}{4pt}
+
+\tableofcontents
+\thispagestyle{empty}
+\newpage
+\setcounter{page}{1}
+
+% --- Main Sections Structure ---
+% Chapter intro page macro (book-like divider)
+\newcommand{\chapterintro}[3]{%
+\clearpage
+\thispagestyle{empty}%
+\vspace*{2cm}%
+\begin{center}
+    {\fontsize{72}{72}\selectfont \textbf{#1}}\\[0.6cm]
+    {\LARGE\bfseries #2}\\[0.6cm]
+    \rule{0.75\textwidth}{0.6pt}\\[0.6cm]
+    \parbox{0.75\textwidth}{\large #3}
+\end{center}
+\vfill
+\clearpage
+}
+\chapterintro{1}{Introduction}{This chapter establishes the project context, problem statement, motivation, objectives, methodology overview, and the project management plan that frames execution for the rest of the report.}
+\section{Introduction}
+\input{sections/01-project-aim.tex}
+
+\input{sections/02-problem-statement.tex}
+
+\input{sections/03-motivation.tex}
+
+\input{sections/04-objectives.tex}
+
+\input{sections/05-methodology.tex}
+
+\input{sections/06-project-management-plan.tex}
+
+%\input{sections/07-introduction-these-sections-are-not-ready-just-draft.tex}
+
+\chapterintro{2}{Literature Review}{This chapter surveys consumer, industrial, and healthcare robotics; documents benefits and challenges of AMRs in hospitals; analyzes core technologies (navigation, RF localization, SLAM, LLMs); and motivates the platform choices and project needs.}
+\section{Literature Review}
+\input{sections/08-relevant-literature-review.tex}
+
+\chapterintro{3}{System Conceptual Design}{This chapter presents the high-level system architecture of the smart healthcare robot, including the overall system overview, design alternatives, and justification for the selected hardware and software configuration.}
+\section{System Conceptual Design}
+\input{sections/09-system-conceptual-design.tex}
+
+\nocite{*}
+
+\bibliographystyle{unsrt}
+\bibliography{references/references}
+\end{document}

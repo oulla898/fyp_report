@@ -1,42 +1,43 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage[margin=1in]{geometry}
-% Use a cleaner, lighter font and better typography
 \usepackage{lmodern}
 \usepackage[protrusion=true,expansion=true]{microtype}
 \usepackage{titling}
 \usepackage{enumitem}
-\usepackage{longtable} % Added for the WBS table
-\usepackage{booktabs}  % Added for professional table lines (\toprule, \midrule)
+\usepackage{longtable}
+\usepackage{booktabs}
 \usepackage{graphicx}
-\usepackage{tabularx} 
+\usepackage{tabularx}
 \usepackage{caption}
-\usepackage{pgfgantt} % Added for Gantt charts
-\usepackage{tocloft} % Control Table of Contents spacing
+\usepackage{pgfgantt}
+\usepackage{tocloft}
 \usepackage{float}
-\usepackage{amsmath} % For \text command in math mode
-\usepackage{hyperref} % For clickable table of contents
-\graphicspath{{figures/}} % For including images
+\usepackage{amsmath}
+\usepackage{hyperref}
+\graphicspath{{figures/}}
 
-% Configure Table of Contents to add "Chapter" prefix
-\renewcommand{\cftsecpresnum}{Chapter }
-\renewcommand{\cftsecnumwidth}{6em} % Adjust width to fit "Chapter X"
-\renewcommand{\cftsecaftersnum}{:}
+% Configure Table of Contents spacing
+\setlength{\cftbeforesecskip}{8pt}
+\setlength{\cftbeforesubsecskip}{4pt}
 
-% Configure hyperref for better appearance
+% Configure hyperref
 \hypersetup{
     colorlinks=true,
     linkcolor=black,
     citecolor=black,
     urlcolor=black,
-    pdfborder={0 0 0}
+    pdfborder={0 0 0},
+    pdftitle={Smart Healthcare Robot},
+    pdfauthor={Almoulla Talal Almaawali, Abdulmunim Khamis Albusaidi}
 }
 
 \begin{document}
 
-% --- Custom Title Page ---
+% ============================================================
+% TITLE PAGE
+% ============================================================
 \begin{titlepage}
 \centering
-
 \vspace*{0.5cm}
 
 % University Logo
@@ -46,7 +47,6 @@
 {\Large\textbf{SULTAN QABOOS UNIVERSITY}}\\[0.4cm]
 {\large College of Engineering}\\[0.3cm]
 {\large Department of Electrical and Computer Engineering}\\[0.2cm]
-{\normalsize Computer Systems and Networks}
 
 \vspace{2cm}
 
@@ -54,93 +54,234 @@
 {\Huge\textbf{Smart Healthcare Robot}}\\[0.8cm]
 {\LARGE Bringing Care Closer to Patients in Oman}
 
+\vspace{1.5cm}
+
+% Authors
+{\large\textbf{Almoulla Talal Almaawali \& Abdulmunim Khamis Albusaidi}}\\[0.3cm]
+{\normalsize 135591 \& 133225}
+
 \vspace{1cm}
-
-% Project Type
-{\large\textbf{Final Year Project Report}}
-
-\vspace{1cm}
-
-% Students
-\begin{flushleft}
-\hspace{3cm}\textbf{Submitted by:}\\[0.5cm]
-\hspace{4cm}Almoulla Talal Almaawali \hfill 135591\\[0.3cm]
-\hspace{4cm}Abdulmunim Khamis Albusaidi \hfill 133225\\[0.3cm]
-\hspace{4cm}\hfill \\
-\end{flushleft}
-
-%\vspace{0.5cm}
 
 % Supervisor
-\begin{flushleft}
-\hspace{3cm}\textbf{Supervised by:}\\[0.5cm]
-\hspace{4cm}Ahmed Chehib Ammari
-\end{flushleft}
+{\large\textbf{Supervisor:}}\\[0.3cm]
+{\large Ahmed Chehib Ammari}
+
+\vspace{1.5cm}
+
+% Degree Statement
+{\normalsize A Final Year Project Report submitted to the Department of}\\
+{\normalsize Electrical and Computer Engineering, Sultan Qaboos University}\\
+{\normalsize in partial fulfilment of the requirements for the Degree of}
+
+\vspace{0.5cm}
+
+{\large\textbf{BACHELOR OF ENGINEERING}}\\
+{\normalsize in}\\
+{\large\textbf{ELECTRICAL \& COMPUTER ENGINEERING}}
 
 \vfill
 
 % Date
 {\large Academic Year 2025--2026}\\[0.4cm]
-{\normalsize\today}
+{\normalsize December 2025}
 
 \end{titlepage}
 
-% --- Table of Contents ---
-% Increase spacing between entries in the Table of Contents only
-% \setlength{\cftbeforesecskip}{10pt}
-% \setlength{\cftbeforesubsecskip}{6pt}
-% \setlength{\cftbeforesubsubsecskip}{4pt}
-
-\tableofcontents
-\thispagestyle{empty}
+% ============================================================
+% STUDENTS DECLARATION STATEMENT
+% ============================================================
 \newpage
+\thispagestyle{empty}
+\section*{Students Declaration Statement}
+\addcontentsline{toc}{section}{Students Declaration Statement}
+
+We certify that Mr. Almoulla Talal Almaawali (Student ID: 135591) and Mr. Abdulmunim Khamis Albusaidi (Student ID: 133225) that this project is our own work, based on our personal study and that we have acknowledged all material and sources used in its preparation, whether they be books, articles, reports, lecture notes, and any other kind of document, electronic or personal communication.
+
+We also certify that this report does not include any violation of anyone's copyrights or otherwise plagiarised the work of other persons.
+
+\vspace{2cm}
+
+\noindent
+\begin{tabular}{@{}p{0.4\textwidth}p{0.5\textwidth}@{}}
+. . . . . . . . . . . . . . . . . . . . . & . . . . . . . . . . . . . . . . . . . . . \\
+Date: December 13, 2025 & Students's Names \\
+& Almoulla Talal Almaawali \\
+& Abdulmunim Khamis Albusaidi
+\end{tabular}
+
+% ============================================================
+% ABSTRACT
+% ============================================================
+\newpage
+\thispagestyle{empty}
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+
+This project develops a smart healthcare robot for Omani hospitals to assist medical staff with routine tasks. The robot uses ROS~2 for autonomous navigation, LiDAR-based SLAM for mapping, and Google Gemini 2.0 Flash for natural language interaction. It can deliver items, guide patients, and provide information through a tablet interface.
+
+Three platform alternatives were evaluated using AHP decision matrices. A hybrid architecture was selected, combining a commercial robot base with custom AI layers. The system includes seven subsystems: Mobility, Navigation, Perception, Intelligence, Task Management, Interface, and Power Management. The design addresses healthcare workforce challenges while maintaining patient safety and ease of use.
+
+\vspace{0.5cm}
+\noindent\textbf{Keywords:} Healthcare Robotics, Autonomous Mobile Robots, ROS 2, LiDAR SLAM, Human--Robot Interaction, Large Language Models
+
+% ============================================================
+% GRAPHICAL ABSTRACT
+% ============================================================
+\newpage
+\thispagestyle{empty}
+\section*{Graphical Abstract}
+\addcontentsline{toc}{section}{Graphical Abstract}
+
+\begin{center}
+\vspace{2cm}
+\textit{[Placeholder: System architecture diagram showing the smart healthcare robot with its seven subsystems (Mobility, Navigation, Perception, Intelligence, Task Management, Interface, Power Management) and their interactions. Include visual representation of robot operating in hospital environment with LiDAR scanning, tablet interface, and cloud AI connection.]}
+\vspace{2cm}
+\end{center}
+
+% ============================================================
+% ACKNOWLEDGEMENT
+% ============================================================
+\newpage
+\thispagestyle{empty}
+\section*{Acknowledgement}
+\addcontentsline{toc}{section}{Acknowledgement}
+
+We acknowledge our supervisor, Dr. Ahmed Chehib Ammari, for his guidance throughout this project.
+
+We thank the Department of Electrical and Computer Engineering at Sultan Qaboos University for providing the necessary facilities and resources.
+
+% ============================================================
+% ACRONYMS
+% ============================================================
+\newpage
+\thispagestyle{empty}
+\section*{Acronyms}
+\addcontentsline{toc}{section}{Acronyms}
+
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Acronym} & \textbf{Description} \\
+\midrule
+AHP & Analytic Hierarchy Process \\
+AI & Artificial Intelligence \\
+AMR & Autonomous Mobile Robot \\
+API & Application Programming Interface \\
+BMS & Battery Management System \\
+HRI & Human--Robot Interaction \\
+IMU & Inertial Measurement Unit \\
+LiDAR & Light Detection and Ranging \\
+LLM & Large Language Model \\
+ROS & Robot Operating System \\
+SLAM & Simultaneous Localization and Mapping \\
+ToF & Time of Flight \\
+UWB & Ultra-Wideband \\
+WBS & Work Breakdown Structure \\
+\bottomrule
+\end{tabular}
+
+% ============================================================
+% TABLE OF CONTENTS
+% ============================================================
+\newpage
+\tableofcontents
+\newpage
+
+% ============================================================
+% LIST OF FIGURES
+% ============================================================
+\listoffigures
+\newpage
+
+% ============================================================
+% LIST OF TABLES
+% ============================================================
+\listoftables
+\newpage
+
+% ============================================================
+% MAIN CONTENT
+% ============================================================
 \setcounter{page}{1}
 
-% --- Main Sections Structure ---
-% Chapter intro page macro (book-like divider)
-\newcommand{\chapterintro}[3]{%
-\clearpage
-\thispagestyle{empty}%
-\vspace*{2cm}%
-\begin{center}
-    {\fontsize{72}{72}\selectfont \textbf{#1}}\\[0.6cm]
-    {\LARGE\bfseries #2}\\[0.6cm]
-    \rule{0.75\textwidth}{0.6pt}\\[0.6cm]
-    \parbox{0.75\textwidth}{\large #3}
-\end{center}
-\vfill
-\clearpage
-}
-\chapterintro{1}{Introduction}{This chapter establishes the project context, problem statement, motivation, objectives, methodology overview, and the project management plan that frames execution for the rest of the report.}
+% Chapter 1: Introduction
 \section{Introduction}
+\label{sec:introduction}
+
+\subsection{Project Aim}
 \input{sections/01-project-aim.tex}
 
+\subsection{Problem Statement}
 \input{sections/02-problem-statement.tex}
 
+\subsection{Motivation}
 \input{sections/03-motivation.tex}
 
+\subsection{Objectives}
 \input{sections/04-objectives.tex}
 
+\subsection{Methodology}
 \input{sections/05-methodology.tex}
 
+\subsection{Project Management Plan}
 \input{sections/06-project-management-plan.tex}
 
-%\input{sections/07-introduction-these-sections-are-not-ready-just-draft.tex}
+\subsection{Report Organization}
+This report is organized into the following chapters:
 
-\chapterintro{2}{Literature Review}{This chapter surveys consumer, industrial, and healthcare robotics; documents benefits and challenges of AMRs in hospitals; analyzes core technologies (navigation, RF localization, SLAM, LLMs); and motivates the platform choices and project needs.}
+\textbf{Chapter 1: Introduction} establishes the project context, problem statement, motivation, objectives, methodology overview, and project management plan that frames execution for the project.
+
+\textbf{Chapter 2: Literature Review} surveys consumer, industrial, and healthcare robotics; documents benefits and challenges of AMRs in hospitals; analyzes core technologies (navigation, RF localization, SLAM, LLMs); and motivates the platform choices and project needs.
+
+\textbf{Chapter 3: Requirements Specifications} presents customer requirements gathered from hospital stakeholders, translates them into engineering requirements with measurable metrics, identifies constraints, and establishes validation criteria.
+
+\textbf{Chapter 4: System Conceptual Design} presents the high-level system architecture of the smart healthcare robot, evaluates three design alternatives using AHP methodology, documents the selection rationale, and provides functional decomposition of the system.
+
+\textbf{Chapter 5 and beyond} will cover detailed design, implementation, testing, and validation (to be completed in subsequent project phases).
+
+\textbf{References} lists all cited works and resources consulted during the project.
+
+\textbf{Appendices} provide supplementary materials including additional tables, figures, datasheets, and code documentation.
+
+% Chapter 2: Literature Review
+\newpage
 \section{Literature Review}
+\label{sec:literature-review}
 \input{sections/08-relevant-literature-review.tex}
 
-\chapterintro{3}{Requirement Specification}{This chapter establishes comprehensive system requirements, translating stakeholder needs into measurable engineering specifications. It documents customer requirements, engineering requirements, constraints, and presents systematic trade-off analyses with scoring matrices for key design decisions including platform selection, sensor configuration, computing architecture, and AI integration.}
-\section{Requirement Specification}
+% Chapter 3: Requirements Specifications
+\newpage
+\section{Requirements Specifications}
+\label{sec:requirements}
 \input{sections/10-requirement-specification.tex}
 
-\chapterintro{4}{System Conceptual Design}{This chapter presents the high-level system architecture of the smart healthcare robot, including the overall system overview, design alternatives, and justification for the selected hardware and software configuration.}
+% Chapter 4: System Conceptual Design
+\newpage
 \section{System Conceptual Design}
+\label{sec:design}
 \input{sections/09-system-conceptual-design.tex}
 
-\nocite{*}
-
+% ============================================================
+% REFERENCES
+% ============================================================
+\newpage
 \bibliographystyle{unsrt}
 \bibliography{references/references}
+
+% ============================================================
+% APPENDICES
+% ============================================================
+\newpage
+\appendix
+\section{Appendix: Additional Tables and Figures}
+\label{sec:appendix}
+
+\subsection{Component Datasheets}
+\textit{[To be added: Technical specifications for RPLiDAR A1, MPU6050 IMU, Raspberry Pi 5, ESP32, motor drivers, and battery system]}
+
+\subsection{Code Repository}
+\textit{[To be added: GitHub repository link, software architecture diagrams, and code documentation]}
+
+\subsection{Testing Protocols}
+\textit{[To be added: Detailed test procedures for navigation accuracy, obstacle avoidance, speech recognition, and system integration]}
+
 \end{document}
