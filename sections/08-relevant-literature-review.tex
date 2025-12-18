@@ -65,7 +65,7 @@ Cleaning and disinfection robots can be equipped with UV-C light systems at rela
 AMRs with integrated telepresence capabilities enable remote consultations, family visits, and specialist rounds without requiring travel \cite{garingo2016}. This technology proved invaluable during pandemic restrictions and continues to provide value for rural healthcare access and specialist consultations.
 
 \paragraph{Waste Collection and Handling.}
-Some advanced AMR systems are deployed for biohazardous waste collection and disposal, reducing staff exposure to potentially infectious materials. In China and other Asian markets, robots have been successfully implemented for collecting and transporting medical waste from patient rooms to centralized disposal areas.
+Some advanced AMR systems are deployed for biohazardous waste collection and disposal, reducing staff exposure to potentially infectious materials \cite{mdpi2024}. In China and other Asian markets, robots have been successfully implemented for collecting and transporting medical waste from patient rooms to centralized disposal areas, demonstrating significant improvements in operational efficiency and staff safety.
 
 \subsubsection{Challenges in Hospital AMR Deployment}
 
@@ -277,21 +277,23 @@ The LLM landscape is broadly divided into two categories: open-source and propri
 \hline
 \textbf{Model (Version)} & \textbf{Org.} & \textbf{License} & \textbf{Max Context (tokens)} & \textbf{Input API Cost (\$/M)} & \textbf{Output API Cost (\$/M)} \\
 \hline
-OpenAI GPT-4o & OpenAI & Proprietary & 128,000 & \$2.50 & \$10.00 \\
+OpenAI GPT-5.2 & OpenAI & Proprietary & 128,000 & \$2.50 & \$10.00 \\
 \hline
-Google Gemini 2.5 Pro & Google & Proprietary & 1,048,576 & \$1.25--\$2.50 & \$10.00--\$15.00 \\
+Google Gemini 3 flash & Google & Proprietary & 1,048,576 & \$1.25--\$2.50 & \$10.00--\$15.00 \\
+\hline
+Google Med-Gemma 2B & Google & Open Weight (Apache 2.0) & 8,192 & \$0.00 (Self-hosted) & \$0.00 (Self-hosted) \\
 \hline
 Meta Llama 3.1 405B & Meta & Llama 3.1 Community License & 128,000--131,072 & \textasciitilde\$0.80--\$3.50 & \textasciitilde\$0.80--\$3.50 \\
 \hline
 DeepSeek V3 & DeepSeek & MIT (Code) / DeepSeek Model & 128,000--164,000 & \textasciitilde\$0.14--\$0.48 & \textasciitilde\$0.28--\$1.10 \\
 \hline
 \end{tabularx}
-\caption{Comparative analysis of leading Large Language Models. Data compiled from early 2025 period \cite{civo2024}.}
+\caption{Comparative analysis of leading Large Language Models. Data compiled from early 2025 period \cite{civo2024, medgemini2024}.}
 \label{tab:llm_comparison}
 \end{table}
 
 \paragraph{LLM Discussion and Cost Considerations.}
-Table~\ref{tab:llm_comparison} summarizes key characteristics of leading LLM options. OpenAI's GPT-4o offers strong performance with a 128k token context window, while Google's Gemini 2.5 Pro stands out with exceptional context length (over 1M tokens) and competitive API pricing. Notably, Google's Gemini API is available at no cost for requests under 60 requests per minute (RPM), making it an attractive option for development and testing phases. Meta's Llama 3.1 405B provides an open-source alternative with flexible licensing, while DeepSeek V3 offers the most economical API costs, particularly beneficial for cost-sensitive deployments. Even that llama and DeepSeek are open-source models, they still have associated costs when using hosted APIs, which can vary based on usage volume and specific service providers.
+Table~\ref{tab:llm_comparison} summarizes key characteristics of leading LLM options. OpenAI's GPT-5.2 offers strong performance with a 128k token context window, while Google's Gemini 3 flash stands out with exceptional context length (over 1M tokens) and competitive API pricing. Notably, Google's Gemini API is available at no cost for requests under 60 requests per minute (RPM), making it an attractive option for development and testing phases. Google's Med-Gemma represents a family of specialized open-weight models (available in 2B, 7B, and 27B parameter variants) fine-tuned specifically on medical literature, clinical guidelines, and healthcare datasets \cite{medgemini2024}. While Med-Gemma demonstrates state-of-the-art performance on medical benchmarks (MedQA, MedMCQA, PubMedQA) and would be highly relevant for advanced clinical decision support or medical question answering, it is considered overkill for the basic conversational interactions required in this project (patient guidance, wayfinding, simple information queries). Meta's Llama 3.1 405B provides an open-source alternative with flexible licensing, while DeepSeek V3 offers the most economical API costs, particularly beneficial for cost-sensitive deployments. Even that Llama and DeepSeek are open-source models, they still have associated costs when using hosted APIs, which can vary based on usage volume and specific service providers.
 
 \subsubsection{User Interface and Human-Robot Interaction}
 For autonomous healthcare robots operating in clinical environments, the user interface (UI) and human-robot interaction (HRI) design directly impacts adoption, user satisfaction, and clinical workflow integration. The interface must balance accessibility for diverse user groups (clinicians, administrative staff, patients) with robust control mechanisms suitable for dynamic hospital environments. Common UI paradigms employed in hospital robotics include:

@@ -2,7 +2,7 @@
 
 The success of any engineering project hinges on a clear, comprehensive understanding of the requirements that guide design, implementation, and evaluation. This chapter formalizes the requirement specification for the smart healthcare robot project, translating stakeholder needs and technical constraints into measurable, verifiable criteria. The requirements are systematically categorized into customer requirements, engineering requirements, and engineering constraints, ensuring alignment between user expectations and technical feasibility.
 
-Customer requirements capture the high-level needs and expectations of primary stakeholders—hospital administrators, clinical staff, patients, and support personnel. These requirements reflect the functional and operational capabilities that directly impact system value and user satisfaction. Engineering requirements translate customer needs into quantifiable, testable technical specifications that guide system architecture and component selection. Engineering constraints define the boundaries within which the system must operate, including budget limitations, timeline restrictions, regulatory compliance, and environmental conditions specific to hospital deployment in Oman.
+Customer requirements capture the high-level needs and expectations of primary stakeholders--hospital administrators, clinical staff, patients, and support personnel. These requirements reflect the functional and operational capabilities that directly impact system value and user satisfaction. Engineering requirements translate customer needs into quantifiable, testable technical specifications that guide system architecture and component selection. Engineering constraints define the boundaries within which the system must operate, including budget limitations, timeline restrictions, regulatory compliance, and environmental conditions specific to hospital deployment in Oman.
 
 This chapter also presents a structured analysis of design alternatives, trade-offs, and selection criteria through comparative tables with metrics and scores. These analyses document the rationale for key architectural decisions, including mobile platform selection, sensor configuration, computing architecture, and AI integration strategy. The systematic evaluation ensures that design choices are transparent, justified, and optimized for the project's objectives and constraints.
 
@@ -188,8 +188,8 @@ Table~\ref{tab:llm_metrics} compares Large Language Models based on context hand
 \hline
 \textbf{Model} & \textbf{Deployment Mode} & \textbf{Context (Tokens)} & \textbf{Cost/1M In (\$)} & \textbf{Cost/1M Out (\$)} \\
 \hline
-Gemini 2.5 Pro & Cloud API & 1,000,000 & 0.00 (Free Tier) & 0.00 (Free Tier) \\
-GPT-4o & Cloud API & 128,000 & 2.50 & 10.00 \\
+Gemini 3 flash & Cloud API & 1,000,000 & 0.00 (Free Tier) & 0.00 (Free Tier) \\
+GPT-5.2 & Cloud API & 128,000 & 2.50 & 10.00 \\
 Llama 3.1 8B & Local (Orin) & 8,000 & 0.00 & 0.00 \\
 DeepSeek V3 & Cloud API & 128,000 & 0.14 & 0.28 \\
 \hline

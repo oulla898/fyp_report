@@ -99,7 +99,7 @@ This alternative combines a commercial robot base platform with custom-developed
     \item \textbf{Computing}: Base platform computer (Raspberry Pi 4/5) plus optional edge AI accelerator (Google Coral TPU or NVIDIA Jetson Nano) for on-device inference
     \item \textbf{Navigation}: Pre-integrated LiDAR, IMU, and odometry from base platform
     \item \textbf{Perception}: Added RGB-D camera and microphone array for enhanced HRI
-    \item \textbf{Intelligence}: Custom integration of Google Gemini 3.0 pro via API for conversational AI, with fallback to on-device models
+    \item \textbf{Intelligence}: Custom integration of Google Gemini 3 flash via API for conversational AI, with fallback to on-device models
     \item \textbf{Interface}: Custom Android tablet application with voice interaction, hospital-specific task workflows, and real-time telemetry dashboard
     \item \textbf{Power}: Platform's integrated battery with custom power monitoring and management software
 \end{itemize}
@@ -142,7 +142,7 @@ To systematically select the most appropriate robot platform alternative, we emp
 \textbf{Motors Integrated} & Yes (pre-installed DC motors with encoders) & No (requires selection \& integration) & Yes (commercial base motors) \\
 \textbf{Sensors Integrated} & Yes (LiDAR, IMU, odometry pre-calibrated) & No (procure \& calibrate separately) & Yes (base sensors included) \\
 \textbf{Computer Integrated} & Yes (RPi 4/5 or NUC pre-configured) & No (requires setup \& ROS installation) & Yes (base computer + optional upgrade) \\
-\textbf{LLM Integrated} & No (requires custom integration) & No (requires custom integration) & No (custom Gemini integration) \\
+\textbf{LLM Integrated} & No (requires custom integration) & No (requires custom integration) & No (custom Gemini 3 flash integration) \\
 \textbf{ROS~2 Compatibility} & Yes (native support) & Yes (manual configuration) & Yes (native + custom nodes) \\
 \textbf{CE/EMC Standards} & Yes (commercial certification) & No (requires testing) & Partial (base certified, additions not) \\
 \textbf{IP Rating} & IP42--IP54 (varies by model) & None (custom design) & Base platform rating (IP42) \\
@@ -216,7 +216,7 @@ B: Custom-Built Modular & 5.55 \\
 \end{tabular}
 \end{table}
 
-While Alternative A (Commercial) scores highest, \textbf{Alternative C (Hybrid)} is selected as it offers the best balance of reliability (47\% weight) and development speed (30\% weight) while maintaining sufficient customizability for healthcare-specific AI features. The modest score difference (7.11 vs 6.76) is acceptable given that Alternative C enables innovation in HRI—the project's primary differentiator—while leveraging proven navigation hardware.
+While Alternative A (Commercial) scores highest, \textbf{Alternative C (Hybrid)} is selected as it offers the best balance of reliability (47\% weight) and development speed (30\% weight) while maintaining sufficient customizability for healthcare-specific AI features. The modest score difference (7.11 vs 6.76) is acceptable given that Alternative C enables innovation in HRI--the project's primary differentiator--while leveraging proven navigation hardware.
 
 \subsubsection{Computing Platform Selection Using AHP}
 Three computing platforms are evaluated for the main onboard computer: Raspberry Pi 5, NVIDIA Jetson Nano, and Intel NUC.
@@ -244,7 +244,7 @@ Intel NUC & 9 & 4 & 3 & 8 & 6.55 \\
 \end{tabular}
 \end{table}
 
-\textbf{Selected: Raspberry Pi 5} — Optimal balance of sufficient processing power for ROS~2 Nav2, excellent power efficiency (critical for battery operation), low cost, and extensive ROS community support.
+\textbf{Selected: Raspberry Pi 5}--Optimal balance of sufficient processing power for ROS~2 Nav2, excellent power efficiency (critical for battery operation), low cost, and extensive ROS community support.
 
 \subsubsection{Navigation Approach Selection Using AHP}
 Three navigation approaches are compared: LiDAR-based SLAM, Visual SLAM, and Hybrid SLAM.
@@ -272,7 +272,7 @@ Hybrid SLAM & 8 & 9 & 4 & 5 & 7.35 \\
 \end{tabular}
 \end{table}
 
-\textbf{Selected: LiDAR-based SLAM (Nav2 + RPLIDAR A1)} — Superior accuracy and robustness in structured indoor environments, well-established ROS~2 Nav2 integration, acceptable sensor cost.
+\textbf{Selected: LiDAR-based SLAM (Nav2 + RPLIDAR A1)}--Superior accuracy and robustness in structured indoor environments, well-established ROS~2 Nav2 integration, acceptable sensor cost.
 
 \subsubsection{Localization Sensor Selection Using AHP}
 Three primary localization sensor configurations are evaluated.
@@ -300,10 +300,10 @@ UWB + Odom + IMU & 6 & 9 & 5 & 4 & 6.10 \\
 \end{tabular}
 \end{table}
 
-\textbf{Selected: LiDAR + Odometry + IMU} — Best precision for structured hospital environments, proven ROS~2 sensor fusion with robot\_localization package, extensive Nav2 support.
+\textbf{Selected: LiDAR + Odometry + IMU}--Best precision for structured hospital environments, proven ROS~2 sensor fusion with robot\_localization package, extensive Nav2 support.
 
 \subsubsection{LLM Selection Using AHP}
-For the conversational AI component, three state-of-the-art LLM options are evaluated: OpenAI GPT-4 Turbo, Anthropic Claude 3.5 Sonnet, and Google Gemini 2.0 Flash (announced December 2024).
+For the conversational AI component, three state-of-the-art LLM options are evaluated: OpenAI GPT-4 Turbo, Anthropic Claude 3.5 Sonnet, and Google Gemini 3 flash (announced December 2024).
 
 \paragraph{LLM Evaluation Criteria}
 Four criteria are defined:
@@ -351,7 +351,7 @@ Consistency Ratio (CR) = 0.05 $<$ 0.10, acceptable.
 \midrule
 GPT-4 Turbo & 7 & 9 & 6 & 5 \\
 Claude 3.5 Sonnet & 5 & 9 & 7 & 6 \\
-Gemini 3.0 pro & 9 & 8 & 9 & 9 \\
+Gemini 3 flash & 9 & 8 & 9 & 9 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -360,7 +360,7 @@ Scoring rationale:
 \begin{itemize}
     \item \textbf{GPT-4 Turbo}: Excellent performance, moderate familiarity, good but not fastest latency, moderate cost
     \item \textbf{Claude 3.5 Sonnet}: Excellent performance with strong safety features, less team familiarity, good latency, moderate cost
-    \item \textbf{Gemini 3.0 pro}: High team familiarity with Google AI APIs, excellent performance for size, extremely low latency optimized for real-time use, very cost-effective
+    \item \textbf{Gemini 3 flash}: High team familiarity with Google AI APIs, excellent performance for size, extremely low latency optimized for real-time use, very cost-effective
 \end{itemize}
 
 \paragraph{Final LLM AHP Scores}
@@ -373,12 +373,12 @@ Scoring rationale:
 \midrule
 GPT-4 Turbo & 7.62 \\
 Claude 3.5 Sonnet & 7.54 \\
-\textbf{Gemini 3.0 pro} & \textbf{8.44} \\
+\textbf{Gemini 3 flash} & \textbf{8.44} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Google Gemini 2.0 Flash} is selected based on its superior AHP score. Key advantages include:
+\textbf{Google Gemini 3 flash} is selected based on its superior AHP score. Key advantages include:
 \begin{itemize}
     \item Team's extensive experience with Google Cloud Platform and Gemini API
     \item Optimized for low-latency real-time conversational AI (critical for natural HRI)
@@ -400,7 +400,7 @@ Robot Platform & Hybrid (Commercial Base + Custom AI) & 6.76 \\
 Computing Platform & Raspberry Pi 5 (4GB) & 7.65 \\
 Navigation Approach & LiDAR-based SLAM (Nav2) & 7.95 \\
 Localization Sensors & LiDAR + Odometry + IMU & 8.20 \\
-LLM & Google Gemini 2.0 Flash & 8.44 \\
+LLM & Google Gemini 3 flash & 8.44 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -412,7 +412,7 @@ Based on the AHP analysis, the final system architecture combines:
     \item \textbf{Main Computer}: Raspberry Pi 5 (4GB) running Ubuntu 22.04 + ROS~2 Humble
     \item \textbf{Navigation}: Integrated RPLiDAR A1, MPU6050 IMU, wheel encoders
     \item \textbf{Perception}: Pi Camera Module 3 + USB microphone array
-    \item \textbf{AI/LLM}: Google Gemini 3.0 pro via Cloud API
+    \item \textbf{AI/LLM}: Google Gemini 3 flash via Cloud API
     \item \textbf{Interface}: Custom Android tablet app with voice interaction
     \item \textbf{Power}: Platform's Li-ion battery with automatic docking
 \end{itemize}
@@ -493,7 +493,7 @@ The subsystems are defined textually as follows:
 
 \paragraph{4. Intelligence Subsystem}
 \begin{itemize}
-    \item \textbf{Components}: Gemini 3.0 pro API client, speech-to-text, text-to-speech, dialogue manager
+    \item \textbf{Components}: Gemini 3 flash API client, speech-to-text, text-to-speech, dialogue manager
     \item \textbf{Functions}: Process natural language queries, generate contextual responses, manage conversation state, translate between voice and text
     \item \textbf{Interfaces}: Receives audio from Perception, text commands from Interface, sends responses to Interface, task requests to Task Manager
 \end{itemize}
@@ -523,7 +523,7 @@ The subsystems are defined textually as follows:
 As summarized in Figure~\ref{fig:level1-subsystems}, the robot operates in a closed loop of sensing, decision-making, and actuation. The Perception subsystem collects sensor data and forwards it to Navigation for localisation and path planning, while also sending audio and video streams to the Intelligence subsystem. Intelligence interprets user intent and generates high-level task requests, which are queued and coordinated by Task Management. Task Management issues navigation goals to Navigation, which computes velocity commands for the Mobility subsystem and receives odometry feedback in return. Interface and Communication exposes task requests, status information, and telemetry to users and remote dashboards, while Power Management responds to dock/charge commands and reports battery status to both Task Management and the interface layer. This interaction pattern ensures that environmental sensing, user intent, motion control, and power management remain synchronised during hospital missions.
 
 \subsection{Conclusion}
-This chapter presented a systematic approach to the conceptual design of the smart healthcare robot. Through AHP-based evaluation of three platform alternatives (commercial, custom-built, and hybrid), the hybrid approach was selected as it balances reliability with customizability for healthcare-specific AI features. A second AHP analysis selected Google Gemini 3.0 pro as the optimal LLM for conversational AI due to team familiarity, low latency, and cost-effectiveness.
+This chapter presented a systematic approach to the conceptual design of the smart healthcare robot. Through AHP-based evaluation of three platform alternatives (commercial, custom-built, and hybrid), the hybrid approach was selected as it balances reliability with customizability for healthcare-specific AI features. A second AHP analysis selected Google Gemini 3 flash as the optimal LLM for conversational AI due to team familiarity, low latency, and cost-effectiveness.
 
 The resulting system architecture is decomposed into seven functional subsystems (Mobility, Navigation, Perception, Intelligence, Task Management, Interface, and Power Management), each with clearly defined responsibilities and interfaces. This modular design enables parallel development, facilitates testing and validation, and provides a clear path for future enhancements such as manipulation capabilities or multi-robot coordination.
 
