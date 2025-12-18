@@ -202,7 +202,23 @@ WBS & Work Breakdown Structure \\
 % ============================================================
 \setcounter{page}{1}
 
+% Chapter intro page macro (book-like divider)
+\newcommand{\chapterintro}[3]{%
+\clearpage
+\thispagestyle{empty}%
+\vspace*{2cm}%
+\begin{center}
+    {\fontsize{72}{72}\selectfont \textbf{#1}}\\[0.6cm]
+    {\LARGE\bfseries #2}\\[0.6cm]
+    \rule{0.75\textwidth}{0.6pt}\\[0.6cm]
+    \parbox{0.75\textwidth}{\large #3}
+\end{center}
+\vfill
+\clearpage
+}
+
 % Chapter 1: Introduction
+\chapterintro{1}{Introduction}{This chapter establishes the project context, problem statement, motivation, objectives, methodology overview, and the project management plan that frames execution for the rest of the report.}
 \section{Introduction}
 \label{sec:introduction}
 
@@ -225,19 +241,19 @@ WBS & Work Breakdown Structure \\
 \input{sections/06-project-management-plan.tex}
 
 % Chapter 2: Literature Review
-\newpage
+\chapterintro{2}{Literature Review}{This chapter surveys consumer, industrial, and healthcare robotics; documents benefits and challenges of AMRs in hospitals; analyzes core technologies (navigation, RF localization, SLAM, LLMs); and motivates the platform choices and project needs.}
 \section{Literature Review}
 \label{sec:literature-review}
 \input{sections/08-relevant-literature-review.tex}
 
 % Chapter 3: Requirements Specifications
-\newpage
+\chapterintro{3}{Requirements Specifications}{This chapter defines customer and engineering requirements for the smart healthcare robot, establishing quantifiable specifications for navigation, telepresence, AI interaction, power management, and safety that guide system design and validation.}
 \section{Requirements Specifications}
 \label{sec:requirements}
 \input{sections/10-requirement-specification.tex}
 
 % Chapter 4: System Conceptual Design
-\newpage
+\chapterintro{4}{System Conceptual Design}{This chapter presents the high-level system architecture of the smart healthcare robot, including functional decomposition, design alternatives analysis using AHP methodology, hardware and software selection justification, and detailed subsystem specifications.}
 \section{System Conceptual Design}
 \label{sec:design}
 \input{sections/09-system-conceptual-design.tex}
