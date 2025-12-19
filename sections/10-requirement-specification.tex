@@ -39,11 +39,11 @@ Engineering requirements translate customer needs into quantifiable, testable te
 \hline
 \textbf{Req. ID} & \textbf{Specification} & \textbf{Mapped to CR} & \textbf{Standards} & \textbf{Verification Method} \\
 \hline
-ER1.1 & Position accuracy of $\pm$20~cm in mapped indoor environments & CR1 & ISO 13482:2014 (Safety requirements for personal care robots - mobile servant robots) & Experimental validation using ground-truth positioning system \\
+ER1.1 & Position accuracy of $\pm$20~cm in mapped indoor environments & CR1 & ISO 13482:2014 \cite{iso13482:2014} (Safety requirements for personal care robots - mobile servant robots) & Experimental validation using ground-truth positioning system \\
 \hline
-ER1.2 & Maximum linear velocity of 0.5--1.0~m/s in hospital corridors & CR1 & ISO 13482:2014 (Speed limits for safe human-robot interaction) & Speed measurement tests in controlled environments and hospital corridors \\
+ER1.2 & Maximum linear velocity of 0.5--1.0~m/s in hospital corridors & CR1 & ISO 13482:2014 \cite{iso13482:2014} (Speed limits for safe human-robot interaction) & Speed measurement tests in controlled environments and hospital corridors \\
 \hline
-ER1.3 & Detect and avoid static and dynamic obstacles with minimum detection range of 3~m and reaction time $<$1~s & CR1 & ISO 13855 (Safety of machinery - Positioning of safeguards) & Obstacle avoidance tests with various object types and approach angles \\
+ER1.3 & Detect and avoid static and dynamic obstacles with minimum detection range of 3~m and reaction time $<$1~s & CR1 & ISO 13855 \cite{iso13855} (Safety of machinery - Positioning of safeguards) & Obstacle avoidance tests with various object types and approach angles \\
 \hline
 ER1.4 & Minimum payload of 5~kg to accommodate onboard computers, sensors, and delivery items & CR2 & --- & Load testing with representative payload configurations \\
 \hline
@@ -61,11 +61,11 @@ ER1.4 & Minimum payload of 5~kg to accommodate onboard computers, sensors, and d
 \hline
 \textbf{Req. ID} & \textbf{Specification} & \textbf{Mapped to CR} & \textbf{Standards} & \textbf{Verification Method} \\
 \hline
-ER2.1 & Minimum 720p (1280$\times$720) video resolution at 30~fps & CR2 & ITU-T H.264 / H.265 (Advanced Video Coding) & Video quality assessment tests under typical hospital lighting and network conditions \\
+ER2.1 & Minimum 720p (1280$\times$720) video resolution at 30~fps & CR2 & ITU-T H.264 / H.265 \cite{itut_h264_h265} (Advanced Video Coding) & Video quality assessment tests under typical hospital lighting and network conditions \\
 \hline
 ER2.2 & Bidirectional audio communication with noise cancellation and echo reduction, maintaining intelligibility in hospital environments (ambient noise up to 70~dB) & CR2 & --- & Audio quality tests (speech intelligibility index, background noise rejection) \\
 \hline
-ER2.3 & End-to-end latency $<$200~ms over hospital Wi-Fi networks & CR2 & IEEE 802.11 (Wi-Fi Standards) & Network performance testing and latency measurements \\
+ER2.3 & End-to-end latency $<$200~ms over hospital Wi-Fi networks & CR2 & IEEE 802.11 \cite{ieee802.11} (Wi-Fi Standards) & Network performance testing and latency measurements \\
 \hline
 \end{tabularx}
 \caption{Telepresence and communication engineering requirements.}
@@ -119,7 +119,7 @@ ER4.2 & Autonomously locate and dock with charging station when battery level re
 \hline
 \textbf{Req. ID} & \textbf{Specification} & \textbf{Mapped to CR} & \textbf{Standards} & \textbf{Verification Method} \\
 \hline
-ER5.1 & Physical emergency stop button(s) and remote e-stop capability via software interface & CR1 & ISO 13850 (Safety of machinery - Emergency stop function) & Functional testing of emergency stop mechanisms \\
+ER5.1 & Physical emergency stop button(s) and remote e-stop capability via software interface & CR1 & ISO 13850 \cite{iso13850} (Safety of machinery - Emergency stop function) & Functional testing of emergency stop mechanisms \\
 \hline
 ER5.2 & Detect and avoid stairs, ramps $>$15° incline, and drop-offs $>$2~cm & CR1 & --- & Edge detection tests on stairs and elevated platforms \\
 \hline
