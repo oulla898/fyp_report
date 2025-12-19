@@ -303,7 +303,7 @@ UWB + Odom + IMU & 6 & 9 & 5 & 4 & 6.10 \\
 \textbf{Selected: LiDAR + Odometry + IMU}--Best precision for structured hospital environments, proven ROS~2 sensor fusion with robot\_localization package, extensive Nav2 support.
 
 \subsubsection{LLM Selection Using AHP}
-For the conversational AI component, three state-of-the-art LLM options are evaluated: OpenAI GPT-4 Turbo, Anthropic Claude 3.5 Sonnet, and Google Gemini 3 flash (announced December 2024).
+For the conversational AI component, three state-of-the-art LLM options are evaluated: OpenAI GPT-5.2, OpenAI GPT-4 Turbo, and Google Gemini 3 flash (announced December 2024).
 
 \paragraph{LLM Evaluation Criteria}
 Four criteria are defined:
@@ -346,11 +346,11 @@ Consistency Ratio (CR) = 0.05 $<$ 0.10, acceptable.
 \centering
 \caption{LLM Alternative Scores by Criterion}
 \begin{tabular}{lcccc}
-\toprule
-\textbf{LLM} & \textbf{API Familiarity} & \textbf{Performance} & \textbf{Latency} & \textbf{Cost} \\
+	oprule
+	extbf{LLM} & \textbf{API Familiarity} & \textbf{Performance} & \textbf{Latency} & \textbf{Cost} \\
 \midrule
-GPT-4 Turbo & 7 & 9 & 6 & 5 \\
-Claude 3.5 Sonnet & 5 & 9 & 7 & 6 \\
+GPT-5.2 & 7 & 9 & 6 & 5 \\
+GPT-4 Turbo & 5 & 9 & 7 & 6 \\
 Gemini 3 flash & 9 & 8 & 9 & 9 \\
 \bottomrule
 \end{tabular}
@@ -358,8 +358,8 @@ Gemini 3 flash & 9 & 8 & 9 & 9 \\
 
 Scoring rationale:
 \begin{itemize}
-    \item \textbf{GPT-4 Turbo}: Excellent performance, moderate familiarity, good but not fastest latency, moderate cost
-    \item \textbf{Claude 3.5 Sonnet}: Excellent performance with strong safety features, less team familiarity, good latency, moderate cost
+    \item \textbf{GPT-5.2}: Excellent performance, moderate familiarity, good but not fastest latency, moderate cost
+    \item \textbf{GPT-4 Turbo}: Excellent performance with strong safety features, less team familiarity, good latency, moderate cost
     \item \textbf{Gemini 3 flash}: High team familiarity with Google AI APIs, excellent performance for size, extremely low latency optimized for real-time use, very cost-effective
 \end{itemize}
 
@@ -368,12 +368,11 @@ Scoring rationale:
 \centering
 \caption{Final AHP Scores for LLM Selection}
 \begin{tabular}{lc}
-\toprule
-\textbf{LLM} & \textbf{Final Score} \\
+	{LLM} & \textbf{Final Score} \\
 \midrule
-GPT-4 Turbo & 7.62 \\
-Claude 3.5 Sonnet & 7.54 \\
-\textbf{Gemini 3 flash} & \textbf{8.44} \\
+GPT-5.2 & 7.62 \\
+GPT-4 Turbo & 7.54 \\
+Gemini 3 flash & \textbf{8.44} \\
 \bottomrule
 \end{tabular}
 \end{table}

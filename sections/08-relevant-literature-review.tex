@@ -4,7 +4,7 @@ The integration of robotics and artificial intelligence into healthcare is advan
 
 Telepresence robots, often described as a mobile screen, are widely used for remote medical consultations. Systems such as InTouch Health RP-VITA and the VGo robot have been used successfully in "telestroke" care, allowing neurologists to assess patients remotely, reduce diagnosis time, and improve outcomes \cite{garingo2016}. These systems support remote rounds, specialist consultations, and family visits, cutting travel costs and reducing infection risks. However, studies also note several drawbacks. A review by Kristoffersson et al. found that telepresence robots, though functional, often feel impersonal and difficult to control \cite{kristoffersson2013}. Clinicians report high cognitive load when navigating cluttered hospital spaces. Patients, especially the elderly and children, also find these robots less engaging than in-person visits due to limited physical embodiment and lack of expressive cues \cite{sabanovic2013}. This "presence gap" limits their effectiveness beyond basic video conferencing, reducing their ability to offer comfort and reassurance during care.
 
-This literature review aims to build a comprehensive case for the development of an integrated, autonomous healthcare robotics platform. It begins by examining the current state and limitations of distinct domains within healthcare robotics: telepresence for remote consultation, socially assistive robots for patient engagement, and autonomous mobile robots for logistics. The review then draws parallels with the consumer and industrial sectors, where autonomous navigation has reached maturity and widespread adoption. By systematically analyzing the strengths and weaknesses of these disparate technologies, this survey identifies a critical research gap: the absence of a unified system that synthesizes clinical telepresence, social interaction, and autonomous mobility. The purpose is to establish a clear rationale for a novel robotic solution that merges these capabilities to create a more holistic and effective tool for patient care.
+This literature review builds a comprehensive case for an integrated, autonomous healthcare robotics platform. It begins by examining success stories from consumer and industrial robotics, demonstrating that autonomous navigation technology has reached maturity and widespread adoption. The review then analyzes healthcare-specific applications, including telepresence, socially assistive robots, and hospital logistics systems, alongside their underlying technical components such as navigation systems, mobile platforms, conversational AI, and user interfaces. By systematically evaluating these technologies and their implementations, this survey identifies a critical research gap: the absence of a unified system that synthesizes clinical telepresence, social interaction, and autonomous mobility into a single platform.
 
 \subsubsection{Success Stories: Consumer, Industrial, and Quadruped Robotics}
 
@@ -27,7 +27,7 @@ The key to their success lies in the sophisticated implementation of SLAM (Simul
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\textwidth]{figures/Amazon-Pegasus.jpg}
-\caption{Amazon Pegasus drive unit used in high-throughput fulfillment centers \cite{amazon2024ai}.}
+\caption{Amazon Pegasus drive unit used in high-throughput fulfillment centers.}
 \label{fig:amazon-pegasus}
 \end{figure}
 
@@ -37,7 +37,7 @@ The key to their success lies in the sophisticated implementation of SLAM (Simul
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\textwidth]{figures/Unitree-Go2-6-copy-1080x675.png}
-\caption{Unitree Go2: quadruped platform featuring RL locomotion, multi-sensor perception, and high-performance compute \cite{unitreeGo2spec}.}
+\caption{Unitree Go2: quadruped platform featuring RL locomotion, multi-sensor perception, and high-performance compute.}
 \label{fig:unitree-go2}
 \end{figure}
 \end{enumerate}
@@ -72,7 +72,7 @@ Some advanced AMR systems are deployed for biohazardous waste collection and dis
 Despite the significant benefits, several challenges remain:
 
 \paragraph{Cost and Return on Investment.}
-Hospital-grade AMRs represent substantial capital investments, typically ranging from \$50,000 to \$150,000 per unit depending on capabilities. Healthcare administrators require clear Return on Investment (ROI () demonstration through labor savings, efficiency gains, and improved outcomes to justify procurement \cite{mdpi2024}.
+Hospital-grade AMRs represent substantial capital investments, typically ranging from \$50,000 to \$150,000 per unit depending on capabilities. Healthcare administrators require clear Return on Investment (ROI) demonstration through labor savings, efficiency gains, and improved outcomes to justify procurement \cite{mdpi2024}.
 
 \paragraph{System Integration Complexity.}
 Integrating AMRs with existing hospital information systems (HIS), electronic health records (EHR), elevator controls, automatic doors, and staff communication systems presents significant technical challenges. Interoperability standards are still evolving, requiring custom integration work for each deployment \cite{frontiers2024}.
@@ -102,7 +102,7 @@ The hospital robotics market has matured significantly, with several manufacture
 4 & Keenon Robotics – Peanut Medical \cite{peanutmedical} & 3,000–5,000 units & ~\$12,700 & Medication/meal delivery, patient guidance, telepresence & Compact (59 cm wide), multi-modal navigation, 30 kg payload. Deployed in Asia-Pacific hospitals; supports remote doctor-patient interaction via screen. \\
 \hline
 \end{tabular}
-\caption{Competitive analysis of leading hospital AMR platforms by global deployment and capabilities \cite{pudubot2, m2medical, puducc1}.}
+\caption{Competitive analysis of leading hospital AMR platforms by global deployment and capabilities.}
 \label{tab:competitive}
 \end{table}
 
@@ -139,13 +139,13 @@ The hospital robotics market has matured significantly, with several manufacture
 In parallel, the field of Socially Assistive Robotics (SAR) has focused on the psycho-social aspects of patient care. These robots are designed not to perform physical tasks but to engage, encourage, and comfort patients through social interaction. For pediatric patients, robots like NAO and PARO (a therapeutic baby seal robot) have been shown to significantly reduce pain perception and anxiety during painful medical procedures such as vaccinations and chemotherapy \cite{beran2013}. The robot acts as a coach and a distractor, creating a more positive and cooperative atmosphere. For elderly populations, SARs have been explored for companionship to combat loneliness, provide cognitive stimulation for dementia patients, and deliver medication reminders to improve treatment adherence \cite{broekens2009}. These studies confirm that a robot's ability to interact socially is a powerful tool for improving patient well-being and clinical outcomes. The primary limitation of SARs, however, is that they are typically specialized, non-mobile or semi-autonomous platforms that lack the high-fidelity telepresence capabilities needed for direct clinical consultation.
 
 \subsection{Technical Building Blocks}
-This section deconstructs the essential technologies that form the foundation of an advanced autonomous healthcare robot. It explores supplementary localization methods, including Radio Frequency (RF) Technologies like UWB and AoA, followed by a deeper dive into SLAM-Based Sensor Fusion Techniques that integrate multiple data streams for robust performance. Finally, it examines the role of Conversational AI and Large Language Models (LLMs), which provide the intelligence for human-robot interaction, and explores User Interface (UI) and Human-Robot Interaction (HRI) paradigms for effective clinical integration.
+This section deconstructs the essential technologies that form the foundation of an advanced autonomous healthcare robot. It examines navigation systems including Radio Frequency (RF) localization and SLAM-based sensor fusion, mobile robot platform specifications and selection criteria, Conversational AI and Large Language Models (LLMs) for intelligent interaction, and User Interface (UI) and Human-Robot Interaction (HRI) design paradigms for clinical integration.
 
 \subsubsection{Navigation System}
 The challenge of manual navigation highlighted in telepresence research is being addressed by autonomous mobile robots (AMRs). Modern AMRs employ a combination of SLAM, path planning, and obstacle avoidance to navigate complex environments without human intervention. The core navigation stack typically includes Radio Frequency (RF) Localization Technologies and SLAM-Based Sensor Fusion Techniques.
 
 \paragraph{Radio Frequency (RF) Localization Technologies}
-Radio frequency (RF) refers to electromagnetic waves used for wireless communication (roughly 3 kHz--300 GHz). Works where GPS cannot provide reliable positioning, such as indoor coverage through walls/obstacles and large areas. Various RF technologies including Wi-Fi, RFID, Bluetooth Low Energy (BLE), ZigBee, and Ultra-Wideband (UWB) are employed, with selection criteria based on coverage, scalability, battery life, accuracy, and cost. UWB solutions offer extended coverage and strong scalability due to multiple nodes sharing spectrum. UWB tags typically achieve multi-year battery life. Cost is somewhat higher; for example, instrumenting a 5000m² facility may cost up to \$20,000. Reported accuracy in industrial scenarios varies (approximately 20cm to greater than 1~m) and degrades in cluttered or metallic environments or very large warehouses \cite{chen2022}. The general structure of these systems is to use static reference sensor locations, or anchors, within an environment, along with beacons or tags fixed to the objects with desired tracking. The location of the tracked object can be estimated using readings from the anchors. Mathematically, this estimation is commonly called multilateration (also called trilateration) when using distance measurements.
+Radio frequency (RF) refers to electromagnetic waves (3 kHz--300 GHz) used for wireless communication. RF-based localization is essential where GPS is unreliable, such as indoors or through obstacles. Technologies like Wi-Fi, RFID, Bluetooth Low Energy (BLE), ZigBee, and Ultra-Wideband (UWB) are used, each selected based on coverage, scalability, battery life, accuracy, and cost. UWB, for example, enables multi-node scalability and multi-year tag battery life, but at higher cost (e.g., up to \$20,000 for a 5000~m$^2$ facility). Accuracy ranges from about 20~cm to over 1~m, with performance degrading in cluttered or metallic environments \cite{chen2022}. The general structure of these systems is to use static reference sensor locations, or anchors, within an environment, along with beacons or tags fixed to the objects with desired tracking. The location of the tracked object can be estimated using readings from the anchors. Mathematically, this estimation is commonly called multilateration (also called trilateration) when using distance measurements. Figure~\ref{fig:uwb} shows an example UWB anchor--tag geometry, while figure~\ref{fig:multilateration} illustrates the multilateration technique.
 \begin{figure}[H]
 \centering
 \begin{minipage}{0.45\textwidth}
@@ -161,7 +161,7 @@ Radio frequency (RF) refers to electromagnetic waves used for wireless communica
 \label{fig:multilateration}
 \end{minipage}
 \end{figure}
-AoA measures the direction (bearing) from which a radio signal arrives at a receiver. An antenna array senses time differences across elements and apply signal-processing algorithms such MUSIC or ESPRIT convert those differences into an angle. AoA (often via BLE 5.1+ or UWB Direction Finding) estimates a target's angle using a beacon or tag and a robot-mounted antenna array, reducing reliance on dense static infrastructure. BLE-based tags offer excellent battery life (years). Limitations include line-of-sight sensitivity and variable accuracy; hybrid AoA + RSSI filtering can improve precision, achieving mean errors on the order of 12 cm in simulation even in cluttered settings \cite{weinmann2023}. AoA could be used to implement a soultion that doesnt count on localization or positioning infrastructure in the environment, instead having the robot home in on a beacon worn by the user. This would be similar to how some Bluetooth trackers work for finding lost items. The robot would use the angle of arrival data to determine the direction to move towards the beacon signal, allowing it to autonomously navigate to the user's location. This approach could be particularly useful in dynamic environments like hospitals where fixed infrastructure may not be feasible. Figure~\ref{fig:amr-stack} illustrates a proposed setup where a Bluetooth homing controller on the robot uses AoA data from a wearable beacon to guide navigation towards the target. Multiable anchors could be used to implement waypoints follwing navigation paths through the environment. 
+Angle of Arrival (AoA) is a localization technique that determines the direction or angle from which a radio signal is received. An antenna array senses time differences across elements and applies signal-processing algorithms such as MUSIC or ESPRIT to convert those differences into an angle. AoA (often via BLE 5.1+ or UWB Direction Finding) estimates a target's angle using a beacon or tag and a robot-mounted antenna array, reducing reliance on dense static infrastructure. BLE-based tags offer excellent battery life (years). Limitations include line-of-sight sensitivity and variable accuracy; hybrid AoA + RSSI filtering can improve precision, achieving mean errors on the order of 12 cm in simulation even in cluttered settings \cite{weinmann2023}. AoA could be used to implement a solution that does not depend on localization or positioning infrastructure in the environment, instead having the robot home in on a beacon worn by the user. This would be similar to how some Bluetooth trackers work for finding lost items. The robot would use the angle of arrival data to determine the direction to move towards the beacon signal, allowing it to autonomously navigate to the user's location. This approach could be particularly useful in dynamic environments like hospitals where fixed infrastructure may not be feasible. Figure~\ref{fig:amr-stack} illustrates a proposed setup where a Bluetooth homing controller on the robot uses AoA data from a wearable beacon to guide navigation towards the target. Multiple anchors could be used to implement waypoints following navigation paths through the environment. 
 
 \begin{figure}[H]
 \centering
@@ -212,15 +212,11 @@ The selection of an appropriate mobile robot platform is a critical decision tha
 The system requires a wheeled mobile robot platform with the following capabilities:
 
 \begin{itemize}[leftmargin=*]
-    \item \textbf{Autonomous docking and charging}: The platform must support autonomous return-to-base functionality with a charging dock, enabling unattended operation and automatic battery management. High-level API commands such as \texttt{dock()} or \texttt{return\_to\_charge()} are essential for seamless integration with the navigation stack.
-    
-    \item \textbf{ROS/ROS 2 compatibility}: Native support for the Robot Operating System is required to leverage existing navigation packages (Nav2, SLAM Toolbox, AMCL) and facilitate rapid development and integration of custom behaviors.
-    
-    \item \textbf{Payload capacity}: The platform must support 5--10~kg of additional payload to accommodate a telepresence screen (tablet or monitor), onboard computer (Raspberry Pi or Jetson Nano), camera system, and potential accessories such as speakers or mounting hardware.
-    
-    \item \textbf{Indoor navigation sensors}: Integration points for LiDAR (2D or 3D), depth cameras, or other sensors required for SLAM-based autonomous navigation in dynamic hospital environments.
-    
-    \item \textbf{Safety and reliability}: Cliff detection, bumper sensors, emergency stop functionality, and predictable motion control to ensure safe operation around patients, visitors, and medical staff.
+    \item \textbf{Autonomous docking and charging} with high-level API commands (\texttt{dock()}, \texttt{return\_to\_charge()})
+    \item \textbf{ROS/ROS 2 compatibility} for navigation packages (Nav2, SLAM Toolbox, AMCL)
+    \item \textbf{Payload capacity} of 5--10~kg for telepresence screen, onboard computer, and camera system
+    \item \textbf{Indoor navigation sensors} including LiDAR (2D or 3D) and depth cameras
+    \item \textbf{Safety and reliability} features (cliff detection, bumpers, emergency stop)
 \end{itemize}
 
 \paragraph{Project Constraints.}
@@ -259,14 +255,12 @@ AgileX LIMO Pro \cite{agilex2024} & \$1,799 & Optional & ROS 2 & 10~kg & 4-mode 
 \label{tab:platforms}
 \end{table}
 
-\paragraph{Platforms Table Discussion.}
-Table~\ref{tab:platforms} provides a compact comparison of candidate mobile bases across price tiers, emphasising the primary trade-offs faced during platform selection: cost versus out-of-the-box capabilities (autonomous docking, ROS/ROS2 support, payload capacity, and built-in sensors). Budget platforms offer low acquisition cost and strong community resources but typically require additional engineering (docking solutions, sensor integration). Mid‑tier platforms reduce integration risk by providing native docking and ROS support at higher cost.
 
 \subsubsection{Conversational AI and Large Language Models (LLMs)}
 \label{sec:llm}
 The field of large language models (LLMs) has witnessed transformative advancements, establishing them as a core technology for conversational AI. An LLM is a sophisticated artificial intelligence system trained on vast datasets of text and code, enabling it to understand, generate, and interact with human language in a nuanced manner. These models have rapidly transitioned from research prototypes to industrial-scale technologies, resulting in a proliferation of models with distinct strengths and commercial terms.
 
-The LLM landscape is broadly divided into two categories: open-source and proprietary. Open-source models, such as Meta's Llama series and the DeepSeek series, offer significant flexibility, allowing for deep customization and fine-tuning to meet specific application needs, often at a lower cost \cite{civo2024}. However, they may require more complex setup and can sometimes lag behind proprietary counterparts in raw performance. In contrast, privately-owned models like OpenAI's GPT series and Google's Gemini series typically offer state-of-the-art performance and are adept at handling highly complex tasks. This performance comes with trade-offs, including higher operational costs and potential data privacy concerns, which are critical considerations in healthcare applications \cite{musick2025}. The selection of an LLM depends on a careful balance between performance requirements, budget, customizability, and data governance policies. The following table provides a consolidated overview of the key characteristics for each of those 4 LLMs.
+The LLM landscape is broadly divided into two categories: open-source and proprietary. Open-source models, such as Meta's Llama series and the DeepSeek series, offer significant flexibility, allowing for deep customization and fine-tuning to meet specific application needs, often at a lower cost \cite{civo2024}. However, they may require more complex setup and can sometimes lag behind proprietary counterparts in raw performance. In contrast, privately-owned models like OpenAI's GPT series and Google's Gemini series typically offer state-of-the-art performance and are adept at handling highly complex tasks. This performance comes with trade-offs, including higher operational costs and potential data privacy concerns, which are critical considerations in healthcare applications \cite{musick2025}. The selection of an LLM depends on a careful balance between performance requirements, budget, customizability, and data governance policies. Table~\ref{tab:llm_comparison} provides a comparative overview of leading LLM options.
 
 \begin{table}[H]
 \centering
@@ -277,23 +271,23 @@ The LLM landscape is broadly divided into two categories: open-source and propri
 \hline
 \textbf{Model (Version)} & \textbf{Org.} & \textbf{License} & \textbf{Max Context (tokens)} & \textbf{Input API Cost (\$/M)} & \textbf{Output API Cost (\$/M)} \\
 \hline
-OpenAI GPT-5.2 & OpenAI & Proprietary & 128,000 & \$2.50 & \$10.00 \\
+OpenAI GPT-5.2 \cite{openai2025pricing} & OpenAI & Proprietary & 128,000 & \$1.75 & \$14.00 \\
 \hline
-Google Gemini 3 flash & Google & Proprietary & 1,048,576 & \$1.25--\$2.50 & \$10.00--\$15.00 \\
+Google Gemini 3 Flash \cite{google2025pricing} & Google & Proprietary & 1,000,000 & \$0.50 & \$3.00 \\
 \hline
-Google Med-Gemma 2B & Google & Open Weight (Apache 2.0) & 8,192 & \$0.00 (Self-hosted) & \$0.00 (Self-hosted) \\
+Google Gemini 2.5 Pro \cite{google2025pricing} & Google & Proprietary & 1,000,000 & \$1.25--\$2.50 & \$10.00--\$15.00 \\
 \hline
-Meta Llama 3.1 405B & Meta & Llama 3.1 Community License & 128,000--131,072 & \textasciitilde\$0.80--\$3.50 & \textasciitilde\$0.80--\$3.50 \\
+Meta Llama 4 Maverick \cite{llama2025} & Meta & Llama Community License & 10,000,000 & \$0.19--\$0.49 & \$0.19--\$0.49 \\
 \hline
-DeepSeek V3 & DeepSeek & MIT (Code) / DeepSeek Model & 128,000--164,000 & \textasciitilde\$0.14--\$0.48 & \textasciitilde\$0.28--\$1.10 \\
+DeepSeek V3.1 \cite{deepseek2025} & DeepSeek & MIT (Code) / DeepSeek Model & 128,000 & \$0.14 & \$0.28 \\
 \hline
 \end{tabularx}
-\caption{Comparative analysis of leading Large Language Models. Data compiled from early 2025 period \cite{civo2024, medgemini2024}.}
+\caption{Comparative analysis of leading Large Language Models with December 2025 pricing and specifications.}
 \label{tab:llm_comparison}
 \end{table}
 
 \paragraph{LLM Discussion and Cost Considerations.}
-Table~\ref{tab:llm_comparison} summarizes key characteristics of leading LLM options. OpenAI's GPT-5.2 offers strong performance with a 128k token context window, while Google's Gemini 3 flash stands out with exceptional context length (over 1M tokens) and competitive API pricing. Notably, Google's Gemini API is available at no cost for requests under 60 requests per minute (RPM), making it an attractive option for development and testing phases. Google's Med-Gemma represents a family of specialized open-weight models (available in 2B, 7B, and 27B parameter variants) fine-tuned specifically on medical literature, clinical guidelines, and healthcare datasets \cite{medgemini2024}. While Med-Gemma demonstrates state-of-the-art performance on medical benchmarks (MedQA, MedMCQA, PubMedQA) and would be highly relevant for advanced clinical decision support or medical question answering, it is considered overkill for the basic conversational interactions required in this project (patient guidance, wayfinding, simple information queries). Meta's Llama 3.1 405B provides an open-source alternative with flexible licensing, while DeepSeek V3 offers the most economical API costs, particularly beneficial for cost-sensitive deployments. Even that Llama and DeepSeek are open-source models, they still have associated costs when using hosted APIs, which can vary based on usage volume and specific service providers.
+Table~\ref{tab:llm_comparison} summarizes key characteristics of leading LLM options as of December 2025. OpenAI's GPT-5.2 offers strong performance with a 128k token context window at \$1.75/\$14.00 per million input/output tokens. Google's Gemini 3 Flash provides exceptional value with a 1M token context and competitive pricing at \$0.50/\$3.00, with free tier available for development (up to 500 requests per day). Google's Gemini 2.5 Pro offers higher capabilities for complex tasks at \$1.25--\$2.50 input and \$10.00--\$15.00 output per million tokens. Meta's Llama 4 Maverick stands out with an unprecedented 10M token context window and industry-leading cost efficiency (\$0.19--\$0.49 per million tokens), making it highly suitable for long-context healthcare applications. DeepSeek V3.1 offers the most economical option at \$0.14/\$0.28 per million tokens, particularly beneficial for cost-sensitive deployments. For this project's conversational requirements (patient guidance, wayfinding, simple information queries), either Gemini 3 Flash (free tier) or DeepSeek V3.1 (lowest cost) would be appropriate choices, with Llama 4 Maverick offering future-proof long-context capabilities if advanced document processing becomes necessary.
 
 \subsubsection{User Interface and Human-Robot Interaction}
 For autonomous healthcare robots operating in clinical environments, the user interface (UI) and human-robot interaction (HRI) design directly impacts adoption, user satisfaction, and clinical workflow integration. The interface must balance accessibility for diverse user groups (clinicians, administrative staff, patients) with robust control mechanisms suitable for dynamic hospital environments. Common UI paradigms employed in hospital robotics include:
