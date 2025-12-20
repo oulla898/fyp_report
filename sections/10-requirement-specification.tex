@@ -132,7 +132,7 @@ ER5.3 & Achieve $>$95\% uptime during operational hours, excluding scheduled mai
 
 \subsubsection{Comparative Performance Metrics}
 
-This section presents quantitative performance data and trade-off metrics for critical system components. The data, derived from technical specifications and benchmark studies, provides the empirical basis for architectural decisions.
+This section presents quantitative performance data and trade-off metrics for critical system components. The data, derived from technical specifications and benchmark studies, provides the empirical basis for architectural decisions. Comprehensive mobile platform comparison metrics, including navigation capabilities, payload specifications, and integration features, are detailed in the literature review (Chapter 2, Section 2.3.2).
 
 \paragraph{Navigation Sensor Performance}
 Table~\ref{tab:sensor_metrics} compares the performance of different sensor modalities in typical hospital environments.
@@ -144,18 +144,18 @@ Table~\ref{tab:sensor_metrics} compares the performance of different sensor moda
 \hline
 \textbf{Sensor Type} & \textbf{Scenario} & \textbf{Range (m)} & \textbf{Accuracy (cm)} & \textbf{FOV (deg)} & \textbf{Power (W)} & \textbf{Cost (\$)} \\
 \hline
-2D LiDAR (RPLiDAR) & Corridor (Static) & 12.0 & $\pm$1.0 & 360 & 1.5 & 100 \\
+2D LiDAR (RPLiDAR) \cite{rplidar2024} & Corridor (Static) & 12.0 & $\pm$1.0 & 360 & 1.5 & 100 \\
 \hline
-2D LiDAR (RPLiDAR) & Waiting Room (Dynamic) & 10.0 & $\pm$2.5 & 360 & 1.5 & 100 \\
+2D LiDAR (RPLiDAR) \cite{rplidar2024} & Waiting Room (Dynamic) & 10.0 & $\pm$2.5 & 360 & 1.5 & 100 \\
 \hline
-RGB-D (RealSense) & Corridor (Static) & 4.0 & $\pm$2.0 & 87$\times$58 & 3.5 & 250 \\
+RGB-D (RealSense) \cite{realsense2024} & Corridor (Static) & 4.0 & $\pm$2.0 & 87$\times$58 & 3.5 & 250 \\
 \hline
-RGB-D (RealSense) & Waiting Room (Dynamic) & 3.5 & $\pm$4.0 & 87$\times$58 & 3.5 & 250 \\
+RGB-D (RealSense) \cite{realsense2024} & Waiting Room (Dynamic) & 3.5 & $\pm$4.0 & 87$\times$58 & 3.5 & 250 \\
 \hline
-3D LiDAR (Velodyne) & Corridor (Static) & 100.0 & $\pm$2.0 & 360$\times$30 & 8.0 & 4000 \\
+3D LiDAR (Velodyne) \cite{velodyne2024} & Corridor (Static) & 100.0 & $\pm$2.0 & 360$\times$30 & 8.0 & 4000 \\
 \hline
 \end{tabularx}
-\caption{Performance metrics of navigation sensors in static and dynamic hospital scenarios.}
+\caption{Performance metrics of navigation sensors in static and dynamic scenarios.}
 \label{tab:sensor_metrics}
 \end{table}
 
@@ -169,39 +169,17 @@ Table~\ref{tab:compute_metrics} details the computational capabilities and power
 \hline
 \textbf{Platform} & \textbf{CPU Perf.} & \textbf{Power (W)} & \textbf{Cost (\$)} \\
 \hline
-Raspberry Pi 5 & High & 5--8 & 80 \\
-Jetson Nano & Medium & 5--10 & 150 \\
-Jetson Orin Nano & Very High & 7--15 & 499 \\
+Raspberry Pi 5 \cite{raspberrypi2024} & High & 5--8 & 80 \\
+Jetson Nano \cite{jetsonnano2024} & Medium & 5--10 & 150 \\
+Jetson Orin Nano \cite{jetsonorin2024} & Very High & 7--15 & 499 \\
 \hline
 \end{tabular}
 \caption{Computational performance and power consumption benchmarks for embedded platforms.}
 \label{tab:compute_metrics}
 \end{table}
 
-\paragraph{LLM Performance and Cost Analysis}
-Table~\ref{tab:llm_metrics} compares Large Language Models based on context handling and operational cost, using the latest December 2025 data from the literature review.
-
-\begin{table}[H]
-\centering
-\footnotesize
-\begin{tabular}{|l|l|c|c|c|}
-\hline
-	extbf{Model} & \textbf{Deployment Mode} & \textbf{Context (Tokens)} & \textbf{Cost/1M In (\$)} & \textbf{Cost/1M Out (\$)} \\
-\hline
-OpenAI GPT-5.2 & Cloud API & 128,000 & 1.75 & 14.00 \\
-\hline
-Google Gemini 3 Flash & Cloud API & 1,000,000 & 0.50 & 3.00 \\
-\hline
-Google Gemini 2.5 Pro & Cloud API & 1,000,000 & 1.25--2.50 & 10.00--15.00 \\
-\hline
-Meta Llama 4 Maverick & Local/Cloud & 10,000,000 & 0.19--0.49 & 0.19--0.49 \\
-\hline
-DeepSeek V3.1 & Cloud API & 128,000 & 0.14 & 0.28 \\
-\hline
-\end{tabular}
-\caption{Performance and cost metrics for conversational AI models (December 2025).}
-\label{tab:llm_metrics}
-\end{table}
+\paragraph{Conversational AI Model Selection}
+Detailed performance and cost metrics for Large Language Models (LLMs), including context handling capabilities and operational costs for cloud-based and local deployment strategies, are presented in the literature review (Chapter 2, Section 2.3.3). These metrics inform the AI architecture selection for patient engagement and conversational interaction requirements (ER3.1--ER3.3).
 
 \subsection{Engineering Constraints}
 
@@ -227,46 +205,26 @@ Engineering constraints define the boundaries within which the system must be de
 
 \subsection{Analysis and Discussion}
 
-This section examines the performance data presented in Section 3.3.6 to identify key trade-offs, compatibility considerations, scalability potential, and adherence to relevant standards. The analysis focuses on understanding component characteristics and their implications for satisfying engineering requirements and constraints.
+This section examines the comparative performance metrics to identify key trade-offs and demonstrate standards compliance within the constraints of hospital deployment in Oman. The analysis focuses on component selection criteria that balance technical requirements with practical deployment considerations specific to the Omani healthcare context.
 
-\subsubsection{Navigation Sensor Considerations}
-The data in Table~\ref{tab:sensor_metrics} reveals fundamental trade-offs between range, field of view (FOV), power consumption, and cost.
-\begin{itemize}
-    \item \textbf{Range vs. Cost Trade-off:} 2D LiDAR sensors provide extended range (12m) at moderate cost (\$100), while RGB-D cameras offer limited range (<4m) at higher cost (\$250). 3D LiDAR achieves exceptional range (100m) but at prohibitive cost (\$4000), representing a 40$\times$ price increase over 2D alternatives.
-    \item \textbf{Sensing Modality vs. Safety:} 2D sensors provide planar coverage suitable for basic navigation but lack vertical obstacle detection. RGB-D and 3D sensors enable full 3D spatial awareness, addressing safety requirements (ER1.3) for dynamic hospital environments with varying obstacle heights.
-    \item \textbf{Power Efficiency:} 2D LiDAR demonstrates superior power efficiency (1.5W) compared to RGB-D (3.5W) and 3D LiDAR (8W), directly impacting battery endurance (ER4.1).
-    \item \textbf{Standards Compatibility:} All sensor modalities support compliance with ISO 13482:2014 (personal care robots) and ISO 13855 (positioning of safeguards) when integrated with appropriate obstacle detection algorithms and safety protocols.
-    \item \textbf{Scalability:} Sensor fusion architectures allow combining multiple sensor types to balance coverage, resolution, and cost. Systems can scale from single-sensor configurations for cost-constrained deployments to multi-modal arrays for enhanced safety and reliability.
-\end{itemize}
+\subsubsection{Performance Metrics and Trade-off Analysis}
 
-\subsubsection{Computing Platform Considerations}
-Table~\ref{tab:compute_metrics} illustrates trade-offs between computational performance, power consumption, and system cost.
-\begin{itemize}
-    \item \textbf{Performance vs. Budget:} CPU-focused platforms (\$80--\$150) provide sufficient processing for navigation and control tasks, while AI-optimized platforms (\$499) offer enhanced capabilities at significantly higher cost, consuming substantial portions of project budgets.
-    \item \textbf{Power Efficiency:} All embedded platforms operate within similar power envelopes (5--15W), enabling 4--6 hour operation (ER4.1) with appropriate battery sizing. Platform selection minimally impacts endurance compared to sensor and actuator power draws.
-    \item \textbf{Ecosystem Compatibility:} Open-source platforms with established ROS 2 support ensure compatibility with standard robotics frameworks, facilitating integration with IEEE 802.11 (Wi-Fi) communication standards (ER2.3) and middleware components.
-    \item \textbf{Scalability Paths:} CPU-based architectures support cloud offloading strategies (EC4), enabling systems to scale computational capabilities through network infrastructure. GPU-accelerated platforms enable on-device AI processing, offering reduced latency and network independence at higher initial cost.
-    \item \textbf{Maintenance and Availability:} Widely adopted platforms ensure component availability (EC8) and community support, reducing long-term maintenance risks for deployed systems.
-\end{itemize}
+Table~\ref{tab:sensor_metrics} reveals fundamental trade-offs in sensor selection. Range capabilities vary from 3.5m to 100m with corresponding cost differences of 40$\times$ (\$100 to \$4000). Accuracy degrades significantly in dynamic hospital environments (2--2.5$\times$ degradation), affecting position accuracy requirement ER1.1. Power consumption ranges from 1.5W to 8W, directly impacting endurance requirement ER4.1. Field of view characteristics--360° planar, 87°$\times$58° 3D, and 360°$\times$30° volumetric--address different aspects of obstacle detection requirement ER1.3.
 
-\subsubsection{Conversational AI Architecture Considerations}
-Table~\ref{tab:llm_metrics} demonstrates distinct trade-offs between cloud-based and edge-based AI deployment strategies.
-\begin{itemize}
-    \item \textbf{Deployment Architecture Trade-offs:} Cloud APIs offer extensive capabilities (up to 1M token context) with minimal hardware requirements, while local execution provides network independence at the cost of reduced model scale and context capacity.
-    \item \textbf{Operational Cost vs. Control:} Cloud services introduce recurring operational costs (\$0.14--\$10.00 per million tokens) but reduce upfront hardware investment. Local inference eliminates ongoing costs but requires substantial initial investment in capable hardware.
-    \item \textbf{Network Dependency:} Cloud-based approaches require reliable network connectivity (EC4), introducing potential points of failure. Edge deployment ensures operation during network disruptions but with reduced conversational capabilities.
-    \item \textbf{Privacy and Compliance:} Local processing architectures inherently support data privacy requirements (EC5), avoiding transmission of sensitive information to external services. Cloud approaches require careful implementation of encryption and data handling policies.
-    \item \textbf{Scalability and Updates:} Cloud-based models enable seamless updates and capability improvements without hardware modifications. Local models require manual updates and may face hardware limitations for newer, larger models.
-\end{itemize}
+Table~\ref{tab:compute_metrics} demonstrates computational trade-offs where platform costs range from \$80 to \$499, consuming 3--20\% of total budget constraint EC1. Power envelopes remain similar (5--15W) across platforms, making computational capability rather than endurance the primary selection factor for supporting navigation, AI processing (ER3.1--ER3.3), and telepresence (ER2.1--ER2.3) requirements.
+
+\subsubsection{Standards Compliance and Deployment Context}
+
+Navigation and safety components satisfy ISO 13482:2014 \cite{iso13482:2014} requirements (position accuracy ER1.1, speed limits ER1.2, obstacle detection ER1.3), ISO 13850 \cite{iso13850} emergency stop guidelines, and ISO 13855 \cite{iso13855} safeguarding standards. Communication systems implement ITU-T H.264/H.265 \cite{itut_h264_h265} video coding and IEEE 802.11 \cite{ieee802.11} wireless protocols for interoperability with Omani hospital IT infrastructure.
+
+Deployment constraints EC3--EC8 address Omani hospital realities: standard corridor dimensions ($\geq$1.5m) and flooring materials, existing Wi-Fi infrastructure (802.11n/ac), climate-controlled environments (18--28°C), component availability through international supply chains, privacy compliance aligned with HIPAA/GDPR principles, and budget/timeline limitations (\$2,500, 9--10 months). These constraints guide component selection to ensure technical feasibility and operational viability in the Omani healthcare context.
+
+Detailed comparative analysis of mobile platforms, computing architectures, and conversational AI models is presented in the literature review (Chapter 2, Sections 2.3.2--2.3.3).
 
 \subsection{Conclusion}
 
-This chapter established a comprehensive requirement specification for the smart healthcare robot project, systematically translating stakeholder expectations into measurable, verifiable technical criteria. The requirements are organized into three complementary categories that together define the system's functional capabilities, performance targets, and operational boundaries.
+This chapter established a comprehensive requirement specification for the smart healthcare robot project, systematically translating stakeholder expectations into measurable, verifiable technical criteria. The requirements are organized into customer requirements, engineering requirements, and engineering constraints, defining the system's functional capabilities, performance targets, and operational boundaries.
 
-Customer requirements capture the value proposition from the perspective of hospital administrators, clinical staff, patients, and support personnel, ensuring the system addresses real-world needs in healthcare delivery. Engineering requirements translate these high-level needs into quantifiable specifications with clear verification methods and traceability to customer requirements. Where applicable, requirements reference relevant international standards including ISO 13482:2014 (personal care robots), ISO 13855 and ISO 13850 (machinery safety), ITU-T H.264/H.265 (video coding), and IEEE 802.11 (wireless communications), establishing the regulatory and technical framework for system validation.
+Engineering requirements reference relevant international standards including ISO 13482:2014 (personal care robots), ISO 13855 and ISO 13850 (machinery safety), ITU-T H.264/H.265 (video coding), and IEEE 802.11 (wireless communications), establishing the regulatory framework for system validation. Engineering constraints reflect budget limitations, timeline restrictions, and regulatory compliance needs specific to Omani healthcare deployment.
 
-Engineering constraints define the practical boundaries within which the system must be developed and deployed, reflecting budget limitations, timeline restrictions, environmental conditions, and regulatory compliance needs specific to the Omani healthcare context. These constraints acknowledge real-world limitations while ensuring the system remains feasible, maintainable, and aligned with hospital infrastructure.
-
-The comparative performance analysis in Section 3.3.6 provided empirical data on component characteristics, revealing inherent trade-offs between performance, power consumption, and cost across sensor modalities, computing platforms, and AI architectures. Section 3.5 examined these trade-offs in the context of compatibility, scalability, and standards compliance, demonstrating that healthcare robotics involves balancing multiple competing objectives rather than optimizing for any single metric.
-
-The requirement specification establishes the foundation for system design decisions that will be detailed in subsequent chapters. The traceability between customer requirements, engineering requirements, and verification methods ensures that design choices can be validated against stakeholder needs and technical constraints throughout the development process.
+The comparative performance analysis in Section 3.3.6 provided empirical data on component characteristics, while Section 3.5 examined trade-offs in the context of standards compliance and Omani deployment requirements. The requirement specification establishes the foundation for system design decisions detailed in subsequent chapters, with traceability ensuring design choices can be validated against stakeholder needs and technical constraints.
