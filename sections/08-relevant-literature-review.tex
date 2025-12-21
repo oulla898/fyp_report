@@ -171,7 +171,7 @@ Angle of Arrival (AoA) is a localization technique that determines the direction
 \end{figure}
 
 \paragraph{SLAM-Based Sensor Fusion Techniques}
-Simultaneous Localization and Mapping (SLAM) is a critical technology for autonomous navigation, enabling robots to build maps of unknown environments while simultaneously keeping track of their own location. Its effectiveness hinges on robust sensor fusion techniques that integrate data from various sources such as camera(s), IMU, wheel odometry, or RF ranging . Beyond external RF systems, autonomous navigation heavily relies on SLAM with multi-sensor fusion for robustness. A common stack fuses 2D LiDAR with an IMU and wheel odometry. IMU and odometry constrain motion, correcting LiDAR motion distortion and mitigating slip-induced drift. Studies report substantial gains when integrating IMU and wheel odometry, for example, approximately 27\% improvement in rotation error and greater than 67\% reduction in position error relative to LiDAR only SLAM, at the expense of added system complexity and compute \cite{doduc2024}.
+Simultaneous Localization and Mapping (SLAM) is a critical technology for autonomous navigation, enabling robots to build maps of unknown environments while simultaneously keeping track of their own location. Its effectiveness hinges on robust sensor fusion techniques that integrate data from various sources such as camera(s), IMU, wheel odometry, or RF ranging. Beyond external RF systems, autonomous navigation heavily relies on SLAM with multi-sensor fusion for robustness. A common stack fuses 2D LiDAR with an IMU and wheel odometry. IMU and odometry constrain motion, correcting LiDAR motion distortion and mitigating slip-induced drift. Studies report substantial gains when integrating IMU and wheel odometry, for example, approximately 27\% improvement in rotation error and greater than 67\% reduction in position error relative to LiDAR only SLAM, at the expense of added system complexity and compute \cite{doduc2024}.
 
 VSLAM (Visual Simultaneous Localization and Mapping) is a method that uses cameras to help robots figure out where they are and build maps of their surroundings at the same time. VSLAM uses cameras like monocular (single), stereo (two), or RGB-D (depth-sensing) for positioning and mapping. It provides low-cost, lightweight hardware and better scene understanding. Challenges include poor performance in texture-less or repetitive areas, and scale issues in monocular systems (e.g., early ORB-SLAM 2.0). Modern approaches prefer hybrid Visual–Inertial–Ranging–LiDAR (VIRAL) SLAM for improved reliability in complex environments \cite{tourani2022}. Figure~\ref{fig:slam} shows the combination of visual/laser data with inertial and odometric inputs for stable estimation. Tools like Google Cartographer build 3D maps in real-time, using LiDAR, IMU, and odometry. 
 \begin{figure}[H]
@@ -240,7 +240,7 @@ Yahboom ROSMASTER X3 \cite{yahboom2024} & \$699 & DIY & ROS 1 & 5--8~kg & Mecanu
 \hline
 Elephant Robotics MyAGV 2023 \cite{elephantrobotics2024} & \$899 & DIY & ROS 1 & 8~kg & Mecanum wheels, 2D SLAM ready, Python/ROS compatible \\
 \hline
-\multicolumn{6}{|c|}{\textit{Mid Tier (\$1,000--\$2,000)}} \\
+\multicolumn{6}{|c|}{\textit{Mid-Tier (\$1,000--\$2,000)}} \\
 \hline
 SLAMTEC Apollo \cite{slamtec2024} & \$1,200 & Yes & ROS 1/2 & 50~kg & Same platform as Pudu/Keenon hospital robots \\
 \hline
