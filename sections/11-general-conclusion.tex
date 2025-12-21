@@ -1,0 +1,35 @@
+\subsection{Project Summary}
+
+This Final Year Project presented the conceptual design and system architecture of a smart healthcare robot for deployment in Omani hospital environments. The project addressed critical challenges including medical staff shortages, infection control, and limited accessibility to specialized care in remote regions. Through systematic literature review, requirements analysis, and Analytic Hierarchy Process (AHP) decision-making, a comprehensive solution was developed that integrates autonomous navigation, telepresence capabilities, and conversational AI into a unified mobile platform.
+
+The system employs a hybrid architecture combining a commercial robot base (TurtleBot 4 or Yahboom ROS-MASTER X3) with custom-developed intelligence layers. This approach leverages proven navigation hardware while enabling innovation in human-robot interaction. The architecture consists of seven subsystems: Mobility, Navigation, Perception, Intelligence, Task Management, Interface and Communication, and Power Management. Key specifications include position accuracy ($\pm$20~cm), telepresence quality (720p at 30~fps), conversational AI performance (90\% intent accuracy), and 4--6 hour operational endurance.
+
+Core technical selections through AHP analysis include: LiDAR-based SLAM with ROS~2 Nav2 (score 7.95), RPLiDAR A1 with MPU6050 IMU and wheel odometry fusion (score 8.20), Raspberry Pi 5 computing platform (score 7.65), and Google Gemini 3 flash for natural language interaction (score 8.44). The design complies with ISO 13482:2014 (robot safety), ISO 13850 (emergency stop), ITU-T H.264/H.265 (video coding), and IEEE 802.11 (wireless communications), while meeting constraints of \$2,500 budget, 9--10 month timeline, and Omani hospital infrastructure compatibility.
+
+\subsection{Areas of Improvement}
+
+The proposed system advances current healthcare robotics technology in several key dimensions:
+
+\paragraph{Unified Multi-Function Platform.} Existing hospital robots excel in specific tasks--telepresence (InTouch RP-VITA), logistics (Pudu PuduBot 2), or patient engagement (NAO)--but operate independently. This project uniquely integrates autonomous navigation, telepresence, and conversational AI into a single platform, addressing the fragmentation identified in literature. This enables seamless transitions between delivery missions, remote consultations, and patient interaction without multiple specialized robots.
+
+\paragraph{Advanced Conversational AI.} Commercial systems rely on scripted interactions or simple commands. By integrating Google Gemini 3 flash with speech-to-text and text-to-speech, this project enables natural conversations in English and Arabic with 90\% intent accuracy and 3-second response latency--significantly improving upon touchscreen-only interfaces of systems like Keenon Peanut Medical.
+
+\paragraph{Cost-Effective Implementation.} The \$2,500 budget represents substantial reduction versus commercial robots (\$12,000--\$47,500). Leveraging open-source ROS~2, cloud-based AI APIs, and commercial components demonstrates that advanced capabilities can be achieved at educational and small-hospital budget scales, improving accessibility for resource-constrained facilities.
+
+\paragraph{Open Architecture and Extensibility.} Unlike proprietary commercial systems, the ROS~2-based architecture provides full access to navigation algorithms and software modules, enabling future extensions UV-C disinfection, hospital information system integration, advanced sensor fusion--without vendor dependencies.
+
+\paragraph{Localized Design.} The system explicitly addresses Omani infrastructure: Arabic language support, standard hospital dimensions and flooring and existing Wi-Fi networks. These considerations, often overlooked in Western-market platforms, improve adoption feasibility in the GCC region.
+
+\subsection{Future Work}
+
+The conceptual design establishes the foundation for implementation and deployment across three phases:
+
+\paragraph{Phase 1: Hardware Integration and Navigation (Months 5-6).} Procure and assemble hardware components including robot base, Raspberry Pi 5, RPLiDAR A1, MPU6050 IMU, Pi Camera Module 3, and Android tablet. Configure ROS~2 Nav2 for SLAM and achieve $\pm$20~cm position accuracy through sensor calibration and fusion tuning. Demonstrate autonomous navigation between waypoints in laboratory environment.
+
+\paragraph{Phase 2: AI Integration and Telepresence (Month 7).} Implement Google Gemini 3 flash API, speech-to-text/text-to-speech pipeline, and dialogue manager. Deploy telepresence with 720p video streaming. Develop Android tablet and web dashboard interfaces. Validate 90\% intent accuracy, 3-second response latency, and clinical scenario completion.
+
+\paragraph{Phase 3: System Integration and Trials (Month 8).} Integrate all subsystems with task management coordination and autonomous charging. Conduct field trials in hospital or similar environment to validate navigation accuracy, telepresence quality under network conditions, conversational AI performance with diverse users, and 4--6 hour operation time. Verify regulatory compliance including patient privacy, safety standards (ISO 13482, ISO 13850), Conduct user acceptance testing with clinical staff and patients.
+
+\paragraph{Advanced Enhancements.} Beyond core implementation, future capabilities include: UV-C disinfection integration for environmental sanitation; Hospital Information System (HIS) integration with electronic health records requiring HIPAA/GDPR compliance; multi-robot fleet coordination leveraging ROS~2 distributed computing; UWB localization with Angle of Arrival for beacon-following scenarios; and affective computing for emotional intelligence through facial expression and voice prosody analysis.
+
+\paragraph{Long-Term Vision.} The ultimate goal extends to establishing scalable deployment framework for Omani healthcare facilities including standardized integration protocols, clinical staff training programs, maintenance documentation, and longitudinal impact studies measuring clinical workflow efficiency (target 30\% improvement in non-clinical logistics time), specialist consultation access in rural regions, and patient experience improvements.
