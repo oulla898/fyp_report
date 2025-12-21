@@ -138,71 +138,96 @@ Output:
 - One 16:9 PNG diagram that clearly shows the Level 0 black-box functional view with Inputs, Smart Healthcare Robot block, Outputs, and Primary functions as specified above.
 `
 
-const LEVEL1_PROMPT = `Create a Level 1 functional decomposition diagram for the same smart healthcare robot. This figure should expand the central block into its main subsystems and show their key responsibilities and interfaces.
+const SYSTEM_BLOCK_DIAGRAM_PROMPT = `Create a comprehensive system architecture block diagram for an autonomous mobile robot (AMR) designed for hospital environments.
 
 Tone and style:
-- Same academic, neutral style as the Level 0 diagram: white background, flat vector shapes, thin dark-grey or dark-blue lines, no decoration.
-- All wording must be short, factual, and easy to read in a thesis.
+- Strictly academic and technical; publication-quality for engineering thesis.
+- Clean white background with flat vector design, using professional color palette (blues, greys, subtle accents).
+- Clear hierarchy showing hardware, software, and communication layers.
+- All text must be concise technical labels, no marketing language.
 
-System description (from the thesis): the robot is decomposed into seven subsystems:
-- Mobility
-- Navigation
-- Perception
-- Intelligence
-- Task Management
-- Interface and Communication
-- Power Management
+System Architecture Overview:
+The diagram must show a layered architecture with clear separation between:
+1. Physical Layer (Mobile Platform & Sensors)
+2. Computing & Control Layer
+3. Software Architecture (ROS 2 Navigation Stack)
+4. Intelligence & Interaction Layer
+5. Communication & Interface Layer
 
-Layout suggestion (horizontal 16:9 diagram):
+Layout (horizontal 16:9 diagram):
 
-1) Title area (top)
-- At the top, place a clear title: "System Level 1 – Subsystem Decomposition".
+BOTTOM LAYER - Physical Hardware Platform (bottom 20% of canvas):
+- Draw a side-view silhouette of the robot base (wheeled platform)
+- Label key physical components in boxes around the base:
+  * "DC Motors with Encoders" (wheels)
+  * "RPLiDAR A1" (on top, spinning sensor icon)
+  * "MPU6050 IMU" (small component)
+  * "12V Li-ion Battery Pack"
+  * "Motor Drivers"
+  * "Charging Dock Interface"
 
-2) Central coordination subsystem
-- Place the "Task Management" subsystem as a medium-sized box in the centre of the diagram.
-- Inside the box, add a one-line responsibility summary: "queue and prioritise tasks; coordinate deliveries and missions".
+MIDDLE LAYER - Computing Platform (20% above hardware):
+- Two connected boxes:
+  * Left box: "Raspberry Pi 5 (Ubuntu 22.04 + ROS 2 Humble)" - main computer
+  * Right box: "ESP32 Microcontroller" - low-level motor control
+- Arrow between them labeled "Serial/I2C"
 
-3) Surrounding subsystems
-- Arrange the remaining subsystems around Task Management as separate labelled boxes:
+UPPER-MIDDLE LAYER - ROS 2 Navigation Stack (25% of canvas):
+- One grouped container titled "ROS 2 Navigation Stack" containing 4 connected boxes:
+  * Box 1: "SLAM Toolbox" - "real-time mapping"
+  * Box 2: "AMCL Localization" - "pose estimation"
+  * Box 3: "Nav2 Planner" - "global & local path planning"
+  * Box 4: "Costmap 2D" - "obstacle representation"
+- Show data flow arrows between these boxes
 
-  a) "Navigation" box, slightly above and to the left of Task Management.
-     - Inside text: "map building, localisation, path planning, obstacle avoidance".
+TOP LAYER - Intelligence & Interface (top 35% of canvas):
+Split into three vertical sections:
 
-  b) "Mobility" box, below Navigation.
-     - Inside text: "execute velocity commands; provide odometry; emergency stop".
+LEFT SECTION - AI Intelligence:
+- Box: "Google Gemini 3 Flash API"
+  * Inside: "Natural language understanding"
+  * Inside: "Conversational response generation"
+- Box below: "Speech Recognition (STT)"
+- Box below: "Text-to-Speech (TTS)"
+- Arrows showing: Voice input → STT → Gemini API → TTS → Voice output
 
-  c) "Perception" box, to the left side.
-     - Inside text: "camera, microphones, proximity sensors; environment sensing".
+CENTER SECTION - Task Coordination:
+- Box: "Task Scheduler"
+  * Inside: "Queue management"
+  * Inside: "Mission planning"
+  * Inside: "State machine"
+- Arrows connecting to Navigation Stack below
 
-  d) "Intelligence" box, above Task Management.
-     - Inside text: "Gemini-based natural language understanding and response".
+RIGHT SECTION - User Interface:
+- Box: "Android Tablet Interface"
+  * Inside: "Touch controls"
+  * Inside: "Status display"
+  * Inside: "Real-time feedback"
+- Box: "Web Dashboard"
+  * Inside: "Remote monitoring"
+  * Inside: "Fleet management"
+- Cloud icon with "Wi-Fi 802.11ac" connecting to external systems
 
-  e) "Interface and Communication" box, to the right side.
-     - Inside text: "tablet UI, web dashboard, network communication".
+KEY DATA FLOWS (show with labeled arrows):
+- Sensor data flow: LiDAR/IMU → ROS 2 Stack → Task Scheduler
+- Command flow: User Interface → Task Scheduler → Nav2 → Motor Control → Motors
+- Feedback flow: Odometry → Localization → UI Display
+- AI interaction: Voice → Speech Recognition → Gemini API → TTS → Speaker
+- Power monitoring: Battery → Power Management → All Systems (show branching)
 
-  f) "Power Management" box, below and slightly to the right.
-     - Inside text: "battery, BMS, converters, docking and charging".
+Visual conventions:
+- Use different subtle colors for different layers (e.g., light blue for hardware, light grey for middleware, light green for AI)
+- Use solid boxes for physical components, rounded boxes for software modules
+- Use dashed lines for wireless communication, solid lines for wired
+- Keep all arrows clear with short descriptive labels
+- Ensure text is readable and professionally typeset
 
-4) Key interfaces (arrows and labels)
-- Show clear arrows for the main data and command flows, using short labels where helpful:
-
-  - From "Task Management" to "Navigation": arrow labelled "navigation goals".
-  - From "Navigation" to "Mobility": arrow labelled "velocity commands".
-  - From "Mobility" back to "Navigation": arrow labelled "odometry".
-  - From "Perception" to "Navigation": arrow labelled "sensor data (LiDAR, proximity)".
-  - From "Perception" to "Intelligence": arrow labelled "audio and video".
-  - From "Interface and Communication" to "Task Management": arrow labelled "task requests and status".
-  - From "Intelligence" to "Task Management": arrow labelled "high-level task requests".
-  - From "Power Management" to "Task Management" and "Interface": arrows labelled "battery status".
-  - From "Task Management" to "Power Management": arrow labelled "dock / charge command".
-
-Diagram rules:
-- Do not add extra subsystems beyond the seven listed.
-- Keep all arrows straight and avoid overlapping labels wherever possible.
-- Ensure subsystem names match exactly: "Mobility", "Navigation", "Perception", "Intelligence", "Task Management", "Interface and Communication", "Power Management".
+Title banner at top:
+"Smart Healthcare Robot - System Architecture Block Diagram"
+Subtitle: "Layered architecture showing hardware, ROS 2 navigation, AI integration, and user interface"
 
 Output:
-- One 16:9 PNG figure suitable as the "System Level 1 – Subsystem Decomposition" diagram in the thesis.
+- One professional 16:9 PNG diagram showing the complete system architecture in a clear, hierarchical manner suitable for an engineering thesis.
 `
 
 async function ensureOutputDir(): Promise<void> {
@@ -258,14 +283,11 @@ async function main() {
 
   await ensureOutputDir()
 
-  // System Level 0 functional view only
-  await generateImage(LEVEL0_PROMPT, 'level0-functional-view', 'Level 0 functional diagram')
+  // Generate System Block Diagram for Conceptual Design chapter
+  await generateImage(SYSTEM_BLOCK_DIAGRAM_PROMPT, 'system-block-diagram', 'System Architecture Block Diagram')
 
-  // System Level 1 subsystem decomposition only
-  await generateImage(LEVEL1_PROMPT, 'level1-subsystem-decomposition', 'Level 1 subsystem diagram')
-
-  console.log('\n✨ Level 0 and Level 1 image generation complete!')
-  console.log('📁 Check the figures/ directory for the new outputs')
+  console.log('\n✨ System block diagram generation complete!')
+  console.log('📁 Check the figures/ directory for the new output')
 }
 
 main().catch(err => {
