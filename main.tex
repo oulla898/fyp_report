@@ -14,6 +14,7 @@
 \usepackage{float}
 \usepackage{amsmath}
 \usepackage{hyperref}
+\usepackage{fancyhdr}
 \graphicspath{{figures/}}
 
 % Configure Table of Contents spacing
@@ -29,6 +30,23 @@
     pdfborder={0 0 0},
     pdftitle={Smart Healthcare Robot},
     pdfauthor={Almoulla Talal Almaawali, Abdulmunim Khamis Albusaidi}
+}
+
+% Configure page headers and footers (Academic Thesis Style)
+\pagestyle{fancy}
+\fancyhf{} % Clear all headers and footers
+\fancyhead[L]{\small\textit{\leftmark}} % Left side: Section name
+\fancyhead[R]{\small\textit{Smart Healthcare Robot}} % Right side: Document title
+\fancyfoot[C]{\thepage} % Page number centered in footer
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}} % Properly set section marks
+
+% Different style for chapter intro pages (no header, only page number)
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \fancyfoot[C]{\thepage}
+    \renewcommand{\headrulewidth}{0pt}
 }
 
 \begin{document}
@@ -117,7 +135,7 @@ Date: December 13, 2025 & Students's Names \\
 \section*{Declaration of Generative AI and AI-Assisted Technologies}
 \addcontentsline{toc}{section}{Declaration of AI Use}
 
-During the preparation of this work, the students Almoulla Talal Almaawali (Student ID: 135591) and Abdulmunim Khamis Albusaidi (Student ID: 133225) used generative AI tools including ChatGPT, Claude, and Google Gemini in order to assist with literature review synthesis, technical writing refinement, code documentation, and LaTeX formatting. After using these tools, the students reviewed and edited the content as needed and take full responsibility for the accuracy, integrity, and originality of the content presented in this Final Year Project report.
+During the preparation of this work, the students Almoulla Talal Almaawali (Student ID: 135591) and Abdulmunim Khamis Albusaidi (Student ID: 133225) used generative AI tools including ChatGPT, Claude, and Google Gemini in order to assist with literature review synthesis, technical writing refinement, code documentation. After using these tools, the students reviewed and edited the content as needed and take full responsibility for the accuracy, integrity, and originality of the content presented in this Final Year Project report.
 
 % ============================================================
 % ABSTRACT
@@ -284,16 +302,28 @@ WBS & Work Breakdown Structure \\
 % ============================================================
 \newpage
 \appendix
-\section{Appendix: Additional Tables and Figures}
+\section{Appendix: Standards and Regulatory References}
 \label{sec:appendix}
 
-\subsection{Component Datasheets}
-\textit{[To be added: Technical specifications for RPLiDAR A1, MPU6050 IMU, Raspberry Pi 5, ESP32, motor drivers, and battery system]}
+\subsection{ISO Standards}
+This project references the following international safety and technical standards:
 
-\subsection{Code Repository}
-\textit{[To be added: GitHub repository link, software architecture diagrams, and code documentation]}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{ISO 13482:2014} -- Robots and robotic devices -- Safety requirements for personal care robots \\
+    \url{https://www.iso.org/standard/53820.html}
+    
+    
+    \item \textbf{ISO 13850:2015} -- Safety of machinery -- Emergency stop function -- Principles for design \\
+    \url{https://www.iso.org/standard/59970.html}
+\end{itemize}
 
-\subsection{Testing Protocols}
-\textit{[To be added: Detailed test procedures for navigation accuracy, obstacle avoidance, speech recognition, and system integration]}
+\subsection{Data Protection and Privacy Regulations}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{GDPR (General Data Protection Regulation)} -- Regulation (EU) 2016/679 of the European Parliament and of the Council on the protection of natural persons with regard to the processing of personal data \\
+    \url{https://eur-lex.europa.eu/eli/reg/2016/679/oj}
+    
+    \item \textbf{HIPAA (Health Insurance Portability and Accountability Act)} -- U.S. Department of Health \& Human Services regulations for protecting sensitive patient health information \\
+    \url{https://www.hhs.gov/hipaa/index.html}
+\end{itemize}
 
 \end{document}

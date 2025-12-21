@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Healthcare Robot - FYP Presentation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        :root {
+            --primary: #003366; /* Deep Blue */
+            --accent: #DAA520; /* Gold/Dark Yellow */
+            --text: #333333;
+            --bg: #ffffff;
+            --light-gray: #f4f4f4;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow: hidden; /* Hide scrollbars */
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* Slide Container */
+        #presentation-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 40px 80px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.6s ease-in-out, transform 0.6s ease;
+            transform: translateY(20px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            border-bottom: 3px solid var(--accent);
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        p, li {
+            font-size: 1.4rem;
+            line-height: 1.6;
+            color: #444;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        ul li::before {
+            content: "•";
+            color: var(--accent);
+            font-weight: bold;
+            display: inline-block; 
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        /* Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            height: 100%;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        /* Images */
+        .img-container {
+            width: 100%;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* Footer / Progress */
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            background: rgba(255,255,255,0.9);
+            border-top: 1px solid #ddd;
+            z-index: 100;
+        }
+
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 5px;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .slide-number {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .uni-logo-small {
+            height: 30px;
+        }
+
+        /* Specific Visuals */
+        .card {
+            background: var(--light-gray);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid var(--primary);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* Animation Canvas */
+        canvas#slamCanvas {
+            border: 1px solid #ddd;
+            background: #fafafa;
+            border-radius: 8px;
+        }
+
+        /* Venn Diagram CSS */
+        .venn-container {
+            position: relative;
+            width: 400px;
+            height: 300px;
+            margin: 0 auto;
+        }
+        .circle {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            opacity: 0.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: transform 0.5s;
+        }
+        .circle:hover {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+        .c1 { background: #e74c3c; top: 0; left: 110px; } /* Telepresence */
+        .c2 { background: #3498db; bottom: 0; left: 40px; } /* AMR */
+        .c3 { background: #f1c40f; bottom: 0; right: 40px; color: black;} /* Social */
+        
+        .center-text {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+            color: #333;
+            z-index: 10;
+        }
+
+        /* Presenter Switch */
+        .switch-slide {
+            background: var(--primary);
+            color: white;
+        }
+        .switch-slide h1, .switch-slide p {
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="presentation-container">
+
+    <!-- ============================================ -->
+    <!-- PRESENTER 1: CONTEXT & ANALYSIS -->
+    <!-- ============================================ -->
+
+    <!-- SLIDE 1: Title -->
+    <div class="slide active">
+        <div style="text-align: center;">
+            <img src="C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\report\figures\squ-logo.png" alt="SQU Logo" style="height: 150px; margin-bottom: 20px;">
+            <h3 style="color: var(--accent); letter-spacing: 2px;">FINAL YEAR PROJECT</h3>
+            <h1>Smart Healthcare Robot</h1>
+            <h3 style="color: var(--primary);">Autonomous Assistance for Omani Hospitals</h3>
+            <br>
+            <div style="display: flex; justify-content: center; gap: 50px; margin-top: 30px;">
+                <div style="text-align: left;">
+                    <p><strong>Students:</strong></p>
+                    <p>Almoulla Talal Almaawali</p>
+                    <p>Abdulmunim Khamis Albusaidi</p>
+                </div>
+                <div style="text-align: left;">
+                    <p><strong>Supervisor:</strong></p>
+                    <p>Dr. Ahmed Chehib Ammari</p>
+                    <p>Dec 2025</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: Project Context -->
+    <div class="slide">
+        <h2>Project Context</h2>
+        <div class="grid-2">
+            <div>
+                <p><strong>Global Challenge:</strong> Post-pandemic healthcare faces staff shortages, infection risks, and logistical burdens.</p>
+                <div class="card" style="margin-top: 20px;">
+                    <h3>The Omani Context</h3>
+                    <ul>
+                        <li>Vision 2040: Equitable healthcare for all regions.</li>
+                        <li>Geography: Rural families need access to specialists.</li>
+                        <li>Current State: 100% Urban / 90% Rural coverage, but specialist access remains a hurdle.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="img-container">
+                <!-- Visual Abstract Image -->
+                <img src="C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\report\figures\visual-abstract-1765608906756.png" alt="Visual Abstract">
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: Problem Statement -->
+    <div class="slide">
+        <h2>Problem Statement</h2>
+        <div class="grid-2">
+            <div style="display: flex; flex-direction: column; justify-content: center;">
+                <div class="card" style="margin-bottom: 20px; border-left-color: #e74c3c;">
+                    <h3>1. Manual Logistics</h3>
+                    <p>Nurses spend ~30% of time on non-clinical transport (meds, linens), reducing patient care time.</p>
+                </div>
+                <div class="card" style="border-left-color: #e74c3c;">
+                    <h3>2. The "Presence Gap"</h3>
+                    <p>Existing telepresence robots are difficult to control manually and lack engagement (just a "screen on wheels").</p>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <canvas id="timeChart" width="400" height="300"></canvas>
+                <p style="font-size: 1rem; color: #777;">Typical Nurse Shift Allocation</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: Objectives -->
+    <div class="slide">
+        <h2>Project Objectives</h2>
+        <div class="grid-2">
+            <div>
+                <ul>
+                    <li><strong>Autonomous Navigation:</strong> Robust SLAM in crowded corridors.</li>
+                    <li><strong>Secure Telepresence:</strong> Low-latency audio/visual consultation.</li>
+                    <li><strong>AI Integration:</strong> LLM-driven interaction (Triage/Guidance).</li>
+                    <li><strong>System Validation:</strong> Pilot scenario (Nurse Station &rarr; Patient Bed).</li>
+                </ul>
+            </div>
+            <div class="img-container">
+                 <img src="C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\report\figures\visual-abstract-1765607722233.png" alt="System Concept">
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: Methodology -->
+    <div class="slide">
+        <h2>Methodology</h2>
+        <p>A systematic engineering approach spanning two semesters.</p>
+        <div style="display: flex; justify-content: space-between; margin-top: 40px; text-align: center;">
+            <div style="width: 18%;">
+                <div style="font-size: 3rem; color: var(--primary);">1</div>
+                <p>Literature Review & Gap Analysis</p>
+            </div>
+            <div style="font-size: 2rem; color: var(--accent);">→</div>
+            <div style="width: 18%;">
+                <div style="font-size: 3rem; color: var(--primary);">2</div>
+                <p>AHP Decision Matrix (Selection)</p>
+            </div>
+            <div style="font-size: 2rem; color: var(--accent);">→</div>
+            <div style="width: 18%;">
+                <div style="font-size: 3rem; color: var(--primary);">3</div>
+                <p>Design & Decomposition</p>
+            </div>
+            <div style="font-size: 2rem; color: var(--accent);">→</div>
+            <div style="width: 18%;">
+                <div style="font-size: 3rem; color: var(--primary);">4</div>
+                <p>Prototyping & Validation</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: Literature Review (The Gap) -->
+    <div class="slide">
+        <h2>Literature Review: The Research Gap</h2>
+        <div class="grid-2">
+            <div>
+                <p>We analyzed three distinct fields. None provide a holistic solution.</p>
+                <ul>
+                    <li><strong>Telepresence:</strong> Good for diagnosis, bad mobility (Manual).</li>
+                    <li><strong>AMRs (Logistics):</strong> Great navigation, zero patient interaction.</li>
+                    <li><strong>Social Robots:</strong> Emotional support, but stationary/limited utility.</li>
+                </ul>
+                <br>
+                <div class="card">
+                    <strong>Our Solution:</strong> Merges these domains using a hybrid architecture.
+                </div>
+            </div>
+            <div class="venn-container">
+                <div class="circle c1">Telepresence<br>(Remote Care)</div>
+                <div class="circle c2">AMR<br>(Logistics)</div>
+                <div class="circle c3">Social Robots<br>(Engagement)</div>
+                <div class="center-text">OUR<br>PROJECT</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: Technical Concepts (SLAM) -->
+    <div class="slide">
+        <h2>Technical Foundation: SLAM & Localization</h2>
+        <div class="grid-2">
+            <div>
+                <h3>Lidar-based SLAM</h3>
+                <p>Simultaneous Localization and Mapping allows the robot to build a map of an unknown environment while tracking its position.</p>
+                <p><strong>Multilateration:</strong> Using RF anchors (Concept).</p>
+                <img src="C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\report\figures\Multilateration.png" alt="Multilateration" style="height: 150px; margin-top: 20px;">
+            </div>
+            <div style="text-align: center;">
+                <canvas id="slamCanvas" width="400" height="400"></canvas>
+                <p style="font-size: 0.9rem;">Simulation: Robot (Blue) mapping obstacles (Red)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 8: Market Analysis -->
+    <div class="slide">
+        <h2>Existing Solutions & Limitations</h2>
+        <div class="grid-3">
+            <div class="card" style="height: 100%;">
+                <img src="C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\report\figures\peanut.jpg" style="height: 150px; width: 100%; object-fit: contain;">
+                <h3>Keenon Peanut</h3>
+                <p>Good Logistics.</p>
+                <p style="color: red;">No Interaction.</p>
+                <p style="color: red;">~$12,000 USD</p>
+            </div>
+            <div class="card" style="height: 100%;">
+                <img src="C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\report\figures\pudubot-sante.png" style="height: 150px; width: 100%; object-fit: contain;">
+                <h3>PuduBot 2</h3>
+                <p>Excellent Navigation.</p>
+                <p style="color: red;">Proprietary OS.</p>
+                <p style="color: red;">~$12,000 USD</p>
+            </div>
+            <div class="card" style="height: 100%;">
+                <div style="height: 150px; display: flex; align-items: center; justify-content: center; background: #eee;">
+                    <span style="font-size: 3rem;">?</span>
+                </div>
+                <h3>Our Proposal</h3>
+                <p>Hybrid ROS 2 System.</p>
+                <p style="color: green;">LLM Interaction.</p>
+                <p style="color: green;">Budget < $2,500</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TRANSITION SLIDE -->
+    <div class="slide switch-slide">
+        <div style="text-align: center;">
+            <h1>Part 2: Design & Engineering</h1>
+            <p>Architecture, Subsystems, and Implementation</p>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- PRESENTER 2: DESIGN & ENGINEERING -->
+    <!-- ============================================ -->
+
+    <!-- SLIDE 9: Requirements -->
+    <div class="slide">
+        <h2>Requirements Specification</h2>
+        <div class="grid-2">
+            <div>
+                <h3>Customer Requirements</h3>
+                <ul>
+                    <li>Autonomous Navigation (Corridors/Rooms).</li>
+                    <li>Remote Telepresence (Dr. to Patient).</li>
+                    <li>Infection Control (Minimized contact).</li>
+                    <li>User Friendly (Non-technical staff).</li>
+                </ul>
+            </div>
+            <div>
+                <h3>Engineering Constraints</h3>
+                <div class="card">
+                    <ul>
+                        <li><strong>Budget:</strong> Max $2,500 USD.</li>
+                        <li><strong>Timeline:</strong> 2 Semesters.</li>
+                        <li><strong>Environment:</strong> Standard Hospital Wi-Fi.</li>
+                        <li><strong>Safety:</strong> ISO 13482 Compliance standards.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 10: Design Alternatives -->
+    <div class="slide">
+        <h2>Design Alternatives</h2>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+            <tr style="background: var(--primary); color: white;">
+                <th style="padding: 15px;">Alternative</th>
+                <th style="padding: 15px;">Description</th>
+                <th style="padding: 15px;">Pros</th>
+                <th style="padding: 15px;">Cons</th>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 15px;"><strong>A: Commercial</strong></td>
+                <td style="padding: 15px;">Pre-built platform (e.g., TurtleBot 4)</td>
+                <td style="padding: 15px;">High reliability, Fast setup</td>
+                <td style="padding: 15px;">High Cost, Low Customization</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 15px;"><strong>B: Custom-Built</strong></td>
+                <td style="padding: 15px;">DIY Frame & Electronics</td>
+                <td style="padding: 15px;">Low Cost, High Learning</td>
+                <td style="padding: 15px;">High Risk, Long Dev Time</td>
+            </tr>
+            <tr style="background: #e8f4fd;">
+                <td style="padding: 15px;"><strong>C: Hybrid (Selected)</strong></td>
+                <td style="padding: 15px;">Commercial Base + Custom AI Layer</td>
+                <td style="padding: 15px;">Balanced Reliability/Dev Time</td>
+                <td style="padding: 15px;">Integration Complexity</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- SLIDE 11: AHP Selection -->
+    <div class="slide">
+        <h2>System Selection: AHP Method</h2>
+        <p>Analytic Hierarchy Process used to select the optimal platform.</p>
+        <div class="grid-2">
+            <div style="height: 400px;">
+                <canvas id="ahpChart"></canvas>
+            </div>
+            <div>
+                <h3>Criteria Weights</h3>
+                <ul>
+                    <li><strong>Reliability:</strong> 47% (Crucial for Hospital)</li>
+                    <li><strong>Dev Time:</strong> 30%</li>
+                    <li><strong>Cost:</strong> 15%</li>
+                    <li><strong>Customizability:</strong> 8%</li>
+                </ul>
+                <div class="card" style="margin-top: 20px;">
+                    <strong>Winner: Hybrid Platform</strong><br>
+                    Score: 6.76<br>
+                    <em>Allows us to focus on Intelligence innovation while ensuring mobility safety.</em>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 12: Functional Decomposition -->
+    <div class="slide">
+        <h2>Functional Decomposition (Level 1)</h2>
+        <div class="img-container" style="height: 550px; background: transparent; box-shadow: none;">
+            <img src="C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\report\figures\level1-subsystem-decomposition-1765609443106.png" alt="Level 1 Decomposition">
+        </div>
+    </div>
+
+    <!-- SLIDE 13: Subsystem Specifications -->
+    <div class="slide">
+        <h2>Core Subsystems</h2>
+        <div class="grid-3">
+            <div class="card">
+                <h3>Navigation</h3>
+                <img src="C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\report\figures\slam.webp" style="height: 100px; width:100%; object-fit:cover; margin-bottom:10px; border-radius:5px;">
+                <ul>
+                    <li>ROS 2 Nav2 Stack</li>
+                    <li>Lidar + IMU + Odometry</li>
+                    <li>Dynamic Obstacle Avoidance</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Computation</h3>
+                <img src="https://assets.raspberrypi.com/static/raspberry-pi-5-hero-31b0b536440c9d968840212003c2a498.png" style="height: 100px; width:100%; object-fit:contain; margin-bottom:10px;">
+                <ul>
+                    <li>Raspberry Pi 5 (4GB)</li>
+                    <li>Ubuntu 22.04 LTS</li>
+                    <li>High efficiency / Low Power</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Interface</h3>
+                <div style="height: 100px; background: #333; color:white; display:flex; align-items:center; justify-content:center; border-radius:5px; margin-bottom:10px;">UI</div>
+                <ul>
+                    <li>Android Tablet App</li>
+                    <li>Web Dashboard (Flask)</li>
+                    <li>Voice Command Integration</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 14: The Intelligence Layer -->
+    <div class="slide">
+        <h2>Intelligence Layer: Gemini Integration</h2>
+        <div class="grid-2">
+            <div>
+                <p>We selected <strong>Google Gemini 3.0 Flash</strong> via AHP for Human-Robot Interaction.</p>
+                <ul>
+                    <li><strong>Latency:</strong> Ultra-fast response suitable for conversation.</li>
+                    <li><strong>Context:</strong> Large window (1M tokens) for hospital protocols.</li>
+                    <li><strong>Cost:</strong> Highly efficient API usage.</li>
+                </ul>
+                <div class="card" style="margin-top: 20px;">
+                    <strong>Function:</strong> Translates patient voice queries ("Where is X?") into navigation goals or reassuring dialogue.
+                </div>
+            </div>
+            <div class="img-container">
+                 <img src="C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\report\figures\level0-functional-view-1765609410658.png" alt="Black Box View">
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 15: Timeline & Progress -->
+    <div class="slide">
+        <h2>Project Management</h2>
+        <div style="width: 100%; margin-top: 20px;">
+            <h3>Semester 1 (Completed)</h3>
+            <div style="display: flex; gap: 5px;">
+                <div style="flex: 1; background: var(--primary); color: white; padding: 10px; text-align: center;">Research</div>
+                <div style="flex: 1; background: var(--primary); color: white; padding: 10px; text-align: center;">Requirements</div>
+                <div style="flex: 1; background: var(--primary); color: white; padding: 10px; text-align: center;">Design AHP</div>
+                <div style="flex: 1; background: var(--primary); color: white; padding: 10px; text-align: center;">Simulation</div>
+            </div>
+            <br>
+            <h3>Semester 2 (Next Steps)</h3>
+            <div style="display: flex; gap: 5px;">
+                <div style="flex: 1; background: #ddd; padding: 10px; text-align: center;">Hardware Assembly</div>
+                <div style="flex: 1; background: #ddd; padding: 10px; text-align: center;">Nav Implementation</div>
+                <div style="flex: 1; background: #ddd; padding: 10px; text-align: center;">UI & LLM Integration</div>
+                <div style="flex: 1; background: #ddd; padding: 10px; text-align: center;">Hospital Pilot Test</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 16: Expected Impact -->
+    <div class="slide">
+        <h2>Expected Impact</h2>
+        <div class="grid-2">
+            <div>
+                 <img src="C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\report\figures\visual-abstract-1765608906756.png" style="width: 100%; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+            </div>
+            <div style="display: flex; flex-direction: column; justify-content: center;">
+                <ul>
+                    <li style="font-size: 1.6rem; color: var(--primary);"><strong>Reduced Workload:</strong> Automating 30% of nurse logistics.</li>
+                    <li style="font-size: 1.6rem; color: var(--primary);"><strong>Enhanced Safety:</strong> Lower infection transmission rates.</li>
+                    <li style="font-size: 1.6rem; color: var(--primary);"><strong>Better Care:</strong> Nurses focus on patients, not delivery.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 17: Conclusion -->
+    <div class="slide">
+        <div style="text-align: center;">
+            <h1 style="color: var(--primary);">Thank You</h1>
+            <h3>Q & A</h3>
+            <p>Smart Healthcare Robot: Bringing Care Closer to Patients in Oman</p>
+            <br>
+            <img src="C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\report\figures\squ-logo.png" style="height: 100px; opacity: 0.8;">
+        </div>
+    </div>
+
+    <!-- Footer Progress -->
+    <div class="footer">
+        <div class="slide-number">Slide <span id="current-slide">1</span> / <span id="total-slides">17</span></div>
+        <div class="progress-bar" id="progress"></div>
+        <div style="font-size: 0.8rem; color: #888;">Sultan Qaboos University - ECE Dept</div>
+    </div>
+
+</div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progress');
+    const currentSlideEl = document.getElementById('current-slide');
+    const totalSlidesEl = document.getElementById('total-slides');
+    let currentIndex = 0;
+    
+    // Set total slides
+    totalSlidesEl.innerText = slides.length;
+
+    function showSlide(index) {
+        if (index < 0) index = 0;
+        if (index >= slides.length) index = slides.length - 1;
+
+        slides[currentIndex].classList.remove('active');
+        slides[index].classList.add('active');
+        
+        currentIndex = index;
+        updateFooter();
+        triggerAnimations(index);
+    }
+
+    function updateFooter() {
+        currentSlideEl.innerText = currentIndex + 1;
+        const progress = ((currentIndex + 1) / slides.length) * 100;
+        progressBar.style.width = `${progress}%`;
+    }
+
+    function nextSlide() {
+        showSlide(currentIndex + 1);
+    }
+
+    function prevSlide() {
+        showSlide(currentIndex - 1);
+    }
+
+    // Keyboard Navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            nextSlide();
+        } else if (e.key === 'ArrowLeft') {
+            prevSlide();
+        } else if (e.key === 'f') {
+            toggleFullScreen();
+        }
+    });
+
+    // Click navigation
+    document.addEventListener('click', (e) => {
+        // Only navigate if not clicking on controls (if any)
+        if(e.clientX > window.innerWidth / 2) nextSlide();
+        else prevSlide();
+    });
+
+    function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    }
+
+    // --- ANIMATIONS & CHARTS ---
+
+    // 1. Chart for Problem Statement (Slide 3)
+    let timeChartInstance = null;
+    function renderTimeChart() {
+        const ctx = document.getElementById('timeChart').getContext('2d');
+        if(timeChartInstance) timeChartInstance.destroy();
+        
+        timeChartInstance = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Clinical Care', 'Documentation', 'Logistics/Walking'],
+                datasets: [{
+                    data: [40, 30, 30],
+                    backgroundColor: ['#003366', '#DAA520', '#e74c3c']
+                }]
+            },
+            options: {
+                animation: { duration: 1500, easing: 'easeOutQuart' },
+                responsive: false
+            }
+        });
+    }
+
+    // 2. Chart for AHP (Slide 11)
+    let ahpChartInstance = null;
+    function renderAHPChart() {
+        const ctx = document.getElementById('ahpChart').getContext('2d');
+        if(ahpChartInstance) ahpChartInstance.destroy();
+
+        ahpChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Commercial (A)', 'Custom (B)', 'Hybrid (C)'],
+                datasets: [{
+                    label: 'Final AHP Score',
+                    data: [7.11, 5.55, 6.76],
+                    backgroundColor: ['#ccc', '#ccc', '#003366'], // Highlight selected
+                    borderColor: 'rgba(0,0,0,0.1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                scales: { x: { beginAtZero: true, max: 10 } },
+                animation: { duration: 1500 }
+            }
+        });
+    }
+
+    // 3. SLAM Animation (Slide 7)
+    let animationId;
+    function startSLAMAnimation() {
+        const canvas = document.getElementById('slamCanvas');
+        if(!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let robot = { x: 50, y: 50, angle: 0 };
+        let points = []; // Mapped points
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw Obstacles (Hidden conceptually, but drawn for vis)
+            ctx.fillStyle = '#ddd';
+            ctx.fillRect(150, 100, 50, 200);
+            ctx.fillRect(300, 50, 50, 50);
+
+            // Draw Mapped Points (Red dots)
+            ctx.fillStyle = 'red';
+            points.forEach(p => {
+                ctx.fillRect(p.x, p.y, 2, 2);
+            });
+
+            // Move Robot
+            robot.x += 1;
+            robot.y += 0.5;
+            if(robot.x > 380) { robot.x = 50; robot.y = 50; points = []; }
+
+            // Lidar Rays
+            ctx.strokeStyle = 'rgba(0, 51, 102, 0.2)';
+            for(let i=0; i<12; i++) {
+                let ang = (Date.now() / 1000) + (i * (Math.PI/6));
+                let rayX = robot.x + Math.cos(ang) * 100;
+                let rayY = robot.y + Math.sin(ang) * 100;
+                
+                ctx.beginPath();
+                ctx.moveTo(robot.x, robot.y);
+                ctx.lineTo(rayX, rayY);
+                ctx.stroke();
+
+                // Fake "hit" detection adds points occasionally
+                if(Math.random() > 0.8) {
+                    points.push({x: rayX, y: rayY});
+                }
+            }
+
+            // Draw Robot
+            ctx.fillStyle = '#003366';
+            ctx.beginPath();
+            ctx.arc(robot.x, robot.y, 10, 0, Math.PI*2);
+            ctx.fill();
+
+            animationId = requestAnimationFrame(draw);
+        }
+        cancelAnimationFrame(animationId);
+        draw();
+    }
+
+    // Trigger Logic
+    function triggerAnimations(index) {
+        // Slide 3 is index 2 (0-based)
+        if(index === 2) renderTimeChart();
+        // Slide 7 is index 6
+        if(index === 6) startSLAMAnimation();
+        // Slide 11 is index 10
+        if(index === 10) renderAHPChart();
+    }
+
+    // Initial load
+    updateFooter();
+    // Add opacity to images on error (placeholder logic)
+    document.querySelectorAll('img').forEach(img => {
+        img.onerror = function() {
+            this.style.display = 'none';
+            this.parentElement.style.backgroundColor = '#eee';
+            this.parentElement.innerHTML += '<div style="color:red; text-align:center;">Image Not Found<br>Local File Security Restriction</div>';
+        };
+    });
+
+</script>
+
+</body>
+</html>
