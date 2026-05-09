@@ -13,8 +13,12 @@
 \usepackage{tocloft}
 \usepackage{float}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{hyperref}
 \usepackage{fancyhdr}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{subcaption}
 \graphicspath{{figures/}}
 
 % Configure Table of Contents spacing
@@ -59,7 +63,7 @@
 \vspace*{0.5cm}
 
 % University Logo
-\includegraphics[width=5cm]{squ-logo.png}\\[0.5cm]
+\includegraphics[width=0.75\textwidth]{squ-logo-new.png}\\[0.5cm]
 
 % University Header
 {\Large\textbf{SULTAN QABOOS UNIVERSITY}}\\[0.4cm]
@@ -290,11 +294,17 @@ WBS & Work Breakdown Structure \\
 \label{sec:design}
 \input{sections/09-system-conceptual-design.tex}
 
-% Chapter 5: General Conclusion
-\chapterintro{5}{General Conclusion}{This chapter summarizes the project outcomes, highlights key contributions and improvements over existing technologies, and outlines the implementation roadmap and future enhancement opportunities for the smart healthcare robot platform.}
-\section{General Conclusion}
+% Chapter 5: System Implementation
+\chapterintro{5}{System Implementation: Results and Discussion}{This chapter documents the hardware commissioning, body shell fabrication, software development, and system integration of TAMRA. It covers the platform transition rationale, iMRP500 reverse engineering, dual-network tablet solution, semantic task orchestrator, and measured validation results.}
+\section{System Implementation: Results and Discussion}
+\label{sec:implementation}
+\input{sections/12-system-implementation.tex}
+
+% Chapter 6: Conclusions and Future Works
+\chapterintro{6}{Conclusions and Future Works}{This chapter summarises the engineering contributions of the project, identifies areas for improvement, and outlines future development directions toward full-scale service robot deployment.}
+\section{Conclusions and Future Works}
 \label{sec:conclusion}
-\input{sections/11-general-conclusion.tex}
+\input{sections/13-conclusions.tex}
 
 % ============================================================
 % REFERENCES

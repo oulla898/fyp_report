@@ -15,6 +15,9 @@
 \usepackage{float}
 \usepackage{amsmath} % For \text command in math mode
 \usepackage{hyperref} % For clickable table of contents
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{subcaption}
 \graphicspath{{figures/}} % For including images
 
 % Configure Table of Contents to add "Chapter" prefix
@@ -134,6 +137,18 @@
 \chapterintro{3}{System Conceptual Design}{This chapter presents the high-level system architecture of the smart healthcare robot, including the overall system overview, design alternatives, and justification for the selected hardware and software configuration.}
 \section{System Conceptual Design}
 \input{sections/09-system-conceptual-design.tex}
+
+\chapterintro{4}{Requirements Specifications}{This chapter formalises the customer requirements, engineering requirements, and engineering constraints that guide design and evaluation, and documents the AHP-based decision framework used to select key system components.}
+\section{Requirements Specifications}
+\input{sections/10-requirement-specification.tex}
+
+\chapterintro{5}{System Implementation: Results and Discussion}{This chapter documents the hardware commissioning, body shell fabrication, software development, and system integration of TAMRA. It includes the platform selection rationale, reverse engineering of the iMRP500 chassis, dual-network tablet solution, semantic task orchestrator design, and measured validation results.}
+\section{System Implementation: Results and Discussion}
+\input{sections/12-system-implementation.tex}
+
+\chapterintro{6}{Conclusions and Future Works}{This chapter summarises the engineering contributions of the project, identifies areas for improvement, and charts a path for future development toward full-scale deployment in service environments.}
+\section{Conclusions and Future Works}
+\input{sections/13-conclusions.tex}
 
 \nocite{*}
 

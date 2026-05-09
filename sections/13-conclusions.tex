@@ -1,0 +1,54 @@
+% ============================================================
+%  Chapter 6 -- Conclusions and Future Works
+% ============================================================
+
+\subsection{Project Summary}
+
+This project produced TAMRA (Task-Agnostic Modular Robotic Apparatus), an autonomous mobile robot that integrates LiDAR-based navigation, LLM-driven semantic task orchestration, real-time voice interaction, item delivery, and remote telepresence on a single platform at a total hardware cost of USD~3{,}240.
+
+The work spanned two semesters. The first semester built a thorough foundation through literature review, requirements formalisation, and AHP-based architecture selection, centred on TurtleBot~4 and iCreate~3. The second semester realised the system in hardware and software, navigating two significant decisions: a platform transition forced by the iRobot bankruptcy and the structural limitations of educational bases, and a scope refinement from a strictly medical device to a general-purpose autonomous service robot -- validated in a healthcare corridor but designed to generalise across any service environment. This reframing was the difference between a system that could be deployed within the project timeline and one that could not.
+
+\paragraph{Technical contributions.}
+The three engineering contributions are:
+\begin{enumerate}
+  \item \textbf{Hybrid hardware platform}: An industrial chassis (iMRP500) combined with a custom-fabricated ergonomic body shell, designed in Oman within a 300\,OMR budget. The design workflow -- generative rendering to 3D mesh synthesis to parametric Fusion~360 refinement -- is a reproducible methodology for human-facing robot aesthetics.
+  \item \textbf{Semantic task orchestrator}: A streaming LLM pipeline (Gemini~3 Flash) that converts free-form English or Arabic voice commands into typed, multi-step mission plans executed in real time by an on-device mission engine, with voice-to-action latency of $1{,}550 \pm 310$\,ms ($N=20$, all trials below 3\,s).
+  \item \textbf{Layered software architecture}: A three-tier stack (ROS~2 navigation, tablet bridge application, cloud AI and MQTT telemetry) that separates concerns cleanly and enables the full system to be updated by replacing a single HTML file over ADB.
+\end{enumerate}
+
+% -------------------------------------
+\subsection{Areas of Improvement}
+% -------------------------------------
+
+\begin{itemize}
+  \item \textbf{Navigation in high-traffic corridors}: The global planner replans inefficiently when many moving obstacles appear simultaneously, causing brief stops. A more adaptive local planner or an upgraded dynamic obstacle layer would improve fluency \cite{chen2022}.
+  \item \textbf{Voice recognition in ambient noise}: ASR accuracy degrades in noisy reception-area environments. A directional microphone array or server-side noise suppression tuned to indoor acoustic profiles would address this.
+  \item \textbf{Display brightness}: The 10-inch panel has limited visibility near windows in strong ambient light. A higher-brightness panel or an anti-glare acrylic coating would improve legibility.
+  \item \textbf{Autonomous docking reliability}: Localisation drift accumulated over a long shift can cause the robot to miss the dock contact. A short-range UWB or IR beacon at the dock for fine-approach correction would bring docking success rate to the 95\% engineering target under all conditions.
+  \item \textbf{Arabic language coverage}: The orchestrator and voice pipeline support Arabic, but systematic accuracy evaluation with native speakers has not been conducted. This should be completed before Arabic is offered as a primary interaction language.
+\end{itemize}
+
+% -------------------------------------
+\subsection{Future Works}
+% -------------------------------------
+
+\paragraph{Hardware call buttons (433\,MHz local RF).}
+Physical call buttons distributed around a building would allow any user to summon the robot without a phone or voice interaction. The buttons communicate over 433\,MHz RF -- a licence-free band that operates entirely without external infrastructure (no router, no WiFi, no internet). The robot carries a 433\,MHz receiver module. This makes the system operable in areas with poor WiFi coverage and removes the dependency on smartphone literacy for the most basic use case.
+
+\paragraph{WhatsApp integration.}
+WhatsApp is ubiquitous in Oman and the wider GCC region. Integrating TAMRA with the WhatsApp Business Cloud API would allow users to send a message to summon the robot, request a delivery, or check its status using an application they already have on their phone. The interaction is intuitive, requires no new app installation, and creates a persistent conversation log. The MQTT bridge already handles the back-end; adding a WhatsApp webhook is an incremental step.
+
+\paragraph{Multi-robot fleet coordination.}
+The MQTT bridge architecture supports multiple robots publishing to distinct topic namespaces from a single dashboard. The next step is a fleet manager that distributes tasks across a pool of TAMRA units, prevents waypoint conflicts, and rebalances loads when one robot goes to charge. ROS~2's DDS-based distributed layer provides the underlying communication primitives.
+
+\paragraph{Hospital Information System integration.}
+Connecting TAMRA to a hospital HIS or EHR via HL7/FHIR interfaces would allow the orchestrator to read room assignments, scheduled deliveries, and ward status dynamically rather than relying on manually configured waypoints. This is the primary technical path toward full clinical deployment \cite{jmir2024}.
+
+\paragraph{End-user experience refinement.}
+The current interface is functional but not yet polished. Planned refinements include animated contextual responses on the display (the MACS face reacts to task state), proactive status updates to the requesting user over WhatsApp, smoother handoff between voice interaction and autonomous navigation modes, and configurable personality profiles suited to different environments (clinical, hospitality, campus).
+
+\paragraph{UV-C disinfection module.}
+The upper tray mounting points provide a structural basis for a UV-C emitter for autonomous disinfection runs during off-peak hours, with safety interlocks disabling the emitter whenever occupancy is detected \cite{sciencedirect2021}.
+
+\paragraph{Longitudinal field study.}
+Laboratory bench tests cannot substitute for real deployment. A structured field study in a hospital, hotel, or campus building -- measuring navigation reliability, staff workflow impact, and maintenance burden over multiple weeks -- would provide the empirical grounding the system needs before broader rollout.

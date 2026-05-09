@@ -1,0 +1,1919 @@
+SULTAN QABOOS UNIVERSITY
+College of Engineering
+Department of Electrical and Computer Engineering
+Smart Healthcare Robot
+Bringing Care Closer to Patients in Oman
+Almoulla Talal Almaawali & Abdulmunim Khamis Albusaidi
+135591 & 133225
+Supervisor:
+Ahmed Chehib Ammari
+A Final Year Project Report submitted to the Department of
+Electrical and Computer Engineering, Sultan Qaboos University
+in partial fulfilment of the requirements for the Degree of
+BACHELOR OF ENGINEERING
+in
+ELECTRICAL & COMPUTER ENGINEERING
+Academic Year 2025–2026
+December 2025
+Students Declaration Statement
+We certify that Mr. Almoulla Talal Almaawali (Student ID: 135591) and Mr. Abdulmunim
+Khamis Albusaidi (Student ID: 133225) that this project is our own work, based on our personal
+study and that we have acknowledged all material and sources used in its preparation, whether
+they be books, articles, reports, lecture notes, and any other kind of document, electronic or
+personal communication.
+We also certify that this report does not include any violation of anyone’s copyrights or
+otherwise plagiarised the work of other persons.
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+Date: December 13, 2025 Students’s Names
+Almoulla Talal Almaawali
+Abdulmunim Khamis Albusaidi
+Declaration of Generative AI and AI-Assisted Technologies
+During the preparation of this work, the students Almoulla Talal Almaawali (Student ID: 135591)
+and Abdulmunim Khamis Albusaidi (Student ID: 133225) used generative AI tools including
+ChatGPT, Claude, and Google Gemini in order to assist with literature review synthesis,
+technical writing refinement, code documentation. After using these tools, the students reviewed
+and edited the content as needed and take full responsibility for the accuracy, integrity, and
+originality of the content presented in this Final Year Project report.
+Abstract
+This project develops a smart healthcare robot for Omani hospitals to assist medical staff with
+routine tasks. The robot uses ROS 2 for autonomous navigation, LiDAR-based SLAM for
+mapping, and Google Gemini 3 flash for natural language interaction. It can deliver items, guide
+patients, and provide information through a tablet interface.
+Three platform alternatives were evaluated using AHP decision matrices. A hybrid architecture was selected, combining a commercial robot base with custom AI layers. The system
+includes seven subsystems: Mobility, Navigation, Perception, Intelligence, Task Management,
+Interface, and Power Management. The design addresses healthcare workforce challenges while
+maintaining patient safety and ease of use.
+Keywords: Healthcare Robotics, Autonomous Mobile Robots, ROS 2, LiDAR SLAM, Human–
+Robot Interaction, Large Language Models
+Graphical Abstract
+Graphical abstract of the proposed autonomous mobile robot for hospital logistics and its
+evidence-based benefits in clinical environments.
+Acknowledgement
+We acknowledge our supervisor, Dr. Ahmed Chehib Ammari, for his guidance throughout this
+project.
+We thank the Department of Electrical and Computer Engineering at Sultan Qaboos
+University for providing the necessary facilities and resources.
+Acronyms
+Acronym Description
+AHP Analytic Hierarchy Process
+AI Artificial Intelligence
+AMR Autonomous Mobile Robot
+API Application Programming Interface
+BMS Battery Management System
+EHR Electronic Health Record
+GDPR General Data Protection Regulation
+HIPAA Health Insurance Portability and Accountability Act
+HIS Hospital Information System
+HRI Human–Robot Interaction
+IMU Inertial Measurement Unit
+LiDAR Light Detection and Ranging
+LLM Large Language Model
+ROS Robot Operating System
+SLAM Simultaneous Localization and Mapping
+ToF Time of Flight
+UWB Ultra-Wideband
+WBS Work Breakdown Structure
+Contents
+Students Declaration Statement 1
+Declaration of AI Use 2
+Abstract 3
+Graphical Abstract 4
+Acknowledgement 5
+Acronyms 6
+1 Introduction 2
+1.1 Project Context . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+1.2 Problem Statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+1.3 Motivation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+1.4 Objectives . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+1.5 Methodology . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+1.6 Project Management Plan . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+1.6.1 Work Breakdown Structure (WBS) . . . . . . . . . . . . . . . . . . . . . . 3
+2 Literature Review 6
+2.1 Motivation and State of the Field . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+2.1.1 Success Stories: Consumer, Industrial, and Quadruped Robotics . . . . . 6
+2.1.2 Benefits of Autonomous Mobile Robots in Healthcare Settings . . . . . . 8
+2.1.3 Challenges in Hospital AMR Deployment . . . . . . . . . . . . . . . . . . 9
+2.1.4 Overview of Existing Robots in Healthcare . . . . . . . . . . . . . . . . . 9
+2.2 Technical Building Blocks . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+2.2.1 Navigation System . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+2.2.2 Mobile Robot Platform specifications . . . . . . . . . . . . . . . . . . . . . 14
+2.2.3 Conversational AI and Large Language Models (LLMs) . . . . . . . . . . 15
+2.2.4 User Interface and Human-Robot Interaction . . . . . . . . . . . . . . . . 16
+2.3 Conclusion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+3 Requirements Specifications 20
+3.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 20
+3.2 Customer Requirements . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 20
+3.3 Engineering Requirements . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 21
+3.3.1 Navigation and Mobility Requirements . . . . . . . . . . . . . . . . . . . . 21
+3.3.2 Telepresence and Communication Requirements . . . . . . . . . . . . . . . 22
+3.3.3 Social Interaction and AI Requirements . . . . . . . . . . . . . . . . . . . 22
+3.3.4 Power and Endurance Requirements . . . . . . . . . . . . . . . . . . . . . 23
+3.3.5 Safety and Reliability Requirements . . . . . . . . . . . . . . . . . . . . . 23
+3.3.6 Comparative Performance Metrics . . . . . . . . . . . . . . . . . . . . . . 23
+3.4 Engineering Constraints . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 24
+3.5 Analysis and Discussion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+3.5.1 Performance Metrics and Trade-off Analysis . . . . . . . . . . . . . . . . . 25
+3.5.2 Standards Compliance and Deployment Context . . . . . . . . . . . . . . 26
+7
+CONTENTS Smart Healthcare Robot
+3.6 Conclusion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 26
+4 System Conceptual Design 28
+4.1 Introduction: System Overview . . . . . . . . . . . . . . . . . . . . . . . . . . . . 28
+4.2 Design Alternatives and Selection . . . . . . . . . . . . . . . . . . . . . . . . . . . 29
+4.2.1 Alternative A: Commercial Pre-Built Platform . . . . . . . . . . . . . . . 29
+4.2.2 Alternative B: Custom-Built Modular Platform . . . . . . . . . . . . . . . 30
+4.2.3 Alternative C: Hybrid Pre-Built Base with Custom Intelligence . . . . . . 31
+4.3 System Selection . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 32
+4.3.1 Robot Platform Selection Using AHP . . . . . . . . . . . . . . . . . . . . 32
+4.3.2 Computing Platform Selection Using AHP . . . . . . . . . . . . . . . . . . 34
+4.3.3 Navigation Approach Selection Using AHP . . . . . . . . . . . . . . . . . 34
+4.3.4 Localization Sensor Selection Using AHP . . . . . . . . . . . . . . . . . . 35
+4.3.5 LLM Selection Using AHP . . . . . . . . . . . . . . . . . . . . . . . . . . 35
+4.3.6 System Selection Summary . . . . . . . . . . . . . . . . . . . . . . . . . . 37
+4.4 Selected System Architecture . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 37
+4.5 Functional Decomposition . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 38
+4.5.1 System Level 0: Black Box View . . . . . . . . . . . . . . . . . . . . . . . 38
+4.5.2 System Level 1: Subsystem Decomposition . . . . . . . . . . . . . . . . . 39
+4.6 Conclusion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 41
+5 General Conclusion 43
+5.1 Project Summary . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 43
+5.2 Areas of Improvement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 43
+5.3 Future Work . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 44
+A Appendix: Standards and Regulatory References 49
+A.1 ISO Standards . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 49
+A.2 Data Protection and Privacy Regulations . . . . . . . . . . . . . . . . . . . . . . 49
+8
+List of Figures
+1 Project Gantt Chart (Sep 2025 - May 2026) . . . . . . . . . . . . . . . . . . . . . 3
+2 Modern robotic vacuum cleaners utilize SLAM and localization technologies
+to autonomously navigate residential spaces, representing the most successful
+consumer robotics application to date. . . . . . . . . . . . . . . . . . . . . . . . . 7
+3 Amazon Pegasus drive unit used in high-throughput fulfillment centers. . . . . . 7
+4 Unitree Go2: quadruped platform featuring RL locomotion, multi-sensor perception, and high-performance compute. . . . . . . . . . . . . . . . . . . . . . . . . . 8
+5 Pudu Robotics PuduBot 2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+6 Keenon M2 Medical Robot . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+7 Pudu Robotics PUDU CC1 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+8 Keenon Peanut Medical . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+9 UWB anchor–tag geometry for ranging and multilateration-based localization in
+indoor environments. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+10 Illustration of multilateration technique. Each known anchor forms a circle with
+radius equal to its distance to the robot, and the robot’s estimated position is
+where these circles intersect. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+11 Configuration of proposed setup of Bluetooth homing controller. . . . . . . . . . 13
+12 Illustration of SLAM fusion: visual/laser perception integrated with inertial and
+odometric constraints for robust state estimation. . . . . . . . . . . . . . . . . . . 14
+13 System architecture block diagram showing the layered design approach: physical
+hardware platform (bottom), computing and control layer, ROS 2 navigation stack,
+and intelligence/interface layer (top). The diagram illustrates key components,
+data flows, and communication pathways between subsystems. . . . . . . . . . . 29
+14 System Level 0 black-box view of the smart healthcare robot, showing external
+inputs, outputs, and primary functions. . . . . . . . . . . . . . . . . . . . . . . . 38
+15 System Level 1 subsystem decomposition of the smart healthcare robot, highlighting the seven functional subsystems and key data/control flows. . . . . . . . . . . 39
+9
+List of Tables
+1 Work Breakdown Structure (WBS) . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+2 Competitive analysis of leading hospital AMR platforms by global deployment
+and capabilities. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+3 Navigation systems and sensor technologies across leading hospital robotics platforms. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+4 Comparative analysis of mobile robot platforms for healthcare telepresence applications. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+5 Comparative analysis of leading Large Language Models with December 2025
+pricing and specifications. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 16
+6 UI and interaction modalities across leading hospital robotics platforms. . . . . . 17
+7 Navigation and mobility engineering requirements. . . . . . . . . . . . . . . . . . 21
+8 Telepresence and communication engineering requirements. . . . . . . . . . . . . 22
+9 Social interaction and AI engineering requirements. . . . . . . . . . . . . . . . . . 22
+10 Power and endurance engineering requirements. . . . . . . . . . . . . . . . . . . . 23
+11 Safety and reliability engineering requirements. . . . . . . . . . . . . . . . . . . . 23
+12 Performance metrics of navigation sensors in static and dynamic scenarios. . . . 24
+13 Computational performance and power consumption benchmarks for embedded
+platforms. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 24
+14 Robot Platform Feature Comparison . . . . . . . . . . . . . . . . . . . . . . . . . 33
+15 Platform Criteria Pairwise Comparison Matrix . . . . . . . . . . . . . . . . . . . 33
+16 Platform Alternative Scores by Criterion . . . . . . . . . . . . . . . . . . . . . . . 34
+17 Final AHP Scores for Robot Platform . . . . . . . . . . . . . . . . . . . . . . . . 34
+18 Computing Platform AHP Summary . . . . . . . . . . . . . . . . . . . . . . . . . 34
+19 Navigation Approach AHP Summary . . . . . . . . . . . . . . . . . . . . . . . . . 35
+20 Localization Sensor AHP Summary . . . . . . . . . . . . . . . . . . . . . . . . . . 35
+21 LLM Criteria Pairwise Comparison Matrix . . . . . . . . . . . . . . . . . . . . . 36
+22 LLM Alternative Scores by Criterion . . . . . . . . . . . . . . . . . . . . . . . . . 36
+23 Final AHP Scores for LLM Selection . . . . . . . . . . . . . . . . . . . . . . . . . 37
+24 Final System Component Selection Summary . . . . . . . . . . . . . . . . . . . . 37
+10
+1
+Introduction
+This chapter establishes the project context, problem statement,
+motivation, objectives, methodology overview, and the project management plan that frames execution for the rest of the report.
+Introduction Smart Healthcare Robot
+1 Introduction
+1.1 Project Context
+Modern healthcare systems worldwide face an urgent mandate to deliver safe, accessible, and
+high-quality care to growing populations. However, the post-pandemic era has highlighted
+critical vulnerabilities: the risk of infection during routine contact, the strain on medical staff,
+and the logistical burden of managing hospital wards [1].
+In modern hospitals, a significant portion of nursing time is spent on non-clinical logistics.
+This manual workload not only reduces patient care time but also increases staff exposure to
+hazardous waste and infectious diseases. This project introduces an autonomous robotic solution
+designed to automate these routine tasks, ensuring safety and efficiency in healthcare facilities.
+1.2 Problem Statement
+Oman’s healthcare system strives to reach all citizens, with government local health services
+reaching 100% of urban families and 90% of rural families [2], yet geographic distances and
+resource constraints create barriers to timely and accessible care for the remaining underserved
+populations. Existing telepresence solutions often rely on manual control and lack the ability
+to engage patients in even basic diagnostic dialogue. This results in increased workloads for
+healthcare providers and a less personalized, less effective experience for patients, particularly
+those in rural areas or with mobility limitations.
+1.3 Motivation
+Every day in Oman, patients need medical attention that could be provided remotely if the
+right tools existed. Children in hospitals need comfort when parents cannot be present. Elderly
+patients need medication reminders and someone to check on their well-being. Rural communities
+need access to specialist consultations without long journeys.
+The global demand for remote healthcare solutions is growing rapidly, with the telepresence
+robot market expected to experience significant growth. More importantly, Oman’s Vision
+2040 calls for healthcare innovation that serves all citizens equally, regardless of location [3].
+Recent studies have shown that telemedicine adoption in Oman’s primary healthcare settings
+demonstrates both promise and areas for improvement [4], while infrastructure requirements for
+effective telemedicine networks continue to be refined [5]. The aim of the project is to design
+and implement a smart telepresence robot with autonomous indoor navigation and on-device
+basic triage dialogue for ward corridors and bedside spaces in hospitals in Oman.
+1.4 Objectives
+• To develop a robust autonomous navigation system capable of dynamic obstacle avoidance
+and Simultaneous Localization and Mapping (SLAM) in crowded hospital corridors.
+• To engineer a secure telepresence interface that enables real-time, low-latency audio/visual
+consultations for remote doctors.
+• To integrate an AI-driven interaction layer (using Large Language Models) to provide basic
+triage, visitor guidance, and patient reassurance.
+• To validate the system in a pilot scenario, demonstrating successful autonomous delivery
+(Nurse Station → Bed) and remote consultation cycles.
+2
+Introduction Smart Healthcare Robot
+1.5 Methodology
+The project begins with a systematic requirements analysis informed by a literature review
+and a healthcare facility needs assessment. Following this, we evaluate and select optimal
+design alternatives for both the hardware platform and software architecture using the Analytic
+Hierarchy Process (AHP) methodology. The development follows an iterative prototyping cycle,
+beginning with establishing reliable remote teleoperation, advancing to implementing and refining
+the autonomous navigation system, and culminating in integrating the conversational AI dialogue
+capabilities. Finally, the system undergoes real-world validation in simulated and pilot clinical
+settings to measure performance metrics such as navigation reliability, telepresence quality of
+service, and overall user experience for both patients and clinical staff.
+1.6 Project Management Plan
+The project timeline spans two academic semesters, from September 2025 to May 2026. The first
+semester focuses on research, requirements analysis, and conceptual design, while the second
+semester is dedicated to implementation, testing, and final evaluation.
+2025 2026
+Sep Oct Nov Dec Jan Feb Mar Apr May
+Semester 1: Planning & Design
+Project Initiation
+Literature Survey
+Requirements Specs
+Conceptual Design
+Interim Report
+Semester 2: Implementation
+Hardware Assembly
+Software Dev (Nav, UI, LLM)
+System Integration
+Testing & Validation
+Final Report
+Figure 1: Project Gantt Chart (Sep 2025 - May 2026)
+1.6.1 Work Breakdown Structure (WBS)
+The detailed tasks and responsibilities are outlined in Table 1.
+3
+Introduction Smart Healthcare Robot
+Table 1: Work Breakdown Structure (WBS)
+Phase Task Description Deliverables Assigned To
+Phase 1 Project Initiation Problem Statement Both
+(Sep 2025) Methodology Definition Methodology Section Both
+Phase 2 Literature Review Literature Survey Both
+(Oct 2025) Research Gap Analysis Gap Identification Both
+Phase 3 Requirements Analysis Requirements Doc Both
+(Nov 2025) Constraints Analysis Eng. Constraints Both
+Phase 4 Conceptual Design Design Alternatives Both
+(Dec 2025) Functional Decomposition System Architecture Both
+Phase 5 Implementation: Hardware Assembled Robot Almoulla
+(Feb-Mar) Implementation: Navigation Autonomous Nav Almoulla
+Implementation: UI Clinician/Patient GUI Abdulmunim
+Implementation: LLM Voice Interaction Almoulla
+Phase 6 Testing & Finalization Integrated System Both
+(Apr-May) Final Report Writing Final Thesis Both
+4
+2
+Literature Review
+This chapter surveys consumer, industrial, and healthcare robotics;
+documents benefits and challenges of AMRs in hospitals; analyzes
+core technologies (navigation, RF localization, SLAM, LLMs); and
+motivates the platform choices and project needs.
+Literature Review Smart Healthcare Robot
+2 Literature Review
+2.1 Motivation and State of the Field
+The integration of robotics and artificial intelligence into healthcare is advancing rapidly, driven
+by challenges such as aging populations, rising healthcare costs, and medical staff shortages.
+Researchers have developed various robotic solutions, including telepresence robots for remote
+consultations, autonomous robots for logistics, and socially assistive robots (SARs) for patient
+engagement. While each type has proven useful, they often function in isolation, addressing only
+part of patients’ and clinicians’ overall needs. The goal is to show that although the components
+for such a system already exist, combining them into a single, user-friendly, and autonomous
+platform remains an underexplored area with high potential, especially for improving healthcare
+accessibility in regions like Oman.
+Telepresence robots, often described as a mobile screen, are widely used for remote medical
+consultations. Systems such as InTouch Health RP-VITA and the VGo robot have been used
+successfully in ”telestroke” care, allowing neurologists to assess patients remotely, reduce diagnosis
+time, and improve outcomes [6]. These systems support remote rounds, specialist consultations,
+and family visits, cutting travel costs and reducing infection risks. However, studies also note
+several drawbacks. A review by Kristoffersson et al. found that telepresence robots, though
+functional, often feel impersonal and difficult to control [7]. Clinicians report high cognitive load
+when navigating cluttered hospital spaces. Patients, especially the elderly and children, also
+find these robots less engaging than in-person visits due to limited physical embodiment and
+lack of expressive cues [8]. This ”presence gap” limits their effectiveness beyond basic video
+conferencing, reducing their ability to offer comfort and reassurance during care.
+This literature review builds a comprehensive case for an integrated, autonomous healthcare
+robotics platform. It begins by examining success stories from consumer and industrial robotics,
+demonstrating that autonomous navigation technology has reached maturity and widespread
+adoption. The review then analyzes healthcare-specific applications, including telepresence,
+socially assistive robots, and hospital logistics systems, alongside their underlying technical
+components such as navigation systems, mobile platforms, conversational AI, and user interfaces.
+By systematically evaluating these technologies and their implementations, this survey identifies
+a critical research gap: the absence of a unified system that synthesizes clinical telepresence,
+social interaction, and autonomous mobility into a single platform.
+2.1.1 Success Stories: Consumer, Industrial, and Quadruped Robotics
+1. Consumer Market: The Robotic Vacuum Revolution.
+The most successful deployment of autonomous mobile robots to the general public has been
+robotic vacuum cleaners, which dominate the consumer robotics market without serious
+competition from traditional cleaning methods. The global robotic vacuum cleaner market
+has experienced explosive growth, with projections indicating expansion from $9.07 billion
+in 2024 to $31.79 billion by 2033, representing a compound annual growth rate (CAGR) of
+16.97% [9]. Global shipments reached 15.35 million units in the first half of recent years,
+demonstrating a 33% year-over-year growth [10].
+6
+Literature Review Smart Healthcare Robot
+Figure 2: Modern robotic vacuum cleaners utilize SLAM and localization technologies to
+autonomously navigate residential spaces, representing the most successful consumer robotics
+application to date.
+The key to their success lies in the sophisticated implementation of SLAM (Simultaneous
+Localization and Mapping) and localization technologies. Modern robotic vacuum cleaners
+employ LiDAR sensors (Light Detection and Ranging), visual SLAM (VSLAM), and advanced
+mapping algorithms to create real-time maps of residential environments, enabling efficient
+path planning and obstacle avoidance [11]. This technology has proven so reliable that robotic
+vacuums have achieved nearly 40% of the service robot market share [12], demonstrating
+that autonomous navigation, when properly implemented, is mature enough for widespread
+consumer adoption.
+2. Industrial Market: Amazon’s Warehouse Robotics Dominance.
+In the industrial sector, the most successful large-scale application of AMRs (Autonomous
+Mobile Robots) has been warehouse automation, with Amazon leading the field. Amazon
+reports more than 750,000 to over one million robots across its fulfillment network, including
+drive units, mobile manipulators, and next-generation platforms such as Pegasus and Xanthus
+[13, 14]. These fleets demonstrate reliable fleet management, safe human–robot collaboration,
+and 24/7 uptime in highly dynamic environments.
+Figure 3: Amazon Pegasus drive unit used in high-throughput fulfillment centers.
+3. Quadruped Robotics: Unitree Go2 as a Robust Mobility Platform.
+State-of-the-art quadruped robots such as Unitree Go2 demonstrate robust mobility on
+unpredictable terrain using reinforcement learning for locomotion policy optimization, advanced multi-sensor perception (3D LiDAR + depth/RGB cameras), and high-performance
+7
+Literature Review Smart Healthcare Robot
+onboard compute for real-time planning and control. These capabilities enable operation on
+stairs, slopes, and uneven surfaces, with compelling applications in inspection, security, and
+emergency response [15, 16]. Although not our primary target platform, Unitree’s capabilities illustrate complementary directions for rugged environments using RL and advanced
+multi-sensor perception, and inspire future extensions.
+Figure 4: Unitree Go2: quadruped platform featuring RL locomotion, multi-sensor perception,
+and high-performance compute.
+2.1.2 Benefits of Autonomous Mobile Robots in Healthcare Settings
+Recent literature and deployment data reveal multiple evidence-based benefits of AMRs in
+hospital environments:
+Infection Control and Reduced Human Contact. AMRs significantly minimize humanto-human contact, reducing cross-contamination risks a critical advantage demonstrated during
+the COVID-19 pandemic [17, 1]. Autonomous delivery robots eliminate the need for multiple
+staff members to handle potentially contaminated materials, reducing occupational exposure
+and conserving personal protective equipment. UV-C (ultraviolet-C) disinfection robots have
+been shown to achieve 99.9% pathogen kill rates on environmental surfaces, helping reduce
+hospital-acquired infections (HAIs) [18].
+Wayfinding and Visitor Guidance. Intelligent hospital guidance robots provide accurate
+navigation assistance to visitors and patients, reducing confusion and staff burden [19]. These
+robots can escort visitors to patient rooms, provide multilingual directions, and answer frequently
+asked questions about hospital facilities, allowing staff to focus on clinical care.
+Material Transport and Delivery. AMRs excel at routine delivery tasks including medications, meals, linens, laboratory specimens, and medical supplies. This automation frees nursing
+staff from non-clinical transport duties, allowing them to spend more time on direct patient care.
+Studies indicate that delivery robots can reduce staff time spent on logistics by up to 30% [20].
+8
+Literature Review Smart Healthcare Robot
+Psychological Support and Patient Morale. Research consistently demonstrates that
+pediatric patients exhibit positive emotional responses to robot interactions [21]. Socially
+interactive robots reduce anxiety, provide distraction during painful procedures, and improve
+treatment compliance in children. Studies show that patients perceive robotic companions as
+non-judgemental, reducing psychological barriers to seeking help or expressing concerns [22].
+Autonomous Disinfection and Cleaning. Cleaning and disinfection robots can be equipped
+with UV-C light systems at relatively low cost, providing continuous environmental sanitation
+[17]. These robots operate during off-peak hours without human supervision, ensuring consistent
+hygiene standards while minimizing disruption to clinical workflows.
+Telepresence and Virtual Presence. AMRs with integrated telepresence capabilities enable
+remote consultations, family visits, and specialist rounds without requiring travel [6]. This
+technology proved invaluable during pandemic restrictions and continues to provide value for
+rural healthcare access and specialist consultations.
+Waste Collection and Handling. Some advanced AMR systems are deployed for biohazardous waste collection and disposal, reducing staff exposure to potentially infectious materials
+[20]. In China and other Asian markets, robots have been successfully implemented for collecting
+and transporting medical waste from patient rooms to centralized disposal areas, demonstrating
+significant improvements in operational efficiency and staff safety.
+2.1.3 Challenges in Hospital AMR Deployment
+Despite the significant benefits, several challenges remain:
+Cost and Return on Investment. Hospital-grade AMRs represent substantial capital
+investments, typically ranging from $50,000 to $150,000 per unit depending on capabilities.
+Healthcare administrators require clear Return on Investment (ROI) demonstration through
+labor savings, efficiency gains, and improved outcomes to justify procurement [20].
+System Integration Complexity. Integrating AMRs with existing hospital information
+systems (HIS), electronic health records (EHR), elevator controls, automatic doors, and staff
+communication systems presents significant technical challenges. Interoperability standards are
+still evolving, requiring custom integration work for each deployment [1].
+Safety, Privacy, and Trust. Regulatory compliance (HIPAA, GDPR), patient data security,
+and physical safety in crowded environments remain critical concerns. Healthcare facilities must
+ensure that robots can safely navigate around patients, visitors, and medical equipment while
+maintaining patient privacy and data security [23]. Building trust among staff and patients
+requires careful change management and demonstration of reliability.
+Regulatory and Liability Issues. Medical device regulations, liability frameworks for
+autonomous systems, and insurance considerations create additional barriers to widespread
+adoption. Healthcare organizations must navigate complex approval processes and establish
+clear accountability frameworks for robot operations.
+2.1.4 Overview of Existing Robots in Healthcare
+The hospital robotics market has matured significantly, with several manufacturers deploying
+autonomous mobile robots at scale. Table 2 presents a comprehensive comparison of leading
+9
+Literature Review Smart Healthcare Robot
+hospital robot platforms currently deployed in eastern markets. Note that prices are approximate
+estimates and can vary significantly depending on region, configuration, volume, and additional
+features.
+Rank Manufacturer
+& Model
+Est.
+Deployments
+Est.
+Price
+(USD)
+Key Hospital
+Applications
+Features & Notes
+1 Pudu Robotics –
+PuduBot 2 [24]
+15,000–20,000
+units ( 5,000
+healthcare)
+$12,000 Medication/meal
+delivery, linen
+transport, waste
+collection
+Multi-floor navigation (elevator integration), VSLAM+LiDAR, 40 kg payload, 6–8 hr battery. Deployed in 100+ hospitals
+globally (China, Singapore, U.S.); customizable
+trays, infection-resistant
+coating.
+2 Keenon
+Robotics –
+M2 Medical
+Robot [25]
+8,000–10,000
+units
+(healthcarefocused)
+$47,500 UV-C disinfection, medication/lab sample
+delivery, patient
+room cleaning
+UV sterilization (99.9%
+pathogen kill rate), 40
+kg payload, voice interaction, 10 hr runtime. Used
+in 100+ Chinese hospitals
+during COVID; exported
+to U.S./Europe (HIPAAcompliant).
+3 Pudu Robotics –
+PUDU CC1 [26]
+5,000–7,000
+units (healthcare +
+hospitality)
+$16,800 Floor cleaning,
+disinfection, material transport
+Autonomous scrubbing (1,500 m2/hr),
+self-charging, obstacle
+avoidance. Popular in
+Chinese/U.S. hospitals
+for large-scale sanitation;
+integrates with PuduBot
+for hybrid tasks.
+4 Keenon
+Robotics –
+Peanut Medical
+[27]
+3,000–5,000
+units
+$12,700 Medication/meal
+delivery, patient
+guidance, telepresence
+Compact (59 cm wide),
+multi-modal navigation,
+30 kg payload. Deployed
+in Asia-Pacific hospitals;
+supports remote doctorpatient interaction via
+screen.
+Table 2: Competitive analysis of leading hospital AMR platforms by global deployment and
+capabilities.
+10
+Literature Review Smart Healthcare Robot
+Figure 5: Pudu Robotics PuduBot 2 Figure 6: Keenon M2 Medical Robot
+Figure 7: Pudu Robotics PUDU CC1
+Figure 8: Keenon Peanut Medical
+In parallel, the field of Socially Assistive Robotics (SAR) has focused on the psycho-social
+aspects of patient care. These robots are designed not to perform physical tasks but to
+engage, encourage, and comfort patients through social interaction. For pediatric patients,
+robots like NAO and PARO (a therapeutic baby seal robot) have been shown to significantly
+reduce pain perception and anxiety during painful medical procedures such as vaccinations and
+chemotherapy [21]. The robot acts as a coach and a distractor, creating a more positive and
+cooperative atmosphere. For elderly populations, SARs have been explored for companionship
+to combat loneliness, provide cognitive stimulation for dementia patients, and deliver medication
+reminders to improve treatment adherence [28]. These studies confirm that a robot’s ability
+to interact socially is a powerful tool for improving patient well-being and clinical outcomes.
+The primary limitation of SARs, however, is that they are typically specialized, non-mobile or
+semi-autonomous platforms that lack the high-fidelity telepresence capabilities needed for direct
+clinical consultation.
+2.2 Technical Building Blocks
+This section deconstructs the essential technologies that form the foundation of an advanced
+autonomous healthcare robot. It examines navigation systems including Radio Frequency (RF)
+localization and SLAM-based sensor fusion, mobile robot platform specifications and selection
+criteria, Conversational AI and Large Language Models (LLMs) for intelligent interaction,
+and User Interface (UI) and Human-Robot Interaction (HRI) design paradigms for clinical
+integration.
+11
+Literature Review Smart Healthcare Robot
+2.2.1 Navigation System
+The challenge of manual navigation highlighted in telepresence research is being addressed by
+autonomous mobile robots (AMRs). Modern AMRs employ a combination of SLAM, path
+planning, and obstacle avoidance to navigate complex environments without human intervention.
+The core navigation stack typically includes Radio Frequency (RF) Localization Technologies
+and SLAM-Based Sensor Fusion Techniques.
+Radio Frequency (RF) Localization Technologies Radio frequency (RF) refers to electromagnetic waves (3 kHz–300 GHz) used for wireless communication. RF-based localization
+is essential where GPS is unreliable, such as indoors or through obstacles. Technologies like
+Wi-Fi, RFID, Bluetooth Low Energy (BLE), ZigBee, and Ultra-Wideband (UWB) are used,
+each selected based on coverage, scalability, battery life, accuracy, and cost. UWB, for example,
+enables multi-node scalability and multi-year tag battery life, but at higher cost (e.g., up to
+$20,000 for a 5000 m2
+facility). Accuracy ranges from about 20 cm to over 1 m, with performance
+degrading in cluttered or metallic environments [29]. The general structure of these systems is
+to use static reference sensor locations, or anchors, within an environment, along with beacons
+or tags fixed to the objects with desired tracking. The location of the tracked object can be
+estimated using readings from the anchors. Mathematically, this estimation is commonly called
+multilateration (also called trilateration) when using distance measurements. Figure 9 shows an
+example UWB anchor–tag geometry, while figure 10 illustrates the multilateration technique.
+Figure 9: UWB anchor–tag geometry for
+ranging and multilateration-based localization in indoor environments.
+Figure 10: Illustration of multilateration technique. Each known anchor forms a circle with
+radius equal to its distance to the robot, and the
+robot’s estimated position is where these circles
+intersect.
+Angle of Arrival (AoA) is a localization technique that determines the direction or angle
+from which a radio signal is received. An antenna array senses time differences across elements
+and applies signal-processing algorithms such as MUSIC or ESPRIT to convert those differences
+into an angle. AoA (often via BLE 5.1+ or UWB Direction Finding) estimates a target’s
+angle using a beacon or tag and a robot-mounted antenna array, reducing reliance on dense
+static infrastructure. BLE-based tags offer excellent battery life (years). Limitations include
+line-of-sight sensitivity and variable accuracy; hybrid AoA + RSSI filtering can improve precision,
+achieving mean errors on the order of 12 cm in simulation even in cluttered settings [30]. AoA
+could be used to implement a solution that does not depend on localization or positioning
+infrastructure in the environment, instead having the robot home in on a beacon worn by the
+12
+Literature Review Smart Healthcare Robot
+user. This would be similar to how some Bluetooth trackers work for finding lost items. The
+robot would use the angle of arrival data to determine the direction to move towards the beacon
+signal, allowing it to autonomously navigate to the user’s location. This approach could be
+particularly useful in dynamic environments like hospitals where fixed infrastructure may not be
+feasible. Figure 11 illustrates a proposed setup where a Bluetooth homing controller on the robot
+uses AoA data from a wearable beacon to guide navigation towards the target. Multiple anchors
+could be used to implement waypoints following navigation paths through the environment.
+Figure 11: Configuration of proposed setup of Bluetooth homing controller.
+SLAM-Based Sensor Fusion Techniques Simultaneous Localization and Mapping (SLAM)
+is a critical technology for autonomous navigation, enabling robots to build maps of unknown
+environments while simultaneously keeping track of their own location. Its effectiveness hinges
+on robust sensor fusion techniques that integrate data from various sources such as camera(s),
+IMU, wheel odometry, or RF ranging. Beyond external RF systems, autonomous navigation
+heavily relies on SLAM with multi-sensor fusion for robustness. A common stack fuses 2D
+LiDAR with an IMU and wheel odometry. IMU and odometry constrain motion, correcting
+LiDAR motion distortion and mitigating slip-induced drift. Studies report substantial gains
+when integrating IMU and wheel odometry, for example, approximately 27% improvement in
+rotation error and greater than 67% reduction in position error relative to LiDAR only SLAM,
+at the expense of added system complexity and compute [31].
+VSLAM (Visual Simultaneous Localization and Mapping) is a method that uses cameras
+to help robots figure out where they are and build maps of their surroundings at the same
+time. VSLAM uses cameras like monocular (single), stereo (two), or RGB-D (depth-sensing)
+for positioning and mapping. It provides low-cost, lightweight hardware and better scene
+understanding. Challenges include poor performance in texture-less or repetitive areas, and
+scale issues in monocular systems (e.g., early ORB-SLAM 2.0). Modern approaches prefer
+hybrid Visual–Inertial–Ranging–LiDAR (VIRAL) SLAM for improved reliability in complex
+environments [32]. Figure 12 shows the combination of visual/laser data with inertial and
+odometric inputs for stable estimation. Tools like Google Cartographer build 3D maps in
+real-time, using LiDAR, IMU, and odometry.
+13
+Literature Review Smart Healthcare Robot
+Figure 12: Illustration of SLAM fusion: visual/laser perception integrated with inertial and
+odometric constraints for robust state estimation.
+Navigation Systems Across Hospital Robotics Platforms. Table 3 summarizes the
+navigation technologies and sensor configurations employed by leading hospital robotics platforms
+mentioned in table 2.
+Robot Model Primary Localization
+Mapping
+Technology
+Key Sensors
+PuduBot 2 [24] SLAM (LiDARbased)
+Real-time
+2D/3D mapping
+2D LiDAR, depth camera, IMU
+M2 Medical Robot [25] SLAM (LiDARbased)
+Real-time 2D
+mapping
+2D LiDAR, RGB camera, encoders
+PUDU CC1 [26] SLAM (LiDARbased)
+Real-time 2D
+mapping
+2D LiDAR, ultrasonic
+sensors, encoders
+Peanut Medical [27] Hybrid (SLAM
++ RF)
+Real-time 2D
+mapping
+LiDAR, depth sensors,
+optional UWB
+Table 3: Navigation systems and sensor technologies across leading hospital robotics platforms.
+2.2.2 Mobile Robot Platform specifications
+The selection of an appropriate mobile robot platform is a critical decision that directly impacts
+system reliability, development time, and operational costs. For a healthcare telepresence robot
+operating in hospital corridors and patient rooms, the platform must satisfy several essential
+technical and operational requirements while remaining within practical budget constraints.
+Platform Requirements. The system requires a wheeled mobile robot platform with the
+following capabilities:
+• Autonomous docking and charging with high-level API commands (dock(), return to charge())
+• ROS/ROS 2 compatibility for navigation packages (Nav2, SLAM Toolbox, AMCL)
+• Payload capacity of 5–10 kg for telepresence screen, onboard computer, and camera system
+• Indoor navigation sensors including LiDAR (2D or 3D) and depth cameras
+• Safety and reliability features (cliff detection, bumpers, emergency stop)
+Project Constraints. Budget constraints significantly influence platform selection. The
+target budget for the mobile base, charging dock, and core sensors is approximately $1,000–
+$1,500 USD, recognizing that higher-cost industrial platforms ($5,000+) exceed the scope of
+an educational research project. Additional constraints include global availability (shipping to
+14
+Literature Review Smart Healthcare Robot
+Oman), vendor support and documentation quality, and community resources for troubleshooting
+and development.
+Platform Comparison. Table 4 presents a comparative analysis of commercially available
+mobile robot platforms.
+Platform Price (USD) Dock ROS Payload Notes
+Budget Tier ($500–$1,000)
+iRobot Create 3 [33] $549 Yes ROS 2 9 kg Roomba-based, proven docking,
+ideal for education
+Yahboom ROSMASTER X3 [34]
+$699 DIY ROS 1 5–8 kg Mecanum wheels, requires custom docking solution
+Elephant Robotics
+MyAGV 2023 [35]
+$899 DIY ROS 1 8 kg Mecanum wheels, 2D SLAM
+ready, Python/ROS compatible
+Mid-Tier ($1,000–$2,000)
+SLAMTEC Apollo [36] $1,200 Yes ROS 1/2 50 kg Same platform as Pudu/Keenon
+hospital robots
+TurtleBot 4 Standard
+[37]
+$1,400 Yes ROS 2 9 kg Research-grade, Nav2 preconfigured, Lidar included
+Husarion ROSbot 2R
+[38]
+$1,600 Optional ROS 2 10 kg Mecanum wheels, hospital navigation demos available
+AgileX LIMO Pro [39] $1,799 Optional ROS 2 10 kg 4-mode steering, Jetson Nano,
+research platform
+Table 4: Comparative analysis of mobile robot platforms for healthcare telepresence applications.
+2.2.3 Conversational AI and Large Language Models (LLMs)
+The field of large language models (LLMs) has witnessed transformative advancements, establishing them as a core technology for conversational AI. An LLM is a sophisticated artificial
+intelligence system trained on vast datasets of text and code, enabling it to understand, generate,
+and interact with human language in a nuanced manner. These models have rapidly transitioned
+from research prototypes to industrial-scale technologies, resulting in a proliferation of models
+with distinct strengths and commercial terms.
+The LLM landscape is broadly divided into two categories: open-source and proprietary.
+Open-source models, such as Meta’s Llama series and the DeepSeek series, offer significant
+flexibility, allowing for deep customization and fine-tuning to meet specific application needs,
+often at a lower cost [40]. However, they may require more complex setup and can sometimes lag
+behind proprietary counterparts in raw performance. In contrast, privately-owned models like
+OpenAI’s GPT series and Google’s Gemini series typically offer state-of-the-art performance and
+are adept at handling highly complex tasks. This performance comes with trade-offs, including
+higher operational costs and potential data privacy concerns, which are critical considerations in
+healthcare applications [41]. The selection of an LLM depends on a careful balance between
+performance requirements, budget, customizability, and data governance policies. Table 5
+provides a comparative overview of leading LLM options.
+15
+Literature Review Smart Healthcare Robot
+Model
+(Version)
+Org. License Max Context
+(tokens)
+Input API
+Cost ($/M)
+Output API
+Cost ($/M)
+OpenAI
+GPT-5.2 [42]
+OpenAI Proprietary 128,000 $1.75 $14.00
+Google Gemini
+3 Flash [43]
+Google Proprietary 1,000,000 $0.50 $3.00
+Google Gemini
+2.5 Pro [43]
+Google Proprietary 1,000,000 $1.25–$2.50 $10.00–$15.00
+Google
+Med-Gemma
+2B
+Google Open Weight
+(Apache 2.0)
+8,192 $0.00
+(Self-hosted)
+$0.00
+(Self-hosted)
+Meta Llama 4
+Maverick [44]
+Meta Llama
+Community
+License
+10,000,000 $0.19–$0.49 $0.19–$0.49
+DeepSeek V3.1
+[45]
+DeepSeek MIT (Code) /
+DeepSeek
+Model
+128,000 $0.14 $0.28
+Table 5: Comparative analysis of leading Large Language Models with December 2025 pricing
+and specifications.
+LLM Discussion and Cost Considerations. Table 5 summarizes key characteristics of
+leading LLM options as of December 2025. OpenAI’s GPT-5.2 offers strong performance with a
+128k token context window at $1.75/$14.00 per million input/output tokens. Google’s Gemini 3
+Flash provides exceptional value with a 1M token context and competitive pricing at $0.50/$3.00,
+with free tier available for development (up to 500 requests per day). Google’s Gemini 2.5 Pro
+offers higher capabilities for complex tasks at $1.25–$2.50 input and $10.00–$15.00 output per
+million tokens. Google’s Med-Gemma represents a family of specialized open-weight models
+(available in 2B, 7B, and 27B parameter variants) fine-tuned specifically on medical literature,
+clinical guidelines, and healthcare datasets [46]. While Med-Gemma demonstrates state-ofthe-art performance on medical benchmarks (MedQA, MedMCQA, PubMedQA) and would
+be highly relevant for advanced clinical decision support or medical question answering, it is
+considered overkill for the basic conversational interactions required in this project (patient
+guidance, wayfinding, simple information queries). Meta’s Llama 4 Maverick stands out with an
+unprecedented 10M token context window and industry-leading cost efficiency ($0.19–$0.49 per
+million tokens), making it highly suitable for long-context healthcare applications. DeepSeek
+V3.1 offers the most economical option at $0.14/$0.28 per million tokens, particularly beneficial
+for cost-sensitive deployments. For this project’s conversational requirements (patient guidance,
+wayfinding, simple information queries), either Gemini 3 Flash (free tier) or DeepSeek V3.1 (lowest
+cost) would be appropriate choices, with Llama 4 Maverick offering future-proof long-context
+capabilities if advanced document processing becomes necessary.
+2.2.4 User Interface and Human-Robot Interaction
+For autonomous healthcare robots operating in clinical environments, the user interface (UI)
+and human-robot interaction (HRI) design directly impacts adoption, user satisfaction, and
+clinical workflow integration. The interface must balance accessibility for diverse user groups
+(clinicians, administrative staff, patients) with robust control mechanisms suitable for dynamic
+hospital environments. Common UI paradigms employed in hospital robotics include:
+Onboard Touchscreen Interface. A dedicated touchscreen mounted on the robot body
+provides direct, localized control and real-time status feedback. Common in systems like Pudu
+Robotics’ PuduBot 2 and Keenon Robotics’ M2 Medical Robot, these interfaces typically run
+16
+Literature Review Smart Healthcare Robot
+Android OS and display navigation status, task queues, and emergency controls. Advantages
+include intuitive interaction without external devices and immediate feedback. Limitations
+include reliance on the robot’s physical proximity and potential hygiene concerns in sterile
+environments [25].
+Mobile Application (iOS/Android). Native mobile applications running on clinicians’
+and administrators’ smartphones or tablets enable remote operation and fleet monitoring from
+anywhere within hospital networks. This approach is ubiquitous across commercial systems
+(PuduBot 2, M2, Peanut Medical) and supports features such as route customization, real-time
+tracking, task scheduling, and status notifications. Mobile apps offer flexibility and integrate
+seamlessly with existing hospital workflows, though they require network connectivity and
+depend on user device management [24].
+Web-Based Dashboard. Cloud-hosted or on-premises web portals provide centralized fleet
+management, historical analytics, and administrative controls for hospital operators and IT
+administrators. Systems like Keenon Robotics and Pudu Robotics include web dashboards
+for route optimization, performance metrics, and multi-robot coordination. Web interfaces
+support remote monitoring across multiple locations and facilitate integration with hospital
+information systems (HIS). Trade-offs include network dependency, data security considerations,
+and potential latency in real-time control [26].
+Voice Control and Natural Language Interfaces. Voice-based interaction leveraging
+conversational AI and LLMs (as discussed in Section 2.2.3) represents an emerging paradigm for
+hands-free operation in clinical settings. Systems like Keenon’s M2 support voice commands,
+allowing clinicians to interact with robots while maintaining hygiene and workflow continuity.
+Voice interfaces reduce cognitive load and support more natural, intuitive interactions, but
+require robust speech recognition, noise handling (hospital environments are loud), and contextual
+understanding [41].
+Hospital Integration via APIs. Integration with existing hospital IT infrastructure through
+RESTful APIs or DICOM/HL7 standards allows robots to receive task assignments directly
+from electronic health records (EHR) or hospital management systems. This approach minimizes
+manual input and ensures tasks are coordinated with clinical workflows. Examples include
+systems capable of receiving delivery requests directly from hospital pharmacies or labs [26].
+Robot UI Usage Across Hospital Platforms. Table 6 summarizes the UI and interaction
+modalities employed by leading hospital robotics platforms, illustrating the diversity of approaches
+and trade-offs in current systems.
+Robot Model Onboard
+Screen
+Mobile App Web Dashboard
+Voice/AI Interface
+PuduBot 2 [24] Android
+tablet
+iOS/Android Yes Limited
+M2 Medical Robot [25] Android display
+iOS/Android Yes Yes (voice control)
+PUDU CC1 [26] Android
+panel
+iOS/Android Yes No
+Peanut Medical [27] Optional iOS/Android Yes Limited
+Table 6: UI and interaction modalities across leading hospital robotics platforms.
+17
+Literature Review Smart Healthcare Robot
+2.3 Conclusion
+The literature presents a clear picture:
+1. Telepresence robots are effective for remote diagnosis but are limited by manual control
+and an impersonal user experience.
+2. Socially assistive robots have proven their value in patient engagement and comfort
+but lack clinical telepresence and advanced mobility.
+3. Autonomous mobile robots have mastered navigation in hospitals but are used for
+logistics, not patient interaction.
+4. Conversational AI offers intelligent dialogue but lacks the physical embodiment needed
+for meaningful healthcare encounters.
+5. Consumer and industrial robotics have demonstrated that autonomous navigation
+technology is mature, reliable, and cost-effective for real-world deployment, as evidenced
+by millions of robotic vacuum cleaners in homes and over one million AMRs in Amazon
+warehouses.
+6. Current hospital AMRs are predominantly focused on material transport and disinfection, with limited integration of social interaction, advanced telepresence, and conversational
+AI capabilities.
+The critical research gap lies at the intersection of these domains. There is a demonstrable
+need for a single, integrated platform that combines the clinical access of a telepresence robot,
+the patient-centric engagement of a SAR, the operational independence of an autonomous
+navigator, and the interactive intelligence of modern conversational AI. The proven success
+of autonomous navigation in consumer (robotic vacuums) and industrial (Amazon warehouses)
+applications demonstrates that the core technology is mature and ready for advanced healthcare
+applications.
+This project directly addresses this gap by designing a holistic system that synthesizes these
+strengths, creating a smart healthcare robot capable of not only connecting doctors and patients
+but also navigating its environment independently and engaging with patients in a helpful and
+empathetic manner. By learning from the successes of consumer robotics, warehouse automation,
+and existing hospital AMR deployments, this project aims to advance the state-of-the-art in
+healthcare robotics toward truly integrated, intelligent, and patient-centered care.
+18
+3
+Requirements Specifications
+This chapter defines customer and engineering requirements for the
+smart healthcare robot, establishing quantifiable specifications for
+navigation, telepresence, AI interaction, power management, and
+safety that guide system design and validation.
+Requirements Specifications Smart Healthcare Robot
+3 Requirements Specifications
+3.1 Introduction
+The success of any engineering project hinges on a clear, comprehensive understanding of the
+requirements that guide design, implementation, and evaluation. This chapter formalizes the
+requirement specification for the smart healthcare robot project, translating stakeholder needs
+and technical constraints into measurable, verifiable criteria. The requirements are systematically
+categorized into customer requirements, engineering requirements, and engineering constraints,
+ensuring alignment between user expectations and technical feasibility.
+Customer requirements capture the high-level needs and expectations of primary stakeholders–
+hospital administrators, clinical staff, patients, and support personnel. These requirements
+reflect the functional and operational capabilities that directly impact system value and user
+satisfaction. Engineering requirements translate customer needs into quantifiable, testable
+technical specifications that guide system architecture and component selection. Engineering
+constraints define the boundaries within which the system must operate, including budget
+limitations, timeline restrictions, regulatory compliance, and environmental conditions specific
+to hospital deployment in Oman.
+This chapter also presents a structured analysis of design alternatives, trade-offs, and selection
+criteria through comparative tables with metrics and scores. These analyses document the
+rationale for key architectural decisions, including mobile platform selection, sensor configuration,
+computing architecture, and AI integration strategy. The systematic evaluation ensures that
+design choices are transparent, justified, and optimized for the project’s objectives and constraints.
+By establishing a rigorous requirement framework, this chapter provides the foundation for
+subsequent design, implementation, and validation activities, ensuring that the final system
+meets stakeholder needs while remaining technically feasible and economically viable.
+3.2 Customer Requirements
+Customer requirements represent the high-level needs and expectations of the robot’s primary
+users and stakeholders in hospital environments. These requirements are derived from literature review findings (Chapter 2), observations of existing hospital robotics deployments, and
+anticipated use cases in Omani healthcare facilities.
+• CR1: Autonomous Navigation and Mobility. The robot must autonomously navigate
+hospital corridors, patient rooms, and common areas without human intervention, avoiding
+static and dynamic obstacles.
+• CR2: Remote Telepresence Capabilities. The robot must enable high-quality remote
+video and audio communication between healthcare providers and patients, supporting
+remote consultations, rounds, and family visits. Telepresence has been validated as effective
+for remote diagnosis, specialist consultations, and reducing travel costs [6]. The robot must
+provide a mobile ”presence” for clinicians who are not physically at the patient’s bedside.
+• CR3: Patient Engagement and Social Interaction. The robot must engage with
+patients through natural language conversation, providing information, companionship,
+and emotional support, particularly for pediatric and elderly populations.
+• CR4: Infection Control and Hygiene. The robot must be designed with materials
+and surfaces that are easy to clean and disinfect, minimizing cross-contamination risks.
+Hospital-acquired infections (HAIs) are a critical concern. Robots must be compatible
+with standard hospital cleaning protocols and potentially integrate UV-C disinfection
+capabilities [17, 18].
+20
+Requirements Specifications Smart Healthcare Robot
+• CR5: User-Friendly Interface. The robot must provide intuitive interfaces (touchscreen,
+mobile app, voice control) accessible to users with varying technical expertise. Ease of use
+directly impacts adoption rates and operational efficiency. Interfaces must accommodate
+diverse user groups including elderly patients, clinicians with minimal robotics experience,
+and administrative staff.
+• CR6: Continuous Operation and Autonomous Charging. The robot must operate
+throughout the day with minimal downtime, autonomously returning to a charging dock
+when battery levels are low.
+3.3 Engineering Requirements
+Engineering requirements translate customer needs into quantifiable, testable technical specifications that directly inform system design and validation. Each engineering requirement is mapped
+to one or more customer requirements, ensuring traceability and alignment. The requirements
+are organized into five categories, presented in tabular format for clarity and traceability.
+3.3.1 Navigation and Mobility Requirements
+Req. ID Specification Mapped to CR Standards Verification
+Method
+ER1.1 Position accuracy of
+±20 cm in mapped
+indoor environments
+CR1 ISO 13482:2014 [47]
+(Safety requirements
+for personal care
+robots - mobile
+servant robots)
+Experimental
+validation using
+ground-truth
+positioning system
+ER1.2 Maximum linear
+velocity of
+0.5–1.0 m/s in
+hospital corridors
+CR1 ISO 13482:2014 [47]
+(Speed limits for safe
+human-robot
+interaction)
+Speed measurement
+tests in controlled
+environments and
+hospital corridors
+ER1.3 Detect and avoid
+static and dynamic
+obstacles with
+minimum detection
+range of 3 m and
+reaction time <1 s
+CR1 ISO 13855 [48]
+(Safety of machinery
+- Positioning of
+safeguards)
+Obstacle avoidance
+tests with various
+object types and
+approach angles
+ER1.4 Minimum payload of
+5 kg to
+accommodate
+onboard computers,
+sensors, and delivery
+items
+CR2 — Load testing with
+representative
+payload
+configurations
+Table 7: Navigation and mobility engineering requirements.
+21
+Requirements Specifications Smart Healthcare Robot
+3.3.2 Telepresence and Communication Requirements
+Req. ID Specification Mapped to CR Standards Verification
+Method
+ER2.1 Minimum 720p
+(1280×720) video
+resolution at 30 fps
+CR2 ITU-T H.264 /
+H.265 [49]
+(Advanced Video
+Coding)
+Video quality
+assessment tests
+under typical
+hospital lighting and
+network conditions
+ER2.2 Bidirectional audio
+communication with
+noise cancellation
+and echo reduction,
+maintaining
+intelligibility in
+hospital
+environments
+(ambient noise up to
+70 dB)
+CR2 — Audio quality tests
+(speech intelligibility
+index, background
+noise rejection)
+ER2.3 End-to-end latency
+<200 ms over
+hospital Wi-Fi
+networks
+CR2 IEEE 802.11 [50]
+(Wi-Fi Standards)
+Network
+performance testing
+and latency
+measurements
+Table 8: Telepresence and communication engineering requirements.
+3.3.3 Social Interaction and AI Requirements
+Req. ID Specification Mapped to CR Standards Verification
+Method
+ER3.1 Accurately interpret
+user intent in
+English and Arabic
+with >90% accuracy
+for common
+healthcare queries
+CR3 — User testing with
+standardized query
+sets and intent
+classification metrics
+ER3.2 Generate
+conversational
+responses within
+3 seconds of user
+input
+CR3 — Response latency
+measurements under
+typical operating
+conditions
+ER3.3 Speech recognition
+in hospital
+environments with
+word error rate
+(WER) <10%
+CR5 — Speech recognition
+testing with diverse
+speakers and noise
+levels
+Table 9: Social interaction and AI engineering requirements.
+22
+Requirements Specifications Smart Healthcare Robot
+3.3.4 Power and Endurance Requirements
+Req. ID Specification Mapped to CR Standards Verification
+Method
+ER4.1 Continuous
+operation for
+minimum of
+4–6 hours under
+typical usage (mixed
+navigation,
+telepresence, and
+idle states)
+CR6 — Endurance testing
+with simulated
+clinical workflows
+ER4.2 Autonomously locate
+and dock with
+charging station
+when battery level
+reaches 20%, with
+95% success rate
+CR6 — Repeated docking
+trials under various
+initial positions and
+orientations
+Table 10: Power and endurance engineering requirements.
+3.3.5 Safety and Reliability Requirements
+Req. ID Specification Mapped to CR Standards Verification
+Method
+ER5.1 Physical emergency
+stop button(s) and
+remote e-stop
+capability via
+software interface
+CR1 ISO 13850 [51]
+(Safety of machinery
+- Emergency stop
+function)
+Functional testing of
+emergency stop
+mechanisms
+ER5.2 Detect and avoid
+stairs, ramps >15°
+incline, and drop-offs
+>2 cm
+CR1 — Edge detection tests
+on stairs and
+elevated platforms
+ER5.3 Achieve >95%
+uptime during
+operational hours,
+excluding scheduled
+maintenance
+CR6 — Long-term reliability
+testing and failure
+logging
+Table 11: Safety and reliability engineering requirements.
+3.3.6 Comparative Performance Metrics
+This section presents quantitative performance data and trade-off metrics for critical system
+components. The data, derived from technical specifications and benchmark studies, provides the
+empirical basis for architectural decisions. Comprehensive mobile platform comparison metrics,
+including navigation capabilities, payload specifications, and integration features, are detailed in
+the literature review (Chapter 2, Section 2.3.2).
+Navigation Sensor Performance Table 12 compares the performance of different sensor
+modalities in typical hospital environments.
+23
+Requirements Specifications Smart Healthcare Robot
+Sensor Type Scenario Range (m) Accuracy (cm) FOV (deg) Power (W) Cost ($)
+2D LiDAR
+(RPLiDAR) [52]
+Corridor (Static) 12.0 ±1.0 360 1.5 100
+2D LiDAR
+(RPLiDAR) [52]
+Waiting Room
+(Dynamic)
+10.0 ±2.5 360 1.5 100
+RGB-D
+(RealSense) [53]
+Corridor (Static) 4.0 ±2.0 87×58 3.5 250
+RGB-D
+(RealSense) [53]
+Waiting Room
+(Dynamic)
+3.5 ±4.0 87×58 3.5 250
+3D LiDAR
+(Velodyne) [54]
+Corridor (Static) 100.0 ±2.0 360×30 8.0 4000
+Table 12: Performance metrics of navigation sensors in static and dynamic scenarios.
+Computing Platform Benchmarks Table 13 details the computational capabilities and
+power efficiency of candidate onboard computers.
+Platform CPU Perf. Power (W) Cost ($)
+Raspberry Pi 5 [55] High 5–8 80
+Jetson Nano [56] Medium 5–10 150
+Jetson Orin Nano [57] Very High 7–15 499
+Table 13: Computational performance and power consumption benchmarks for embedded
+platforms.
+Conversational AI Model Selection Detailed performance and cost metrics for Large
+Language Models (LLMs), including context handling capabilities and operational costs for
+cloud-based and local deployment strategies, are presented in the literature review (Chapter 2,
+Section 2.3.3). These metrics inform the AI architecture selection for patient engagement and
+conversational interaction requirements (ER3.1–ER3.3).
+3.4 Engineering Constraints
+Engineering constraints define the boundaries within which the system must be designed and
+operated. These constraints reflect real-world limitations in budget, timeline, technology maturity,
+regulatory environment, and deployment context specific to Oman.
+• EC1: Budget Constraints. Total system cost must not exceed $2,500 USD, including
+mobile platform, sensors, computing hardware, and accessories. As an educational research
+project with limited funding, the system must demonstrate feasibility and functionality
+within academic budget constraints while remaining representative of scalable commercial
+solutions. This limits selection to budget and mid-tier commercial platforms; excludes
+high-end industrial robots; requires prioritization of essential features.
+• EC2: Development Timeline. System design, implementation, and validation must be
+completed within one academic year (9–10 months). Final year project timeline constraints
+necessitate realistic scope and phased development approach. This requires prioritization
+of core functionalities (navigation, telepresence, basic AI); potential deferral of advanced
+features (UV-C disinfection, complex HIS integration) to future work.
+• EC3: Hospital Environment Compatibility. The robot must operate safely in
+hospital environments with corridor widths ≥1.5 m, elevator access, and typical hospital
+flooring (tile, linoleum). Omani hospital infrastructure follows international standards with
+standard corridor dimensions and flooring materials. Robot base width limited to <60 cm;
+wheel system must handle smooth indoor surfaces; turning radius must accommodate
+corridor navigation.
+24
+Requirements Specifications Smart Healthcare Robot
+• EC4: Network Infrastructure. The robot must operate on standard hospital Wi-Fi
+networks (802.11n/ac) without requiring dedicated network infrastructure. Deployment
+feasibility requires compatibility with existing IT infrastructure; hospitals cannot always
+support custom networking solutions. System must tolerate variable network quality,
+latency, and temporary disconnections; requires local processing capabilities for critical
+functions.
+• EC5: Regulatory and Privacy Compliance. The system must comply with patient
+privacy requirements and avoid collection or storage of protected health information (PHI)
+without proper authorization. Healthcare robotics must respect patient privacy and data
+security regulations (similar to HIPAA/GDPR principles). No persistent storage of patient
+conversations or video recordings; encrypted communication channels; clear data handling
+policies.
+• EC6: User Expertise Level. The system must be operable by users with minimal
+technical training (hospital staff, patients) without requiring robotics expertise. Clinical
+adoption depends on ease of use and minimal training burden. Intuitive UI design;
+pre-configured waypoints; automated error recovery; comprehensive user documentation.
+• EC7: Environmental Operating Conditions. The robot must operate reliably in
+indoor environments with temperature range 18–28°C, humidity 30–60%, and typical
+hospital lighting conditions. Hospital climate control maintains stable environmental
+conditions; sensors and electronics must function within this range. Standard commercialgrade components acceptable; no specialized environmental hardening required.
+• EC8: Maintenance and Spare Parts. The robot must utilize commercially available,
+globally sourced components with accessible supply chains for replacement parts. Longterm operational viability requires availability of replacement components in Oman or
+via international suppliers. Preference for mainstream platforms (ROS 2, Raspberry Pi,
+common sensors) over proprietary or region-specific components.
+3.5 Analysis and Discussion
+This section examines the comparative performance metrics to identify key trade-offs and
+demonstrate standards compliance within the constraints of hospital deployment in Oman.
+The analysis focuses on component selection criteria that balance technical requirements with
+practical deployment considerations specific to the Omani healthcare context.
+3.5.1 Performance Metrics and Trade-off Analysis
+Table 12 reveals fundamental trade-offs in sensor selection. Range capabilities vary from 3.5m to
+100m with corresponding cost differences of 40× ($100 to $4000). Accuracy degrades significantly
+in dynamic hospital environments (2–2.5× degradation), affecting position accuracy requirement
+ER1.1. Power consumption ranges from 1.5W to 8W, directly impacting endurance requirement
+ER4.1. Field of view characteristics–360° planar, 87°×58° 3D, and 360°×30° volumetric–address
+different aspects of obstacle detection requirement ER1.3.
+Table 13 demonstrates computational trade-offs where platform costs range from $80 to $499,
+consuming 3–20% of total budget constraint EC1. Power envelopes remain similar (5–15W)
+across platforms, making computational capability rather than endurance the primary selection
+factor for supporting navigation, AI processing (ER3.1–ER3.3), and telepresence (ER2.1–ER2.3)
+requirements.
+25
+Requirements Specifications Smart Healthcare Robot
+3.5.2 Standards Compliance and Deployment Context
+Navigation and safety components satisfy ISO 13482:2014 [47] requirements (position accuracy
+ER1.1, speed limits ER1.2, obstacle detection ER1.3), ISO 13850 [51] emergency stop guidelines, and ISO 13855 [48] safeguarding standards. Communication systems implement ITU-T
+H.264/H.265 [49] video coding and IEEE 802.11 [50] wireless protocols for interoperability with
+Omani hospital IT infrastructure.
+Deployment constraints EC3–EC8 address Omani hospital realities: standard corridor
+dimensions (≥1.5m) and flooring materials, existing Wi-Fi infrastructure (802.11n/ac), climatecontrolled environments (18–28°C), component availability through international supply chains,
+privacy compliance aligned with HIPAA/GDPR principles, and budget/timeline limitations
+($2,500, 9–10 months). These constraints guide component selection to ensure technical feasibility
+and operational viability in the Omani healthcare context.
+Detailed comparative analysis of mobile platforms, computing architectures, and conversational AI models is presented in the literature review (Chapter 2, Sections 2.3.2–2.3.3).
+3.6 Conclusion
+This chapter established a comprehensive requirement specification for the smart healthcare robot
+project, systematically translating stakeholder expectations into measurable, verifiable technical
+criteria. The requirements are organized into customer requirements, engineering requirements,
+and engineering constraints, defining the system’s functional capabilities, performance targets,
+and operational boundaries.
+Engineering requirements reference relevant international standards including ISO 13482:2014
+(personal care robots), ISO 13855 and ISO 13850 (machinery safety), ITU-T H.264/H.265 (video
+coding), and IEEE 802.11 (wireless communications), establishing the regulatory framework for
+system validation. Engineering constraints reflect budget limitations, timeline restrictions, and
+regulatory compliance needs specific to Omani healthcare deployment.
+The comparative performance analysis in Section 3.3.6 provided empirical data on component
+characteristics, while Section 3.5 examined trade-offs in the context of standards compliance
+and Omani deployment requirements. The requirement specification establishes the foundation
+for system design decisions detailed in subsequent chapters, with traceability ensuring design
+choices can be validated against stakeholder needs and technical constraints.
+26
+4
+System Conceptual Design
+This chapter presents the high-level system architecture of the smart
+healthcare robot, including functional decomposition, design alternatives analysis using AHP methodology, hardware and software
+selection justification, and detailed subsystem specifications.
+System Conceptual Design Smart Healthcare Robot
+4 System Conceptual Design
+4.1 Introduction: System Overview
+The proposed smart healthcare robot is a mobile, autonomous platform designed to assist
+hospital staff in routine, non-critical tasks while providing patients with an intuitive human–
+robot interaction (HRI) interface. The robot operates primarily in indoor clinical environments
+such as hospital wards, corridors, and waiting areas. Its main roles include autonomous navigation,
+safe obstacle avoidance, point-to-point delivery of small items, basic patient interaction via
+conversational AI, and remote telepresence capabilities for clinical staff.
+From a functional perspective, the robot must be able to localize itself in the hospital
+environment, plan safe paths between waypoints, and react to dynamic obstacles such as people,
+trolleys, and doors. It should expose a user-friendly interface through a tablet and voice
+interaction for nurses, doctors, and patients to issue tasks or receive information. The system is
+conceived as a modular platform so that sensors, software modules, and interaction modalities
+can be extended in future iterations without major redesign.
+The overall system architecture follows a layered approach consisting of:
+• Mobile Base Layer: Providing locomotion, payload mounting, and physical robustness
+• Computing and Control Layer: High-level computer running ROS 2 and microcontroller
+for real-time motor control
+• Navigation and Perception Layer: Sensors for localization, mapping, and obstacle
+detection
+• Intelligence Layer: Large Language Model (LLM) for natural language understanding
+and HRI
+• Communication and Interface Layer: Tablet UI, web dashboard, and voice interaction
+• Power Management Layer: Battery system with automatic docking capabilities
+28
+System Conceptual Design Smart Healthcare Robot
+Figure 13: System architecture block diagram showing the layered design approach: physical hardware platform (bottom), computing and control layer, ROS 2 navigation stack, and
+intelligence/interface layer (top). The diagram illustrates key components, data flows, and
+communication pathways between subsystems.
+This conceptual design aims to balance technical performance, patient safety, modularity,
+and cost, providing a realistic path from prototype to potential deployment in Omani hospitals.
+4.2 Design Alternatives and Selection
+To arrive at a suitable system architecture for the smart healthcare robot, three main design
+alternatives were systematically evaluated. The evaluation focuses on robot platform approach,
+computing architecture, sensor configuration, and AI integration capabilities.
+4.2.1 Alternative A: Commercial Pre-Built Platform
+This alternative leverages an existing commercial robot platform designed for healthcare or
+service applications, such as the TurtleBot 4, Robotnik RB-1, or similar ROS-compatible mobile
+bases.
+System Architecture
+• Mobile Base: Commercial differential-drive or mecanum-wheel platform with integrated
+motors, encoders, and basic safety sensors
+• Computing: Pre-integrated single-board computer (typically Raspberry Pi 4/5 or Intel
+NUC) running ROS 2
+• Navigation: Factory-installed 2D LiDAR (RPLiDAR A1/A2 or Hokuyo), IMU, and wheel
+odometry
+• Perception: Optional RGB-D camera (Intel RealSense or similar) for 3D perception
+• Intelligence: Cloud-based LLM integration via API calls (OpenAI GPT-4, Anthropic
+Claude, or Google Gemini)
+29
+System Conceptual Design Smart Healthcare Robot
+• Interface: Standard ROS 2 interfaces, web-based dashboard, optional Android tablet
+mount
+• Power: Integrated battery pack (typically Li-ion) with proprietary or standard docking
+station
+Advantages
+• Significantly reduced development time with pre-tested hardware integration
+• Professional mechanical design with proven reliability and safety features
+• Comprehensive documentation, tutorials, and community support
+• Pre-calibrated sensors and validated ROS 2 navigation stack
+• Commercial warranty and technical support availability
+• Established supply chain for replacement parts
+Limitations
+• Higher initial cost (typically $3,000–$8,000 depending on configuration)
+• Limited customization of mechanical structure and form factor
+• Vendor lock-in for certain components and software stacks
+• May include unnecessary features increasing system complexity
+• Longer lead times for procurement and shipping to Oman
+• Less hands-on learning experience for mechanical and low-level integration
+4.2.2 Alternative B: Custom-Built Modular Platform
+This alternative involves designing and fabricating the entire robot from individual components, including mechanical structure, motor selection, electronics integration, and software
+development.
+System Architecture
+• Mobile Base: Custom-designed aluminum extrusion frame with selected DC motors (e.g.,
+12V with encoders) and 4WD mecanum or omni wheels
+• Computing: Raspberry Pi 5 (4GB) as main computer running Ubuntu + ROS 2, ESP32
+for low-level motor control
+• Navigation: Separately procured RPLiDAR A1, MPU6050 IMU, and encoder-based
+odometry
+• Perception: USB webcam or Pi Camera Module 3 for vision, ultrasonic sensors for safety
+• Intelligence: On-device quantized LLM (e.g., Gemini Nano, LLaMA 3.2 3B) or hybrid
+cloud approach
+• Interface: Custom Android tablet application, Flask-based web dashboard
+• Power: 12V LiFePO4 battery (10–20Ah) with custom BMS, DC–DC converters, and DIY
+docking station
+30
+System Conceptual Design Smart Healthcare Robot
+Advantages
+• Maximum design flexibility and customization for hospital-specific requirements
+• Significantly lower cost ($800–$1,500 estimated total)
+• Complete understanding of all system components and integration points
+• Ability to iterate quickly on mechanical and electrical design
+• Educational value through hands-on experience with robotics fundamentals
+• Easy sourcing of replacement parts from local suppliers or online marketplaces
+• Full control over software stack and no vendor dependencies
+Limitations
+• Substantially longer development time (6–9 months for initial prototype)
+• Higher technical risk requiring expertise in mechanical design, electronics, and software
+• No warranty or commercial support; troubleshooting relies on team knowledge
+• Requires multiple design iterations to achieve reliability comparable to commercial systems
+• Need for specialized tools and facilities (3D printers, soldering equipment, testing instruments)
+• Potential safety concerns requiring rigorous testing and validation
+• Limited payload capacity and robustness compared to engineered commercial platforms
+4.2.3 Alternative C: Hybrid Pre-Built Base with Custom Intelligence
+This alternative combines a commercial robot base platform with custom-developed upper layers,
+particularly focusing on advanced AI-driven HRI and task management capabilities.
+System Architecture
+• Mobile Base: Commercial platform (e.g., TurtleBot 4, Yahboom ROS-MASTER X3)
+providing proven navigation
+• Computing: Base platform computer (Raspberry Pi 4/5) plus optional edge AI accelerator
+(Google Coral TPU or NVIDIA Jetson Nano) for on-device inference
+• Navigation: Pre-integrated LiDAR, IMU, and odometry from base platform
+• Perception: Added RGB-D camera and microphone array for enhanced HRI
+• Intelligence: Custom integration of Google Gemini 3 flash via API for conversational AI,
+with fallback to on-device models
+• Interface: Custom Android tablet application with voice interaction, hospital-specific
+task workflows, and real-time telemetry dashboard
+• Power: Platform’s integrated battery with custom power monitoring and management
+software
+31
+System Conceptual Design Smart Healthcare Robot
+Advantages
+• Balanced approach: reliable base platform with custom high-value features
+• Faster time to functional prototype (3–4 months) compared to full custom build
+• Focus development effort on AI/HRI innovation rather than low-level integration
+• Commercial platform provides safety-certified mobility while allowing software customization
+• Moderate cost ($2,000–$3,500) compared to fully commercial or fully custom
+• Flexibility to swap AI models and interaction modalities without hardware redesign
+• Proven navigation reliability combined with cutting-edge conversational AI
+Limitations
+• Still dependent on commercial base platform availability and lead times
+• Less mechanical customization than Alternative B
+• Requires cloud connectivity for full LLM capabilities, raising data privacy considerations
+• Integration complexity between commercial ROS stack and custom AI modules
+• Potential latency issues with cloud-based LLM requiring careful system design
+• Limited ability to modify low-level control and sensor fusion algorithms
+4.3 System Selection
+4.3.1 Robot Platform Selection Using AHP
+To systematically select the most appropriate robot platform alternative, we employ the Analytic
+Hierarchy Process (AHP), a structured decision-making methodology. Four key criteria are
+identified: Cost, Development Time, Customizability, and Reliability.
+32
+System Conceptual Design Smart Healthcare Robot
+Table 14: Robot Platform Feature Comparison
+Feature A: Commercial B: Custom-Built C: Hybrid
+Motors Integrated Yes (pre-installed DC
+motors with encoders)
+No (requires selection
+& integration)
+Yes (commercial base
+motors)
+Sensors Integrated Yes (LiDAR, IMU,
+odometry precalibrated)
+No (procure & calibrate separately)
+Yes (base sensors included)
+Computer Integrated Yes (RPi 4/5 or NUC
+pre-configured)
+No (requires setup &
+ROS installation)
+Yes (base computer +
+optional upgrade)
+LLM Integrated No (requires custom integration)
+No (requires custom integration)
+No (custom Gemini 3
+flash integration)
+ROS 2 Compatibility Yes (native support) Yes (manual configuration)
+Yes (native + custom
+nodes)
+CE/EMC Standards Yes (commercial certification)
+No (requires testing) Partial (base certified,
+additions not)
+IP Rating IP42–IP54 (varies by
+model)
+None (custom design) Base platform rating
+(IP42)
+Safety Standards ISO 13482 compliance
+typical
+None (requires validation)
+Base compliant, custom features TBD
+Documentation Comprehensive (manuals, ROS packages)
+Community resources
+only
+Base docs + custom development
+Warranty/Support 1–2 years commercial
+warranty
+None Base warranty only
+Platform Comparison Summary
+Criteria Pairwise Comparison The pairwise comparison matrix for criteria (scale: 1 =
+equal importance, 3 = moderate importance, 5 = strong importance, 7 = very strong importance,
+9 = extreme importance):
+Table 15: Platform Criteria Pairwise Comparison Matrix
+Criterion Cost Dev. Time Customizability Reliability
+Cost 1 1/3 3 1/5
+Development Time 3 1 5 1/3
+Customizability 1/3 1/5 1 1/7
+Reliability 5 3 7 1
+Criteria Weights After normalization and calculating the priority vector:
+• Cost: 0.15 (15%)
+• Development Time: 0.30 (30%)
+• Customizability: 0.08 (8%)
+• Reliability: 0.47 (47%)
+Consistency Ratio (CR) = 0.04 < 0.10, indicating acceptable consistency.
+Alternative Scoring Each alternative is scored against each criterion (scale: 1–9, where 9 =
+best):
+33
+System Conceptual Design Smart Healthcare Robot
+Table 16: Platform Alternative Scores by Criterion
+Alternative Cost Dev. Time Customizability Reliability
+A: Commercial 3 9 3 9
+B: Custom-Built 9 3 9 5
+C: Hybrid 6 7 6 7
+Final AHP Scores Calculating weighted scores: Score =
+P(Criterion Weight×Alternative Score)
+Table 17: Final AHP Scores for Robot Platform
+Alternative Final Score
+A: Commercial Pre-Built 7.11
+B: Custom-Built Modular 5.55
+C: Hybrid Platform 6.76
+While Alternative A (Commercial) scores highest, Alternative C (Hybrid) is selected
+as it offers the best balance of reliability (47% weight) and development speed (30% weight)
+while maintaining sufficient customizability for healthcare-specific AI features. The modest score
+difference (7.11 vs 6.76) is acceptable given that Alternative C enables innovation in HRI–the
+project’s primary differentiator–while leveraging proven navigation hardware.
+4.3.2 Computing Platform Selection Using AHP
+Three computing platforms are evaluated for the main onboard computer: Raspberry Pi 5,
+NVIDIA Jetson Nano, and Intel NUC.
+Computing Platform Criteria
+• Processing Power: CPU/GPU performance for ROS 2 and AI workloads
+• Power Consumption: Battery life impact
+• Cost: Hardware acquisition cost
+• Ecosystem Support: ROS 2 compatibility, community, documentation
+Table 18: Computing Platform AHP Summary
+Platform Power (40%) Consumption (25%) Cost (20%) Ecosystem (15%) Final Score
+Raspberry Pi 5 6 9 9 9 7.65
+Jetson Nano 8 7 5 7 7.05
+Intel NUC 9 4 3 8 6.55
+Selected: Raspberry Pi 5–Optimal balance of sufficient processing power for ROS 2
+Nav2, excellent power efficiency (critical for battery operation), low cost, and extensive ROS
+community support.
+4.3.3 Navigation Approach Selection Using AHP
+Three navigation approaches are compared: LiDAR-based SLAM, Visual SLAM, and Hybrid
+SLAM.
+34
+System Conceptual Design Smart Healthcare Robot
+Navigation Criteria
+• Accuracy: Localization precision in hospital corridors
+• Robustness: Performance in dynamic/challenging environments
+• Computational Cost: Processing requirements
+• Sensor Cost: Hardware acquisition cost
+Table 19: Navigation Approach AHP Summary
+Approach Accuracy (35%) Robustness (35%) Comp. Cost (15%) Sensor Cost (15%) Final
+LiDAR SLAM 9 8 7 6 7.95
+Visual SLAM 7 6 5 9 6.65
+Hybrid SLAM 8 9 4 5 7.35
+Selected: LiDAR-based SLAM (Nav2 + RPLIDAR A1)–Superior accuracy and robustness in structured indoor environments, well-established ROS 2 Nav2 integration, acceptable
+sensor cost.
+4.3.4 Localization Sensor Selection Using AHP
+Three primary localization sensor configurations are evaluated.
+Localization Sensor Criteria
+• Precision: Pose estimation accuracy
+• Update Rate: Sensor refresh frequency
+• Integration Complexity: Software and hardware setup difficulty
+• Cost: Total sensor package cost
+Table 20: Localization Sensor AHP Summary
+Configuration Precision (40%) Update (20%) Integration (20%) Cost (20%) Final
+LiDAR + Odom + IMU 9 8 8 7 8.20
+Vision + Odom + IMU 7 7 6 8 7.00
+UWB + Odom + IMU 6 9 5 4 6.10
+Selected: LiDAR + Odometry + IMU–Best precision for structured hospital environments, proven ROS 2 sensor fusion with robot localization package, extensive Nav2 support.
+4.3.5 LLM Selection Using AHP
+For the conversational AI component, three state-of-the-art LLM options are evaluated: OpenAI
+GPT-5.2, OpenAI GPT-4 Turbo, and Google Gemini 3 flash (announced December 2024).
+35
+System Conceptual Design Smart Healthcare Robot
+LLM Evaluation Criteria Four criteria are defined:
+• API Familiarity: Team experience with the API and SDK
+• Performance: Response quality, reasoning capability, and medical domain knowledge
+• Latency: Speed of response generation for real-time interaction
+• Cost: API pricing per token (input/output)
+Table 21: LLM Criteria Pairwise Comparison Matrix
+Criterion API Familiarity Performance Latency Cost
+API Familiarity 1 1/3 3 5
+Performance 3 1 5 7
+Latency 1/3 1/5 1 3
+Cost 1/5 1/7 1/3 1
+Criteria Pairwise Comparison for LLM
+LLM Criteria Weights After normalization:
+• API Familiarity: 0.26 (26%)
+• Performance: 0.54 (54%)
+• Latency: 0.14 (14%)
+• Cost: 0.06 (6%)
+Consistency Ratio (CR) = 0.05 < 0.10, acceptable.
+Table 22: LLM Alternative Scores by Criterion
+LLM API Familiarity Performance Latency Cost
+GPT-5.2 7 9 6 5
+GPT-4 Turbo 5 9 7 6
+Gemini 3 flash 9 8 9 9
+LLM Alternative Scoring Scoring rationale:
+• GPT-5.2: Excellent performance, moderate familiarity, good but not fastest latency,
+moderate cost
+• GPT-4 Turbo: Excellent performance with strong safety features, less team familiarity,
+good latency, moderate cost
+• Gemini 3 flash: High team familiarity with Google AI APIs, excellent performance for
+size, extremely low latency optimized for real-time use, very cost-effective
+36
+System Conceptual Design Smart Healthcare Robot
+Table 23: Final AHP Scores for LLM Selection
+LLM Final Score
+GPT-5.2 7.62
+GPT-4 Turbo 7.54
+Gemini 3 flash 8.44
+Final LLM AHP Scores Google Gemini 3 flash is selected based on its superior AHP
+score. Key advantages include:
+• Team’s extensive experience with Google Cloud Platform and Gemini API
+• Optimized for low-latency real-time conversational AI (critical for natural HRI)
+• Multimodal capabilities (text, image, audio) enabling future vision-based features
+• Native integration with Google Cloud services used in the project
+• Significantly lower cost enables extensive testing and development iterations
+• Announced Flash variant (Dec 2024) specifically designed for speed-critical applications
+4.3.6 System Selection Summary
+Table 24: Final System Component Selection Summary
+Component Selected Option AHP Score
+Robot Platform Hybrid (Commercial Base + Custom AI) 6.76
+Computing Platform Raspberry Pi 5 (4GB) 7.65
+Navigation Approach LiDAR-based SLAM (Nav2) 7.95
+Localization Sensors LiDAR + Odometry + IMU 8.20
+LLM Google Gemini 3 flash 8.44
+4.4 Selected System Architecture
+Based on the AHP analysis, the final system architecture combines:
+• Robot Platform: TurtleBot 4 or Yahboom ROS-MASTER X3 (commercial base)
+• Main Computer: Raspberry Pi 5 (4GB) running Ubuntu 22.04 + ROS 2 Humble
+• Navigation: Integrated RPLiDAR A1, MPU6050 IMU, wheel encoders
+• Perception: Pi Camera Module 3 + USB microphone array
+• AI/LLM: Google Gemini 3 flash via Cloud API
+• Interface: Custom Android tablet app with voice interaction
+• Power: Platform’s Li-ion battery with automatic docking
+37
+System Conceptual Design Smart Healthcare Robot
+4.5 Functional Decomposition
+4.5.1 System Level 0: Black Box View
+At the highest abstraction level, the smart healthcare robot can be represented as a single system
+with external interfaces. Figure 14 summarizes the Level 0 functional view, grouping the main
+inputs, outputs, and primary functions.
+Figure 14: System Level 0 black-box view of the smart healthcare robot, showing external inputs,
+outputs, and primary functions.
+For clarity, the main interfaces can be described textually as follows:
+• Inputs:
+– Voice commands from patients/staff
+– Touch input via tablet interface
+– Remote commands from web dashboard
+– Environmental sensor data (LiDAR scans, camera images)
+– Power from charging station
+• Outputs:
+– Locomotion (movement through hospital environment)
+– Voice responses (text-to-speech)
+– Visual feedback (tablet display)
+– Telemetry data to monitoring systems
+– Physical item delivery
+• Primary Functions:
+– Autonomous navigation and obstacle avoidance
+– Natural language interaction with users
+38
+System Conceptual Design Smart Healthcare Robot
+– Task execution (delivery, information provision, telepresence)
+– Status monitoring and reporting
+– Autonomous recharging
+4.5.2 System Level 1: Subsystem Decomposition
+The system is decomposed into seven major subsystems, each with defined responsibilities.
+Figure 15 presents the Level 1 functional decomposition and the main interfaces between
+subsystems.
+Figure 15: System Level 1 subsystem decomposition of the smart healthcare robot, highlighting
+the seven functional subsystems and key data/control flows.
+The subsystems are defined textually as follows:
+1. Mobility Subsystem
+• Components: 4WD mecanum base, DC motors, motor drivers, wheel encoders
+• Functions: Translate velocity commands to wheel motion, provide odometry feedback,
+execute emergency stops
+• Interfaces: Receives velocity commands from Navigation Subsystem, sends encoder data
+2. Navigation Subsystem
+• Components: RPLiDAR A1, MPU6050 IMU, ROS 2 Nav2 stack (SLAM, localization,
+path planning)
+• Functions: Build and update maps, localize robot pose, plan collision-free paths, detect
+obstacles
+• Interfaces: Receives goal poses from Task Manager, sends velocity commands to Mobility,
+provides pose estimates to all subsystems
+39
+System Conceptual Design Smart Healthcare Robot
+3. Perception Subsystem
+• Components: Pi Camera Module 3, microphone array, ultrasonic/ToF sensors
+• Functions: Capture visual data for teleoperation and docking, record audio for voice
+interaction, detect close-range obstacles
+• Interfaces: Sends camera frames to Interface Subsystem and Intelligence Subsystem,
+audio to Intelligence Subsystem, proximity alerts to Navigation Subsystem
+4. Intelligence Subsystem
+• Components: Gemini 3 flash API client, speech-to-text, text-to-speech, dialogue manager
+• Functions: Process natural language queries, generate contextual responses, manage
+conversation state, translate between voice and text
+• Interfaces: Receives audio from Perception, text commands from Interface, sends responses
+to Interface, task requests to Task Manager
+5. Task Management Subsystem
+• Components: Task scheduler, state machine, goal queue, hospital map database
+• Functions: Queue and prioritize tasks, track task execution status, coordinate between
+subsystems, manage waypoints and delivery locations
+• Interfaces: Receives task requests from Intelligence and Interface, sends navigation goals
+to Navigation, status updates to Interface
+6. Interface and Communication Subsystem
+• Components: Android tablet app, Flask web dashboard, ROS 2 bridge, Wi-Fi module
+• Functions: Display status and controls, enable touch/voice input, provide remote monitoring, transmit telemetry, receive remote commands
+• Interfaces: Bidirectional communication with all subsystems, external network connection
+to web dashboard and cloud services
+7. Power Management Subsystem
+• Components: 12V Li-ion battery, BMS, DC–DC converters, docking contacts, charging
+station
+• Functions: Distribute power to all subsystems, monitor battery status, initiate autonomous docking when low, manage charging process
+• Interfaces: Provides power to all subsystems, sends battery status to Task Management
+and Interface, receives docking commands from Task Management
+40
+System Conceptual Design Smart Healthcare Robot
+Subsystem Interaction Flow As summarized in Figure 15, the robot operates in a closed loop
+of sensing, decision-making, and actuation. The Perception subsystem collects sensor data and
+forwards it to Navigation for localisation and path planning, while also sending audio and video
+streams to the Intelligence subsystem. Intelligence interprets user intent and generates high-level
+task requests, which are queued and coordinated by Task Management. Task Management issues
+navigation goals to Navigation, which computes velocity commands for the Mobility subsystem
+and receives odometry feedback in return. Interface and Communication exposes task requests,
+status information, and telemetry to users and remote dashboards, while Power Management
+responds to dock/charge commands and reports battery status to both Task Management and
+the interface layer. This interaction pattern ensures that environmental sensing, user intent,
+motion control, and power management remain synchronised during hospital missions.
+4.6 Conclusion
+This chapter presented a systematic approach to the conceptual design of the smart healthcare
+robot. Through AHP-based evaluation of three platform alternatives (commercial, custom-built,
+and hybrid), the hybrid approach was selected as it balances reliability with customizability for
+healthcare-specific AI features. A second AHP analysis selected Google Gemini 3 flash as the
+optimal LLM for conversational AI due to team familiarity, low latency, and cost-effectiveness.
+The resulting system architecture is decomposed into seven functional subsystems (Mobility,
+Navigation, Perception, Intelligence, Task Management, Interface, and Power Management),
+each with clearly defined responsibilities and interfaces. This modular design enables parallel
+development, facilitates testing and validation, and provides a clear path for future enhancements
+such as manipulation capabilities or multi-robot coordination.
+The selected architecture provides a solid foundation for the detailed design and implementation phases that follow, ensuring the robot meets the project objectives of safe autonomous
+operation, natural human–robot interaction, and practical deployment in Omani hospitals.
+41
+5
+General Conclusion
+This chapter summarizes the project outcomes, highlights key contributions and improvements over existing technologies, and outlines
+the implementation roadmap and future enhancement opportunities
+for the smart healthcare robot platform.
+General Conclusion Smart Healthcare Robot
+5 General Conclusion
+5.1 Project Summary
+This Final Year Project presented the conceptual design and system architecture of a smart
+healthcare robot for deployment in Omani hospital environments. The project addressed
+critical challenges including medical staff shortages, infection control, and limited accessibility to
+specialized care in remote regions. Through systematic literature review, requirements analysis,
+and Analytic Hierarchy Process (AHP) decision-making, a comprehensive solution was developed
+that integrates autonomous navigation, telepresence capabilities, and conversational AI into a
+unified mobile platform.
+The system employs a hybrid architecture combining a commercial robot base (TurtleBot
+4 or Yahboom ROS-MASTER X3) with custom-developed intelligence layers. This approach
+leverages proven navigation hardware while enabling innovation in human-robot interaction.
+The architecture consists of seven subsystems: Mobility, Navigation, Perception, Intelligence,
+Task Management, Interface and Communication, and Power Management. Key specifications
+include position accuracy (±20 cm), telepresence quality (720p at 30 fps), conversational AI
+performance (90% intent accuracy), and 4–6 hour operational endurance.
+Core technical selections through AHP analysis include: LiDAR-based SLAM with ROS 2
+Nav2 (score 7.95), RPLiDAR A1 with MPU6050 IMU and wheel odometry fusion (score
+8.20), Raspberry Pi 5 computing platform (score 7.65), and Google Gemini 3 flash for natural
+language interaction (score 8.44). The design complies with ISO 13482:2014 (robot safety),
+ISO 13850 (emergency stop), ITU-T H.264/H.265 (video coding), and IEEE 802.11 (wireless
+communications), while meeting constraints of $2,500 budget, 9–10 month timeline, and Omani
+hospital infrastructure compatibility.
+5.2 Areas of Improvement
+The proposed system advances current healthcare robotics technology in several key dimensions:
+Unified Multi-Function Platform. Existing hospital robots excel in specific tasks–telepresence
+(InTouch RP-VITA), logistics (Pudu PuduBot 2), or patient engagement (NAO)–but operate
+independently. This project uniquely integrates autonomous navigation, telepresence, and
+conversational AI into a single platform, addressing the fragmentation identified in literature.
+This enables seamless transitions between delivery missions, remote consultations, and patient
+interaction without multiple specialized robots.
+Advanced Conversational AI. Commercial systems rely on scripted interactions or simple
+commands. By integrating Google Gemini 3 flash with speech-to-text and text-to-speech, this
+project enables natural conversations in English and Arabic with 90% intent accuracy and
+3-second response latency–significantly improving upon touchscreen-only interfaces of systems
+like Keenon Peanut Medical.
+Cost-Effective Implementation. The $2,500 budget represents substantial reduction versus
+commercial robots ($12,000–$47,500). Leveraging open-source ROS 2, cloud-based AI APIs, and
+commercial components demonstrates that advanced capabilities can be achieved at educational
+and small-hospital budget scales, improving accessibility for resource-constrained facilities.
+Open Architecture and Extensibility. Unlike proprietary commercial systems, the ROS 2-
+based architecture provides full access to navigation algorithms and software modules, enabling
+future extensions UV-C disinfection, hospital information system integration, advanced sensor
+fusion–without vendor dependencies.
+43
+General Conclusion Smart Healthcare Robot
+Localized Design. The system explicitly addresses Omani infrastructure: Arabic language
+support, standard hospital dimensions and flooring and existing Wi-Fi networks. These considerations, often overlooked in Western-market platforms, improve adoption feasibility in the
+GCC region.
+5.3 Future Work
+The conceptual design establishes the foundation for implementation and deployment across
+three phases:
+Phase 1: Hardware Integration and Navigation (Months 5-6). Procure and assemble
+hardware components including robot base, Raspberry Pi 5, RPLiDAR A1, MPU6050 IMU, Pi
+Camera Module 3, and Android tablet. Configure ROS 2 Nav2 for SLAM and achieve ±20 cm
+position accuracy through sensor calibration and fusion tuning. Demonstrate autonomous
+navigation between waypoints in laboratory environment.
+Phase 2: AI Integration and Telepresence (Month 7). Implement Google Gemini 3
+flash API, speech-to-text/text-to-speech pipeline, and dialogue manager. Deploy telepresence
+with 720p video streaming. Develop Android tablet and web dashboard interfaces. Validate 90%
+intent accuracy, 3-second response latency, and clinical scenario completion.
+Phase 3: System Integration and Trials (Month 8). Integrate all subsystems with task
+management coordination and autonomous charging. Conduct field trials in hospital or similar
+environment to validate navigation accuracy, telepresence quality under network conditions,
+conversational AI performance with diverse users, and 4–6 hour operation time. Verify regulatory
+compliance including patient privacy, safety standards (ISO 13482, ISO 13850), Conduct user
+acceptance testing with clinical staff and patients.
+Advanced Enhancements. Beyond core implementation, future capabilities include: UVC disinfection integration for environmental sanitation; Hospital Information System (HIS)
+integration with electronic health records requiring HIPAA/GDPR compliance; multi-robot fleet
+coordination leveraging ROS 2 distributed computing; UWB localization with Angle of Arrival
+for beacon-following scenarios; and affective computing for emotional intelligence through facial
+expression and voice prosody analysis.
+Long-Term Vision. The ultimate goal extends to establishing scalable deployment framework
+for Omani healthcare facilities including standardized integration protocols, clinical staff training
+programs, maintenance documentation, and longitudinal impact studies measuring clinical
+workflow efficiency (target 30% improvement in non-clinical logistics time), specialist consultation
+access in rural regions, and patient experience improvements.
+44
+REFERENCES Smart Healthcare Robot
+References
+[1] Frontiers in public health. Frontiers. (2024). Advancing healthcare through mobile collaboration: A survey of intelligent nursing robots research. Frontiers in Public Health.
+[2] Sultan qaboos university medical journal. Al-Sheikhly, D., et al. (2010). Four decades
+of progress: Evolution of the health system in Oman. Sultan Qaboos University Medical
+Journal, 6(1), 9-22. PMC3074664.
+[3] Bulletin of the world health organization. Al-Hinai, H., et al. (2024). Health system
+performance assessment and reforms, Oman. Bulletin of the World Health Organization,
+102(6), 428-435. PMC11197650.
+[4] Bmc health services research. Al-Salmani, M. A., et al. (2023). Usability of telephone-based
+telemedicine in primary healthcare in Oman during COVID-19 pandemic. BMC Health
+Services Research, 23(1), 1-11.
+[5] 2013 international conference on computing, electrical and electronic engineering (icceee).
+Al-Shishtawy, A., & Al-Khanjari, Z. (2013). Telemedicine requirements for treatment
+network in Oman. 2013 International Conference on Computing, Electrical and Electronic
+Engineering (ICCEEE), 465-470.
+[6] The neurologist. Garingo, A., et al. (2016). The use of telestroke in the management of
+acute ischemic stroke. The Neurologist, 21(2), 21-25.
+[7] Advances in human-computer interaction. Kristoffersson, A., Coradeschi, S., & Loutfi, A.
+(2013). A review of mobile robotic telepresence. Advances in Human-Computer Interaction,
+2013, 1-17.
+[8] Proceedings of the 8th acm/ieee international conference on human-robot interaction.
+Sabanovi´c, S., et al. (2013). Robots in practice: A situated analysis of meaning-making in ˇ
+human-robot interaction. Proceedings of the 8th ACM/IEEE International Conference on
+Human-Robot Interaction, 333-340.
+[9] Market research report. IMARC Group. (2024). Robotic vacuum cleaner market size to hit
+USD 31.79 billion by 2033. Market Research Report.
+[10] Scmp economy. South China Morning Post. (2024). Roomba revolution: How China
+swallowed up the robot vacuum market. SCMP Economy.
+[11] Market analysis. Consegic Business Intelligence. (2025). Residential robotic vacuum cleaner
+market size, report, trend analysis 2032. Market Analysis.
+[12] Industry report. TrendForce. (2024). Global service robot sales analysis. Industry Report.
+[13] Amazon. (2024). Amazon has more than 750,000 robots that sort, lift, and carry packages.
+About Amazon Operations. Retrieved from https://www.aboutamazon.com.
+[14] Amazon Science. (2022). Amazon’s tiny robot drives do the heavy lifting. Amazon Science
+News. Retrieved from https://www.amazon.science.
+[15] Unitree Robotics. (2024). Unitree Go2 Product Page and Specifications. Retrieved from
+https://www.unitree.com/go2.
+[16] Unitree Robotics. (2024). Reinforcement Learning for Robust Quadruped Locomotion:
+Technical overview and demos. Retrieved from https://www.unitree.com.
+45
+REFERENCES Smart Healthcare Robot
+[17] Intel learn resources. Intel Corporation. (2024). Robotics in healthcare: The future of robots
+in medicine. Intel Learn Resources.
+[18] Intelligent medicine. ScienceDirect. (2021). Intelligent disinfection robots assist medical
+institutions in controlling environmental surface disinfection. Intelligent Medicine, 1(2),
+88-93.
+[19] Pubmed central. PMC. (2024). Advancing healthcare through mobile collaboration: A
+survey of intelligent nursing robots research. PubMed Central, PMC11628269.
+[20] Robotics. MDPI. (2024). Robotics applications in the hospital domain: A literature review.
+Robotics, 7(6), 125.
+[21] Journal of health psychology. Beran, T. N., et al. (2013). The effect of a humanoid robot
+on reducing anxiety in pediatric patients undergoing medical procedures. Journal of Health
+Psychology, 18(7), 931-941.
+[22] Ahu blog. AdventHealth University. (2024). Robotics in healthcare: Past, present, and
+future. AHU Blog.
+[23] Jmir. Journal of Medical Internet Research. (2024). Advances in the application of AI
+robots in critical care: Scoping review. JMIR, 2024(1), e54095.
+[24] Pudubot 2: Universal delivery robot. Pudu Robotics. (2024). Official product page. Retrieved
+from https://www.merchantservice.com/product/pudubot-2-pudu-smart-delivery-robot/.
+[25] M2 medical robot. Keenon Robotics. (2024). Official product page. Retrieved from
+https://carestar-robotics.com/medical-disinfection-robot-m2.
+[26] Pudu cc1: Intelligent commercial cleaning robot. Pudu Robotics. (2024). Official product
+page. Retrieved from https://www.pudurobotics.com/en/products/puduCC1.
+[27] Peanut medical robot. Keenon Robotics. (2024). Official product page. Retrieved from
+https://www.manualslib.com/products/Keenon-Robotics-Peanut-T1-11489737.html.
+[28] Gerontechnology. Broekens, J., Heerink, M., & Rosendal, H. (2009). Assistive social robots
+in elderly care: A review. Gerontechnology, 8(2), 94-103.
+[29] Electronics. Chen, W., Xiao, J., Jiang, R., Zhu, Y., & Liu, M. (2022). A Review of SLAM
+Algorithms for Indoor Mobile Robots. Electronics, 11(20), 3294. DOI: 10.3390/electronics11203294.
+[30] Robotics. Weinmann, K., & Simske, S. (2023). Design of Bluetooth 5.1 Angle of Arrival
+Homing Controller for Autonomous Mobile Robot. Robotics, 12(4), 115.
+[31] arxiv preprint arxiv:2407.11870. Do Duc, M., Nguyen Canh, T., DoNgoc, M., & HoangVan,
+X. (2024). Fusion LiDAR-Inertial-Encoder data for High-Accuracy SLAM. arXiv preprint
+arXiv:2407.11870.
+[32] Sensors. Tourani, A., Bavle, H., Sanchez-Lopez, J. L., & Voos, H. (2022). Visual SLAM:
+What Are the Current Trends and What to Expect?. Sensors, 22(23), 9297.
+[33] iRobot Corporation. (2024). iRobot Create 3: Educational Robot Platform. Retrieved from
+https://edu.irobot.com/create3.
+[34] Yahboom Technology. (2024). ROSMASTER X3 ROS Robot Car with Mecanum Wheels.
+Retrieved from https://www.yahboom.net.
+46
+REFERENCES Smart Healthcare Robot
+[35] Elephant Robotics. (2024). myAGV 2023: Autonomous Mobile Robot Platform. Retrieved
+from https://www.elephantrobotics.com.
+[36] SLAMTEC Co., Ltd. (2024). SLAMTEC Apollo Autonomous Mobile Robot Development
+Platform. Retrieved from https://www.slamtec.com.
+[37] Open Robotics. (2024). TurtleBot 4: The Next Generation Robot for Education and
+Research. Retrieved from https://turtlebot.github.io.
+[38] Husarion. (2024). ROSbot 2R: Autonomous Mobile Robot for ROS Developers. Retrieved
+from https://husarion.com.
+[39] AgileX Robotics. (2024). LIMO Pro: Multi-Modal Mobile Robot Platform. Retrieved from
+https://www.agilex.ai.
+[40] Civo blog. Civo. (2024). Open Source vs. Proprietary LLMs. Civo Blog.
+[41] Medium. Musick, E. (2025). A Comparative Analysis of Leading Large Language Models
+(LLMs) in Early 2025. Medium.
+[42] Openai api pricing. OpenAI. (2025). API Pricing. Retrieved December 2025 from
+https://openai.com/api/pricing/.
+[43] Gemini api pricing. Google AI. (2025). Gemini Developer API Pricing. Retrieved December
+2025 from https://ai.google.dev/pricing.
+[44] Llama 4 models. Meta AI. (2025). Llama 4: Leading Intelligence. Retrieved December 2025
+from https://www.llama.com.
+[45] Deepseek v3.1. DeepSeek AI. (2025). DeepSeek-V3.1 Release. Retrieved December 2025
+from https://www.deepseek.com.
+[46] Med-gemma: Specialized medical language models. Google Research & Google DeepMind.
+(2024). Med-Gemma: Family of highly capable multimodal models specialized in medicine.
+arXiv preprint arXiv:2404.18416.
+[47] Iso 13482:2014. International Organization for Standardization. (2014). Robots and robotic
+devices – Safety requirements for personal care robots – Mobile servant robots. ISO
+13482:2014.
+[48] Iso 13855. International Organization for Standardization. Safety of machinery – Positioning
+of safeguards with respect to the approach speeds of parts of the human body. ISO 13855.
+[49] Itu-t h.264 / h.265. International Telecommunication Union. Advanced Video Coding for
+Generic Audiovisual Services (H.264/H.265). ITU-T Recommendations H.264 and H.265.
+[50] Ieee 802.11. Institute of Electrical and Electronics Engineers. (2020). IEEE Standard for
+Information Technology – Telecommunications and Information Exchange between Systems
+– Local and Metropolitan Area Networks – Specific Requirements – Part 11: Wireless LAN
+Medium Access Control (MAC) and Physical Layer (PHY) Specifications. IEEE 802.11.
+[51] Iso 13850. International Organization for Standardization. Safety of machinery – Emergency
+stop function – Principles for design. ISO 13850.
+[52] Rplidar a1/a2 series. SLAMTEC Co., Ltd. (2024). RPLiDAR: 360 Degree Laser Scanner.
+Technical specifications. Retrieved from https://www.slamtec.com.
+47
+REFERENCES Smart Healthcare Robot
+[53] Intel realsense depth camera d400 series. Intel Corporation. (2024). Intel RealSense
+Depth Camera D435/D455: Datasheet and Technical Specifications. Retrieved from
+https://www.intelrealsense.com.
+[54] Velodyne lidar sensors. Velodyne Lidar, Inc. (2024). VLP-16 Puck: Lightweight 3D LiDAR
+Sensor. Technical specifications. Retrieved from https://velodynelidar.com.
+[55] Raspberry pi 5. Raspberry Pi Foundation. (2024). Raspberry Pi 5: Technical Specifications.
+Retrieved from https://www.raspberrypi.com.
+[56] Nvidia jetson nano. NVIDIA Corporation. (2024). Jetson Nano Developer Kit: Technical
+Specifications. Retrieved from https://developer.nvidia.com/embedded/jetson-nano.
+[57] Nvidia jetson orin nano. NVIDIA Corporation. (2024). Jetson
+Orin Nano: Technical Specifications and Datasheet. Retrieved from
+https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-orin/.
+48
+Appendix: Standards and Regulatory References Smart Healthcare Robot
+A Appendix: Standards and Regulatory References
+A.1 ISO Standards
+This project references the following international safety and technical standards:
+• ISO 13482:2014 – Robots and robotic devices – Safety requirements for personal care robots
+https://www.iso.org/standard/53820.html
+• ISO 13850:2015 – Safety of machinery – Emergency stop function – Principles for design
+https://www.iso.org/standard/59970.html
+A.2 Data Protection and Privacy Regulations
+• GDPR (General Data Protection Regulation) – Regulation (EU) 2016/679 of the
+European Parliament and of the Council on the protection of natural persons with regard to
+the processing of personal data
+https://eur-lex.europa.eu/eli/reg/2016/679/oj
+• HIPAA (Health Insurance Portability and Accountability Act) – U.S. Department
+of Health & Human Services regulations for protecting sensitive patient health information
+https://www.hhs.gov/hipaa/index.html
+49

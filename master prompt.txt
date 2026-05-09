@@ -1,0 +1,320 @@
+We are trying to create and continue the work on the final year project report. You can see the first semester of work on reports under FYB report on latex. The main file is main.tex
+From there, we should follow this
+Abstract
+ii
+Graphical Abstract
+iii
+Acknowledgement
+iv
+Acronyms
+v
+Symbols
+vi
+Lists of Figures
+ix
+Lists of Tables
+x
+1	Introduction
+1
+1.1	Problem Statement  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1
+1.2	Motivation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1
+1.3	Objective	. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1
+1.4	Methodology  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2
+1.5	Tasks	. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2
+1.6	Report Organization . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+4
+2	Literature Survey
+5
+2.1	Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+5
+2.2	Relevant Literature Review . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+5
+2.3	Conclusion	. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+8
+3	Requirements Specifications
+9
+3.1	Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+9
+3.2	Customer Requirements . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+10
+3.3	Engineering Requirements  . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+10
+3.4	Engineering Constraints . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+11
+3.5	Analysis and Discussion	. . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+12
+3.6	Conclusion	. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+13
+4	System Conceptual Design
+14
+4.1	Introduction: System Overview . . . . . . . . . . . . . . . . . . . . . . . . . .
+14
+4.2	Design Alternatives and Selection	. . . . . . . . . . . . . . . . . . . . . . . .
+15
+4.2.1	Alternative A: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+15
+4.2.2	Alternative B: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+17
+4.2.3	Alternative C: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+19
+4.3	System Selection  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+21
+4.4	Functional Decomposition  . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+21
+4.4.1	System Level 0 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+21
+ 
+Table of Contents
+
+	4.4.2	System Level 1 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+22
+4.5
+Conclusion	. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+23
+5	System Implementation: Results and Discussion
+24
+5.1	Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+24
+5.2	System Integration and Testing . . . . . . . . . . . . . . . . . . . . . . . . . .	24
+5.2.1	Individual Unit Tests . . . . . . . . . . . . . . . . . . . . . . . . . . .
+24
+5.2.2	System Integration Tests . . . . . . . . . . . . . . . . . . . . . . . . .
+25
+5.2.3	Acceptance Test	. . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+26
+5.3	Standards  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+27
+5.4	Conclusion	. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+27
+6	Conclusions and Future Works
+29
+6.1	Project Summary  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+29
+6.2	Areas of Improvement	. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+29
+6.3	Future Works  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+29
+References
+R-1
+A Appendix Tables and Figures
+A-1
+
+
+we alredy created The four first chapters. Now we need to make the fifth and the sixth
+
+On the second semester, there were some big changes. And there is many decisions that changed a lot. We were planning to use turtle pot platform but total parts platform and the company went bankrupt. So we decided we should it's a very risky decision. To go with Turtlebots. So we started searching into the Chinese platforms available. We noticed a huge difference when it comes to many aspects. So the Chinese platforms are just way better in almost everything. They have better performance, better stability, They are meant to actually build on them service robots that actually can work and can solve the problem.
+
+
+there is the concept of robot base or robot chassis that you can build on you may introduce it we dicovered its really good to solve our problem
+this is my email to my doctor you can get from it
+
+As you know, we started this project planning to use the TurtleBot, and you recommended the iCreate 3 as an alternative so we could learn more by building things ourselves. We respected that reasoning a lot, and we spent the entire first semester working with both platforms. We went through their documentation, ran simulations, and really tried to understand how they work. And honestly, that time was not wasted at all. Working with TurtleBot and the iCreate 3 in simulation taught us so much about ROS 2, navigation stacks, sensor integration, and how mobile robots actually work under the hood. That foundation carried over directly into everything we built later. The knowledge we gained in the first semester was a huge part of why we were able to move so fast afterward.
+
+But when it came time to actually commit and buy something, we were facing a really difficult situation.
+
+The biggest concern was iRobot itself. At the time we needed to make the purchase, iRobot had gone bankrupt, and there was a Chinese company trying to acquire them. For a project funded at 1,500 OMR with only 8 weeks before the Engineering Gathering, buying from a company in that state felt way too risky. We were extremely worried about long term support, and whether the platform would even continue to exist. Building our entire graduation project on a dying ecosystem just didn't make sense to us.
+
+On top of that, we only had 8 weeks. Every single week mattered. We needed something we could order quickly, receive on time, and start building on right away.
+
+That's when we started looking seriously at Chinese robotic platforms, and what we found honestly surprised us. They were way ahead of both the TurtleBot and iCreate 3 in terms of technology, performance, reliability, and the number of options available. We didn't just pick one randomly. We did a full comparative study. For every platform we considered, we went through the documentation, studied the features and limitations, understood the capabilities, checked the prices, and compared everything against our project needs. We believe this is one of the most thorough comparisons of these platforms out there. Nobody has done a report like this. And all of this was extra work on top of everything we had already done in the first semester.
+
+But the thing that really made the decision clear for us was the body. Neither the iCreate 3 nor the TurtleBot have proper mounting points or any neat way to build a physical body on top of them. You can't just screw into them and fabricate a structure. We didn't want to build something that just sits in a lab. We are paying 1,500 OMR and we wanted to build something real, something functional that can actually help people. The platform we chose gave us exactly that. It has the structural compatibility to mount a body directly onto it, and that's what allowed us to design and fabricate TAMRA the way we did.
+
+We understand that this decision probably felt sudden, and we sincerely apologize for not explaining all of this to you when it happened. The truth is we were under a lot of pressure. The deadline was close, the workload was heavy, and we had to act fast. We couldn't sit down and walk you through everything the way we should have. Shifting to a new platform that we had less experience with was itself a big risk, and we didn't take it lightly. But we believed then and we still believe now that it was the right decision.
+
+The platform we chose is more sustainable. It comes from an active company that is growing, not one going through bankruptcy. We have access to spare parts, support, and a foundation that will last beyond this project. And most importantly, it allowed us to build something we are genuinely proud of.
+
+We also want you to know that we value your guidance deeply. The circumstances pushed us to make a hard decision under time pressure, but your supervision and blah blah
+
+
+
+on the report put place holder for electric circuit will do it later
+
+
+there is many files scattered accross the proj as notes. very important and explain so much  eg "C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\design-notes\design_decisions.txt" goes through diffrent alternitives we studied for building the body until we evanully setteled on wood and acrylic.. when you see txt its usually very rich wth so much
+
+"C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\work-photos\playing with foam\20260430_154638.jpg"
+this photo we experimented with foam sculptiring just to learn and we learned that foam can get really good. stiff. hard. long lasting. non distiguishable from hard materils. like its click able and is the secrtete behind holywood.. this image shoes cnc working on foam big "C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\work-photos\playing with foam\IMG-20260206-WA0014.jpg"
+
+
+
+this might be the best deev dive into chinese platforms we had to go through each one robot documentation to evantually choose impr500 as base
+"C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\robot-selection\comparison_report\index.html"
+
+this talks on how we reverse engineer the platform to get raw sensor data which many of which is unfortunatly  not documented by vendor
+"C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\robot-platform\important this descripes reverse eng of robot.md" and many other files in that folder about the impr500
+
+So the robot in a basic form is a chassis or a robot base. And a screen. And they are connected for the screen you can go through the folder on the screen We have many notes why we choose that. Display but it needs to be industrial tablet. We studied so many alternatives. But Android stands out as one of the best developer friendly. Platforms. And the most painful part about it was the routing network +  booting sequence see code. So there is very painful things you can go and understand on the tablet folder.
+
+mqtt stuff experimnt only but we integrate it later into big software
+"C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\robot-bridge\bridge_robot_mqtt.html"
+"C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\robot-bridge\drive.html"
+
+There is two big pieces of software on this project. The first one is the software that's running on the tablet. It's just an HTML page. Self contained, and As simple as many people might think, it's very complicated. It has the task orchestration which is one of the biggest contributions in our projects. You may go over it to understand it. And the second piece of software is the central command. It's a place where you can control a single robot or even a fleet of robots using one piece of software You can control it, you can guide it, you can do telepresence, and many other things.
+
+
+
+photos
+"C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\work-photos\look at robot internals" there is the wood process and internals of the impr500
+
+these are images from fusion 360
+"C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\3d-models\back view shwing removable upper tray for acceceible display service.png"
+"C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\3d-models\display acrylic dimensions  (1).png"
+"C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\3d-models\display acrylic dimensions .png"
+"C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\3d-models\engn drawing robot dimensions.png"
+"C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\3d-models\front view render (1).png"
+
+these are the nicest render images of the robot (concept rendering before doing 3d)
+"C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\design-images\opt2\Generated Image February 22, 2026 - 4_37PM.jpeg"
+"C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\design-images\opt2\Generated Image February 22, 2026 - 4_53PM.jpeg"
+"C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\design-images\opt2\Generated Image February 22, 2026 - 10_34AM.jpeg"
+"C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\design-images\opt2\Generated Image February 22, 2026 - 10_36AM.png"
+
+
+these are the real world images of machine
+"C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\work-photos\20260407_182330.jpg"
+"C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\work-photos\20260407_182702(1).jpg"
+"C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\work-photos\20260407_182732(1).jpg"
+
+
+ 
+notes:
+dont make it sound simple. eg dont say robot is just a display and a base
+30 extra pages only
+engineering project. engineering not art or fluff
+this will guide you alot. its really well made and most recent thing and has really good everything
+C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\reports\eng-gathering the tex file is the most recent it has many graphs that need to be embeded into the fyp report
+"C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\hardware\work-photos\look at robot internals\notes oninternals - how they made it this cheap.txt" this is my notes on how the chinese made this cheap like few notes here and ther
+For the voice interface, or the agent that humans can talk to, when we build the orchestrator in the software that's running on the tablet. We tried several options. You might go through these HTMLs. Initially, we experimented with OpenAI live Model. But it has many limitations. The voice is not very natural. And the interaction is a little bit weird in some ways. Of course, this is not engineering, so you need to refine it. Then secondly, we started experimenting with 11 laps which is way superior when it comes to the natural talk but it comes at a cost of so much latency. And there is something that's hard to quantify. But it didn't feel fast. Or intuitive. Then there was Gamma Knife 3.1 Live. Which was literally a lifesaver. When it was released we immediately shifted the entire pipeline into 3.1 live from Gamani. very powerfull very verstalie. so much baked in cbibilities.
+
+
+
+
+this is a summery of the previous chapters
+Here is a comprehensive and accurate summary of the provided Final Year Project Report from Sultan Qaboos University. 
+
+---
+
+# **Comprehensive Summary: Smart Healthcare Robot**
+**Project Title:** Smart Healthcare Robot: Bringing Care Closer to Patients in Oman  
+**Institution:** Sultan Qaboos University, Department of Electrical and Computer Engineering  
+**Authors:** Almoulla Talal Almaawali & Abdulmunim Khamis Albusaidi  
+**Supervisor:** Dr. Ahmed Chehib Ammari  
+**Date:** December 2025 (Academic Year 2025–2026)
+
+---
+
+## **1. Project Overview and Introduction**
+Modern healthcare systems face critical challenges, including staff shortages, the logistical burden of non-clinical tasks, and the risk of infection during routine contact. In Oman, geographic distances create additional barriers to providing timely care to rural populations. 
+
+This project details the conceptual design and system architecture of a **Smart Healthcare Robot** tailored for Omani hospitals. The core objective is to design a holistic system that merges three distinct domains into a single platform:
+1. **Autonomous indoor navigation** to independently handle hospital logistics.
+2. **High-fidelity telepresence** to allow remote clinicians to consult with patients.
+3. **Conversational AI** (utilizing Large Language Models) to provide patient engagement, triage, and guidance.
+
+**Key Project Objectives:**
+* Develop a robust autonomous navigation system using LiDAR-based Simultaneous Localization and Mapping (SLAM).
+* Engineer a secure, low-latency audio/visual telepresence interface for remote doctors.
+* Integrate an AI interaction layer for natural dialogue in both English and Arabic.
+* Validate the system in a simulated pilot scenario (e.g., nurse station to patient bed).
+
+The project is structured to span two semesters (Sept 2025 – May 2026), moving from planning and design to implementation, testing, and finalization.
+
+---
+
+## **2. Literature Review and Technical Building Blocks**
+The authors analyzed current robotic successes in consumer (vacuum cleaners), industrial (Amazon fulfillment), and healthcare markets to establish baseline capabilities. 
+
+### **The Healthcare Gap**
+Current medical robotics are heavily fragmented:
+* **Telepresence robots** (e.g., InTouch RP-VITA) enable remote consultations but often require manual driving and feel impersonal.
+* **Socially Assistive Robots (SARs)** (e.g., PARO, NAO) provide excellent patient engagement but lack clinical mobility and telepresence.
+* **Autonomous Mobile Robots (AMRs)** (e.g., PuduBot 2, Keenon M2) excel at logistics and disinfection but offer limited human interaction.
+
+This project addresses the research gap by combining **clinical access**, **patient-centric engagement**, and **operational independence** into one cost-effective system.
+
+### **Technical Technologies Explored:**
+* **Navigation:** The authors evaluated RF localization methods like Ultra-Wideband (UWB) and Bluetooth Angle of Arrival (AoA), as well as Visual/Laser SLAM. They determined that fusing 2D LiDAR with an Inertial Measurement Unit (IMU) and wheel odometry yields the most robust navigation in dynamic hospital corridors.
+* **Conversational AI:** Leading LLMs were compared based on December 2025 pricing. Specialized models like Google's Med-Gemma are too heavy for simple patient interactions. Ultimately, models with vast context windows and cost-efficiencies (like Gemini and DeepSeek) were prioritized.
+
+---
+
+## **3. Requirements and Engineering Constraints**
+To guide design and validation, the project formalizes strict customer and engineering specifications.
+
+### **Customer Requirements (CRs):**
+* **CR1:** Autonomous navigation around static/dynamic obstacles.
+* **CR2:** Remote high-quality video and audio telepresence.
+* **CR3:** Natural language interaction for patient engagement.
+* **CR4:** Infection control (easy-to-clean surfaces).
+* **CR5:** User-friendly interfaces for patients and staff.
+* **CR6:** Continuous operation and autonomous battery charging.
+
+### **Engineering Targets (ERs):**
+* **Position Accuracy:** $\pm 20\text{ cm}$ in mapped environments.
+* **Velocity:** $0.5\text{ to }1.0\text{ m/s}$ in corridors (compliant with ISO 13482 safety standards).
+* **Telepresence:** Minimum 720p resolution at 30 fps; latency $<200\text{ ms}$.
+* **AI Latency:** Conversational responses within 3 seconds.
+* **Uptime:** $4\text{ to }6\text{ hours}$ of continuous operation; minimum $95\%$ docking success rate.
+
+### **Engineering Constraints (ECs):**
+* **Budget:** A strict cap of **\$2,500 USD** (traditional commercial hospital robots cost \$12,000–\$47,500).
+* **Timeline:** Completion within one academic year (9–10 months).
+* **Infrastructure:** Must utilize standard hospital Wi-Fi and accommodate standard Omani corridor widths ($\ge 1.5\text{ m}$).
+
+---
+
+## **4. System Conceptual Design and Selection**
+The authors systematically evaluated three structural alternatives using the **Analytic Hierarchy Process (AHP)** decision-making matrix.
+
+### **The Three Alternatives:**
+* **Alternative A (Commercial Pre-Built Platform):** High cost, low customization, but fast development and certified safety.
+* **Alternative B (Custom-Built Modular Platform):** Very low cost, maximum flexibility, but high technical risk and longest development time.
+* **Alternative C (Hybrid Pre-Built Base with Custom Intelligence):** Merges a commercially proven base with student-developed intelligence layers. 
+
+**Decision:** While Alternative A scored highest mathematically, **Alternative C (Hybrid)** was selected because it perfectly balanced reliability and cost, while allowing the students to innovate on the human-robot interaction (HRI) layer.
+
+### **Component Selection via AHP:**
+* **Robot Platform:** TurtleBot 4 or Yahboom ROS-MASTER X3.
+* **Computing Platform:** **Raspberry Pi 5** (chosen over Jetson Nano and Intel NUC for its superior balance of low cost, power efficiency, and processing capability).
+* **Navigation Approach:** LiDAR-based SLAM utilizing ROS 2 Nav2 stack.
+* **Localization Sensors:** RPLiDAR A1 + Odometry + MPU6050 IMU.
+* **LLM:** **Google Gemini 3 Flash** (chosen for team familiarity, speed, multimodal capabilities, and a low-cost free tier for development).
+
+---
+
+## **5. Subsystem Architecture and Future Work**
+The robot's software and hardware are decomposed into **seven functional subsystems**:
+1. **Mobility:** Translates velocity commands to wheel motions.
+2. **Navigation:** Builds maps, localizes the robot, and plans collision-free paths.
+3. **Perception:** Captures audiovisual streams and checks for close-range obstacles.
+4. **Intelligence:** Processes natural language via the Gemini API.
+5. **Task Management:** Prioritizes hospital tasks, schedules deliveries, and coordinates goals.
+6. **Interface & Communication:** Connects users to an Android tablet app, a web dashboard, and cloud services.
+7. **Power Management:** Monitors the 12V battery and orders autonomous docking when low.
+
+### **Areas of Improvement over Existing Tech:**
+Unlike current commercial hospital robots that are highly proprietary and single-function, this project boasts an **open-source, multi-functional, cost-effective framework**. Furthermore, its design is explicitly localized for Oman, prioritizing Arabic language support and GCC hospital standards.
+
+### **Implementation Roadmap (Future Work):**
+* **Phase 1 (Months 5-6):** Hardware assembly and fine-tuning autonomous navigation in a lab.
+* **Phase 2 (Month 7):** Integration of telepresence, tablet UI, and the Gemini API.
+* **Phase 3 (Month 8):** Full system integration, multi-hour operation testing, and pilot trials in clinical environments.
+* **Advanced Goals:** Future additions mention UV-C disinfection, electronic health record (EHR) integration, and emotional intelligence through facial and vocal prosody analysis.
+
+its just summery of the chapters in C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\reports\fyp-report\sections thats organised by main.tex
+as you can see its mainlyy about the robot as medical machine but after one semster of searching we discoverd something that led us to big challenges
+medical environmetns are one of the slowest to adopt new tech 
+and medicl envirnmets are very painful when it comes to legislation 
+if we wher to go with the same concept wee will be bulding something that will be basically useless or extremly hard to sell 
+so we had to tale the extremly difficult decison to steer little bit away fromthe medical see "C:\Users\oulla\Desktop\SQU\competetions\sumo robot\fyp\tamra-amr-project\reports\eng-gathering\poster-form-submission.md"
+as hard and difficult as it is it was for us the diff between failiure so we tool it 
+
+neat report. nice flow
+engineering report. avoid jargon. natural. 
+30 extra pages only 

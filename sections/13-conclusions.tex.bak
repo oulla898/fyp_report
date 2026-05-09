@@ -1,0 +1,87 @@
+% ============================================================
+%  Chapter 6: Conclusions and Future Works
+% ============================================================
+
+\subsection{Project Summary}
+
+This project set out to design and build an autonomous mobile robot capable of supporting hospital operations --- handling logistics, enabling remote consultation, and providing patients with a natural, conversational interface. Over two semesters, it evolved from a conceptual design exercise into a working integrated system, and in doing so required the team to make several difficult decisions that turned out to be the right ones.
+
+The first semester produced a systematic literature survey of healthcare robotics, a formal requirements specification, a structured AHP-based system architecture selection, and a thorough grounding in ROS~2, SLAM, navigation stacks, and sensor fusion. The second semester converted that foundation into hardware and software reality.
+
+The pivotal decision of the second semester was the platform transition. When iRobot entered bankruptcy proceedings and the iCreate~3 ecosystem became untenable, the team pivoted to a systematic evaluation of eight Chinese-manufactured mobile chassis platforms, ultimately selecting the iMRP500 --- a 500~mm-diameter industrial chassis with 50~kg payload, integrated LiDAR and RGBD sensing, a 6-axis IMU, 12-hour battery life, and an onboard X86 PC running ROS~1. This decision was not a detour. The platform evaluation itself --- reviewing documentation, testing ROS~2 compatibility, assessing mounting options, and benchmarking sensor suites --- is one of the more thorough platform comparisons of Chinese service-robot chassis in the academic literature on affordable healthcare AMRs.
+
+A second strategic decision widened the scope from a narrowly-framed medical device to a general-purpose autonomous service robot framework, validated in a healthcare corridor context. Medical environments impose regulatory and certification barriers that lie far outside the scope of a single academic year. Reframing TAMRA as a task-agnostic platform --- capable of operating in hospitals, hospitality environments, campuses, and facilities management contexts --- preserves all the technical contributions while making meaningful deployment a realistic near-term outcome.
+
+The resulting system, TAMRA (Task-Agnostic Modular Robotic Apparatus), integrates:
+\begin{itemize}
+    \item An industrial mobile chassis (iMRP500) with LiDAR SLAM and Nav2-based autonomous navigation achieving $\pm$5~cm positioning accuracy across mapped environments.
+    \item A custom-designed and locally fabricated ergonomic body shell: 900~mm tall, 500~mm base footprint, oak-veneer surface finish, 40° tilted display, integrated rear storage compartment, weight under 12~kg.
+    \item A semantic task orchestrator (Gemini~3 Flash) that converts free-form English or Arabic voice commands into structured, streaming, multi-step mission plans executed by an on-board mission engine.
+    \item A real-time voice interface (ElevenLabs Conversational AI + Gemini~3.1 Live) with end-to-end voice-to-action latency of $1.55 \pm 0.31$~s ($N=20$, all trials below 3~s).
+    \item An MQTT-bridged remote dashboard enabling remote navigation control, live map viewing, telepresence, and fleet-ready task management from any internet-connected device.
+    \item A dual-network tablet deployment solved through a custom ADB boot daemon, enabling simultaneous local Ethernet (robot control) and campus WiFi (cloud AI) connectivity on an Android device.
+\end{itemize}
+
+The complete system is realised at USD~3,240 --- a 73\% cost reduction compared to the nearest commercially available platform offering equivalent capabilities, and a fraction of the USD~12,000--USD~47,500 range occupied by commercial hospital AMRs such as the PuduBot~2 and Keenon M2.
+
+% -------------------------------------------------------
+\subsection{Areas of Improvement}
+% -------------------------------------------------------
+
+The implementation revealed several areas where the current system falls short of what a more mature deployment would require.
+
+\paragraph{Navigation robustness in dynamic environments.}
+The iMRP500's navigation stack is well-calibrated for static maps. In high-traffic corridors with many simultaneous moving obstacles --- people, trolleys, doors --- the global planner occasionally replans inefficiently, resulting in brief stops before a new path is selected. A more adaptive dynamic obstacle layer, or an upgraded local planner, would improve fluency in busy environments.
+
+\paragraph{Voice recognition accuracy in ambient noise.}
+The ElevenLabs ASR pipeline performs well in quiet environments. In environments with background noise typical of hospital reception areas (announcements, conversations, equipment sounds), word error rates increase noticeably. Hardware-level echo cancellation (a directional microphone array) or server-side noise suppression tuned to hospital acoustic profiles would address this.
+
+\paragraph{Display visibility.}
+The 10-inch 1080p display is adequate for one-to-one interaction at close range but has limited off-axis visibility and insufficient brightness for operation near windows or in strongly lit lobbies. A higher-brightness panel, or an anti-glare coating on the acrylic frame, would improve legibility.
+
+\paragraph{Autonomous docking reliability.}
+Autonomous return to the charging dock was tested under controlled conditions. In a live deployment, small localisation drift accumulated over a long shift can cause the robot to miss the dock contact. A short-range IR or UWB beacon at the dock, used for fine-approach correction, would increase docking success rate toward the 95\% engineering requirement.
+
+\paragraph{Body shell durability.}
+The wood-and-acrylic body shell meets the structural requirements for the current project timeline. For a long-term deployment, the wood subframe would need to be replaced with aluminium extrusion, and the veneer surface treatment would require periodic maintenance. The parametric Fusion~360 model makes this material substitution straightforward without dimensional changes.
+
+\paragraph{Arabic language coverage.}
+The orchestrator and voice pipeline support Arabic, but the testing conducted in this project used primarily English commands. Arabic speech recognition accuracy and orchestrator response quality in Arabic should be evaluated systematically with native speakers before Arabic is offered as a primary interaction language.
+
+% -------------------------------------------------------
+\subsection{Future Works}
+% -------------------------------------------------------
+
+\paragraph{Multi-robot fleet coordination.}
+The MQTT bridge architecture supports multiple robots publishing to distinct topic namespaces from a single dashboard. The next step is to implement a fleet manager that can distribute tasks across a pool of TAMRA units, prevent waypoint conflicts, and rebalance loads when one robot goes to charge. ROS~2's DDS-based distributed computing layer provides the underlying communication primitives for this.
+
+\paragraph{Scheduled and recurring missions.}
+The cron scheduler in the current mission engine supports POSIX five-field expressions and has been tested for simple recurring patterns (hourly patrol, nightly dock return). Extending this to more complex temporal constraints --- ``deliver medications at 08:00, 14:00, and 20:00 on weekdays, skipping public holidays'' --- requires calendar integration and exception handling logic that is a natural near-term extension.
+
+\paragraph{Hospital Information System integration.}
+Connecting TAMRA to a hospital's HIS or electronic health record (EHR) system would allow the orchestrator to read patient room assignments, scheduled deliveries, and ward status dynamically, rather than relying on manually configured waypoints. This integration requires compliance with HL7/FHIR data standards and appropriate access controls, and represents the primary path toward clinical deployment.
+
+\paragraph{Emotional intelligence and affective response.}
+The current voice interface is transactional: the robot completes tasks and responds to queries. Adding affective computing --- detecting stress or distress in the patient's voice through prosody analysis, or recognising facial expressions via the RGBD camera --- would allow the robot to adapt its tone and responses to the emotional state of the person it is interacting with. This is particularly valuable for paediatric and elderly patient populations.
+
+\paragraph{UV-C disinfection module.}
+The storage compartment and upper tray mounting points provide a structural basis for adding a UV-C emitter module for autonomous disinfection runs during off-peak hours. UV-C integration would require safety interlocks (the emitter must be disabled when people are detected nearby) and scheduling logic that coordinates with the patrol mission type.
+
+\paragraph{UWB docking assistance.}
+Ultra-wideband ranging at the charging dock would provide centimetre-level approach guidance independent of LiDAR localisation drift. A single UWB anchor at the dock and a corresponding tag on the chassis base would correct the final approach and improve docking success rate to the 95\% engineering target under all operating conditions.
+
+\paragraph{Longitudinal field study.}
+The most important future work is deployment in a real operating environment. A structured field study in a hospital, hotel, or campus building --- measuring staff workload reduction, patient interaction quality, navigation reliability over multi-week operation, and maintenance burden --- would provide the empirical grounding that laboratory bench tests cannot. The open architecture and low hardware cost of TAMRA make it viable to deploy multiple units for such a study without the procurement barriers associated with commercial platforms.
+
+\paragraph{Generalisation to other service contexts.}
+TAMRA was validated in a healthcare corridor. The same hardware and software stack applies directly to hotel concierge services (delivering items to rooms, responding to guest questions), airport wayfinding, library book retrieval, and facilities management. Each context requires a different waypoint map and orchestrator prompt configuration but no architectural changes. Demonstrating the platform across multiple service contexts would substantiate the task-agnostic design claim.
+
+% -------------------------------------------------------
+\subsection{Closing Remarks}
+% -------------------------------------------------------
+
+Service robotics is at a turning point. The hardware required to build a capable autonomous mobile robot has become affordable. The AI required to give that robot a natural voice and a reasoning capability has become accessible. What remains difficult is integration --- combining navigation, voice, task management, network communication, and physical design into a system that is reliable enough to be genuinely useful.
+
+TAMRA demonstrates that this integration is achievable by a two-person undergraduate team, at a cost that makes it realistic for hospitals, businesses, and institutions that cannot afford commercial alternatives. The platform is open, documented, and extensible. Every engineering decision made during this project --- the platform selection, the material choices, the software architecture, the network routing solution --- is recorded in this report so that the next team, the next institution, or the next generation of this system can build on it rather than repeating it.
+
+The first semester built the knowledge. The second semester built the machine.

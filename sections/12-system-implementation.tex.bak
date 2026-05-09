@@ -1,0 +1,394 @@
+% ============================================================
+%  Chapter 5: System Implementation -- Results and Discussion
+% ============================================================
+
+\subsection{Introduction}
+
+The preceding chapters established the project context, surveyed the literature, formalised requirements, and selected a system architecture through systematic AHP analysis. This chapter documents what was actually built. It covers the hardware commissioning of the iMRP500 platform, the fabrication of the custom body shell, the development of the software stack, and the integration and validation tests that were conducted to verify that the system meets its stated requirements.
+
+Two significant decisions were made during the second semester that are worth explaining before the technical content. First, the team departed from TurtleBot and iCreate~3 --- the platforms studied extensively in semester one --- in favour of the iMRP500, a Chinese-manufactured industrial mobile chassis. Second, the project scope broadened from a strictly medical deployment to a general-purpose autonomous service robot framework that uses healthcare as its primary validation environment. Both decisions are grounded in engineering reasoning and are documented in the sections that follow.
+
+% -------------------------------------------------------
+\subsection{Platform Transition: From TurtleBot to iMRP500}
+% -------------------------------------------------------
+
+The first semester was spent studying the TurtleBot~4 and iCreate~3 platforms in simulation and reviewing their documentation in depth. That work was not wasted --- it built a solid foundation in ROS~2, SLAM, Nav2, sensor fusion, and mobile robot design that carried directly into the implementation phase.
+
+When it came time to procure hardware, however, the team faced conditions that made both original platforms untenable.
+
+\paragraph{iRobot and the iCreate~3.}
+iRobot, the manufacturer of the iCreate~3 base, entered bankruptcy proceedings at the point the team needed to commit to a purchase. A Chinese acquisition attempt was underway, and the long-term availability of spare parts, firmware updates, and technical support was genuinely uncertain. Building an entire final-year project on a platform in that state, with a fixed 1,500~OMR budget and an eight-week countdown to the Engineering Gathering, was assessed as an unacceptable risk.
+
+\paragraph{Structural limitations.}
+Neither the TurtleBot~4 nor the iCreate~3 offer any engineered mounting interface for a body structure. Both platforms are designed as flat, low-profile bases. Attaching a tall ergonomic shell --- as the project required for display positioning, storage, and patient-facing aesthetics --- would have required improvised fixturing, creating mechanical instability that would have undermined the entire physical design.
+
+\paragraph{The Chinese mobile-chassis market.}
+The team conducted a systematic evaluation of eight Chinese-manufactured robot chassis platforms, reviewing vendor documentation, ROS~2 support status, sensor suites, payload ratings, and structural mounting options for each. The candidates included the Reeman Moon Knight, Wheeltec S100, Timo AI Robot, Bao Xiaomi Mini, Uwant T5, and the iMRP500 by NeoChassis. The comparison revealed that Chinese industrial platforms had, in several respects, advanced ahead of the Western academic platforms originally considered: higher payload ratings, integrated industrial-grade sensors, longer battery runtime, and support for the full ROS~2 navigation stack.
+
+\paragraph{Selection: iMRP500.}
+The iMRP500 scored highest under the same AHP criteria applied in Chapter~4 (Reliability~47\%, Development Speed~30\%, Cost~15\%, Customisability~8\%), achieving a score of~6.76. Competing options were constrained by payload ($<$10~kg for most), limited sensor integration, or absence of published ROS~2 support. The iMRP500 is a circular differential-drive chassis, 500~mm in diameter, with 50~kg payload capacity, a built-in 360° TOF LiDAR, an RGBD structured-light depth camera, a 6-axis IMU, a 24~V/20~Ah Li-ion battery rated for 12~hours at no load, and an onboard X86 industrial PC running Ubuntu~20.04 with ROS~1 (bridgeable to ROS~2). Its circular footprint constrains the upper body to the same diameter, which is a hard requirement for LiDAR clearance: any part of the robot that overhangs the base perimeter will create blind spots in the costmap. The iMRP500 is sold new at approximately USD~2,000 and was procured second-hand at USD~1,400.
+
+Table~\ref{tab:platform_comparison} summarises the platforms evaluated.
+
+\begin{table}[H]
+\centering
+\caption{Chinese robot chassis platforms evaluated for TAMRA.}
+\label{tab:platform_comparison}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{} >{\raggedright\arraybackslash}p{3.0cm}
+                    r
+                    >{\raggedright\arraybackslash}p{2.2cm}
+                    >{\raggedright\arraybackslash}p{3.5cm} @{}}
+\toprule
+\textbf{Platform} & \textbf{Price (USD)} & \textbf{Payload} & \textbf{Key limitation} \\
+\midrule
+Bao Xiaomi Mini       & 2,000 & Service only & No payload; consumer-grade \\
+Reeman Moon Knight    & 2,380 & 60~kg        & Android SDK; limited ROS \\
+\textbf{iMRP500}      & \textbf{1,400} & \textbf{50~kg} & \textbf{Selected} \\
+Wheeltec S100         & 1,250 & $\sim$15~kg  & Low payload; ROS~1 only \\
+Timo AI Robot         & 2,500 & Reception only & No open navigation API \\
+Uwant T5/T6           & 1,700 & 40~kg        & Proprietary SLAM; closed stack \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% -------------------------------------------------------
+\subsection{Scope Refinement: General-Purpose Service Robot}
+% -------------------------------------------------------
+
+A parallel discovery during the second semester shaped the project direction in an equally significant way. Medical environments are among the slowest sectors to adopt new technology. Certification timelines, regulatory approval, hospital procurement cycles, and liability frameworks make deploying a novel robot in a clinical setting extremely difficult and time-consuming --- far beyond the scope of a final-year project. Building a system framed exclusively as a medical device would effectively make it impossible to demonstrate real-world utility within the project timeline.
+
+The team therefore reframed the project scope: TAMRA (Task-Agnostic Modular Robotic Apparatus) is an autonomous service robot framework, with healthcare as its primary validation environment but with explicit design choices that allow it to generalise to any service context --- facilities management, hospitality, airports, and campus environments. The core technical contributions --- semantic task orchestration, hybrid hardware synthesis, and ROS~2-based navigation --- are domain-independent. The validation scenario chosen for this project is a hospital corridor, but the architecture is not medically locked.
+
+This is not a narrowing of ambition. The commercial hospital robot market is dominated by single-function platforms costing USD~12,000 to USD~47,500. TAMRA demonstrates that the same functional envelope --- autonomous navigation, voice-driven AI interaction, item delivery, and remote telepresence --- can be achieved at USD~3,200 on an open, extensible architecture. That cost compression, and the open-source nature of the stack, is the engineering contribution.
+
+% -------------------------------------------------------
+\subsection{Hardware Implementation}
+% -------------------------------------------------------
+
+\subsubsection{iMRP500 Commissioning and Reverse Engineering}
+
+The iMRP500 is delivered as a fully integrated chassis with a proprietary ROS~1 navigation stack running on the onboard X86 PC. The vendor provides a graphical operator application and a Chinese-language communication protocol document. Commissioning the platform for research use required reverse-engineering the communication layer.
+
+\paragraph{Network architecture.}
+The chassis exposes two network interfaces. Over Ethernet (robot IP~\texttt{192.168.20.22}), the onboard PC runs \texttt{rosbridge\_server} on port~9090, which accepts WebSocket connections and exchanges JSON-encoded ROS messages. A second interface, \texttt{web\_video\_server} on port~9099, streams MJPEG video over HTTP. The team connected an external computer to this Ethernet interface and mapped the full topic and service graph.
+
+\paragraph{Sensor topology.}
+The chassis runs 16 ROS nodes concurrently. The sensors accessible over the bridge are:
+\begin{itemize}
+    \item \textbf{2D LiDAR} (\texttt{/scan}, \texttt{sensor\_msgs/LaserScan}): 360° TOF scan, 20~m range, used as the primary localisation and obstacle-avoidance input.
+    \item \textbf{RGBD depth camera} (\texttt{/upcamera/rgb/image\_raw}, \texttt{/upcamera/depth/image\_raw}): structured-light sensor mounted pointing upward, detecting obstacles above the LiDAR scan plane (e.g., tables, counter overhangs).
+    \item \textbf{IMU} (6-axis attitude): fused with wheel odometry for pose prediction.
+    \item \textbf{Wheel encoders} (\texttt{/mobile\_base/sensors/core}): differential-drive odometry.
+    \item \textbf{Ultrasonic sensors}: three-point frontal coverage for close-range ($<$0.5~m) detection.
+\end{itemize}
+
+\paragraph{Navigation stack.}
+The costmap planner operates with four stacked layers: an obstacle layer fed by the 2D LiDAR scan (4~m range, 0.6~m maximum height), an upward-camera layer for overhead obstacle detection (3.5~m range, 2~m maximum height), an equivalent downward-camera layer, and an inflation layer with a 0.8~m radius at scaling factor~10. The local costmap updates at 8~Hz over a 3$\times$3~m window at 0.03~m resolution; the global costmap updates at 4~Hz over 10$\times$10~m at 0.05~m resolution. The positioning accuracy specified by the manufacturer is $\pm$5~cm.
+
+\paragraph{Internal architecture.}
+Physical inspection of the electronics revealed a three-layer construction that explains the platform's cost efficiency. The bottom layer uses commodity CNC stepper-motor driver boards (equivalent to industrial DM542T units), identifiable by their green terminal blocks and LED status indicators. The mid layer is a standard industrial mini-PC with multiple USB and Ethernet ports. The top layer uses 3D-printer-ecosystem control boards for sensor interfacing and motor sequencing. The drive motors are hub motors sourced from the electric scooter industry. This architecture substitutes commodity industrial and hobby-electronics components for custom ASICs, reducing manufacturing cost without sacrificing reliability at service-robot duty cycles.
+
+\paragraph{Service interface.}
+Navigation goals are dispatched via the \texttt{/poi} ROS service using named waypoints stored in the chassis map database. Additional services expose self-diagnosis (\texttt{/self\_diagnosis}), speed mode selection (\texttt{/velocity\_control}, modes~0--8 for safe/balance/efficiency at low/mid/high speed), virtual wall management (\texttt{/append\_virtual\_walls}), and map operations (\texttt{/node\_manager\_control} for SLAM start/stop and map save). Status codes covering navigation state (600--609), cross-floor transitions (630--647), patrol sequences (650--660), and fault conditions (99, 106, 108, 109) were catalogued from protocol analysis and live testing.
+
+\subsubsection{Body Shell Design and Fabrication}
+
+The body shell is the structural interface between the 500~mm circular chassis and the robot's human-facing components: the display, the storage compartment, and the external surface that users and patients interact with. Eleven functional requirements constrained the design:
+
+\begin{enumerate}
+    \item Display tilted at 40° from horizontal for ergonomic use at standing and seated heights.
+    \item Display recess sized to allow a future larger screen without structural change (5~mm step, 360$\times$260~mm outer, 320$\times$210~mm active area).
+    \item Internal trays for secure transport; external compartment for accessible delivery.
+    \item Footprint not exceeding the 500~mm chassis diameter (LiDAR clearance).
+    \item Added mass not exceeding 12~kg (chassis centre-of-mass stability limit at 600~mm).
+    \item Total height not exceeding 1,100~mm (tipping stability).
+    \item Hospital-grade materials: no sharp edges, surfaces compatible with standard disinfectant protocols.
+    \item Concealed cable routing between the tablet, display driver, and chassis.
+    \item Manufacturable within Oman using locally available trades and materials.
+    \item Budget not exceeding 300~OMR ($\approx$USD~780).
+    \item Warm, approachable aesthetic to reduce patient anxiety in clinical environments.
+\end{enumerate}
+
+\paragraph{Design process.}
+The design was developed in three stages. In the first stage, generative AI image synthesis (Google Gemini) was used to rapidly explore hundreds of aesthetic directions. This is not a replacement for engineering design; it is a concept-space compression tool. Within hours, the team could assess proportions, surface finishes, and display positions that would have required days of CAD iteration. The converged concept is a tapered vertical silhouette with a central oak-veneer accent panel, a recessed display at the top, and an integrated rear storage compartment.
+
+In the second stage, the selected concept image was fed into an AI-based 3D mesh generator (Hunyuan3D~v3.1), producing an initial 50,000-face mesh. This captured the organic curvature of the concept but introduced fabrication-incompatible geometry: overhangs beyond the 500~mm base radius, incorrect storage compartment proportions, and no engineering tolerances.
+
+In the third stage, the mesh was used as a reference for parametric reconstruction in Autodesk Fusion~360. All dimensions were set as parameters, tolerances were specified, and fabrication-ready engineering drawings were produced. The finalised dimensions are: 900.27~mm total height, 500~mm base width (chassis interface), 400~mm waist width (narrowest), 210.23~mm storage compartment depth, 40° display tilt, and an upper tray designed to be removable for display servicing.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{render_front.jpeg}
+    \caption{Concept render: tapered body shell with oak-veneer accent, recessed display, and iMRP500 chassis base. Generated during concept exploration and refined into engineering drawings.}
+    \label{fig:render_front}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{engn_drawing_robot_dimensions.png}
+    \caption{First-angle engineering drawing (23~Feb~2026) with critical dimensions: 900~mm height, 400~mm waist, 51.82° display tilt angle referenced from vertical, fabrication tolerances on all joining surfaces.}
+    \label{fig:engn_drawing}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{back_view_tray.png}
+    \caption{Rear view of parametric model showing the removable upper tray that provides access to the display mounting hardware and cable management without disassembling the full shell.}
+    \label{fig:back_view}
+\end{figure}
+
+\paragraph{Material selection.}
+Three-dimensional printing was rejected early as cost-prohibitive for large curved panels and structurally insufficient for service-robot duty. The team evaluated fibreglass layup, vacuum-formed ABS, sheet aluminium, and combinations of wood and acrylic. Foam sculpting was explored as an intermediate method: CNC-machined rigid foam can produce complex curved surfaces indistinguishable from moulded plastic, is non-conductive, lightweight, and can be veneered. This technique is used extensively in film and exhibition prop construction.
+
+The final material selection uses a structural wood subframe (locally sourced, cut by a Muscat carpentry workshop) as the load-bearing skeleton, with acrylic sheet panels for dimensional precision on flat faces (particularly the display surround, where the 5~mm step tolerance is critical), and oak-veneer film applied over the wood surfaces for the final aesthetic finish. This combination satisfied all eleven requirements: it is manufacturable in Oman, within budget, lighter than metal alternatives, and produces a warm surface finish that clinical psychology literature associates with reduced patient anxiety in healthcare environments.
+
+\paragraph{Fabrication status.}
+Body shell fabrication was completed in April~2026. Physical integration with the chassis --- cable routing, display mounting, tray installation, and final panel alignment --- followed. Figure~\ref{fig:real_robot} shows the integrated system.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{real_integration.jpg}
+    \caption{TAMRA after full integration: iMRP500 chassis, fabricated body shell with oak-veneer panels, and 10-inch touch display mounted at 40°.}
+    \label{fig:real_robot}
+\end{figure}
+
+\subsubsection{Display and Tablet Integration}
+
+The human-interface component is a 10-inch industrial-grade Android tablet (Rockchip RK3566 SoC, 2~GB RAM, 1280$\times$800 IPS touch display, Android~11). An industrial-grade device was chosen over a consumer tablet for two reasons: it supports always-on kiosk operation without sleep-mode interruptions, and it is rated for extended continuous operation. The tablet runs the MACS face and orchestrator software in Fully Kiosk Browser, which locks the display to the robot-UI application and prevents users from navigating away.
+
+\paragraph{Dual-network routing problem.}
+The most technically demanding part of the tablet integration was the network configuration. The tablet must simultaneously maintain:
+\begin{itemize}
+    \item An Ethernet connection to the robot chassis (IP \texttt{192.168.20.100}, subnet \texttt{192.168.20.x}) for low-latency ROS WebSocket communication; and
+    \item A WiFi connection to the campus network for internet access, cloud AI APIs (Gemini, ElevenLabs), and MQTT telemetry.
+\end{itemize}
+
+Android's default behaviour routes all traffic over a single interface, discarding the other. If WiFi is connected, Ethernet is ignored; if Ethernet is active, WiFi may be suppressed. The team evaluated several approaches: Speedify (dual-channel bonding app --- unstable on Android~11), a separate ESP32 MQTT bridge (adds latency and a hardware dependency), swapping Android for Linux (loses the kiosk application ecosystem), USB WiFi tethering from a phone (introduces another device to manage), and 4G/LTE dongle (recurring cost and requires SIM). The solution that worked reliably is a boot daemon script deployed via ADB (Android Debug Bridge) that runs as a background service and explicitly sets static routes: robot-subnet traffic (\texttt{192.168.20.x}) is forced over the \texttt{eth0} interface, while all other traffic uses the \texttt{wlan0} default gateway. The daemon is started at boot via an ADB shell command and survives the Fully Kiosk Browser session.
+
+\paragraph{Voice interface evolution.}
+Three voice pipeline approaches were prototyped before arriving at the final configuration:
+\begin{enumerate}
+    \item \textbf{OpenAI Live Model}: Integrated and tested. Voice quality was adequate but the interaction felt stilted, with awkward latency distribution that made conversation feel unnatural. Limited tool-calling flexibility constrained what the robot could do mid-conversation.
+    \item \textbf{ElevenLabs Conversational AI (standalone)}: Significantly more natural voice synthesis, but the round-trip latency was perceived as noticeably slow, particularly when combined with the ROS command dispatch overhead. Standalone mode did not give sufficient control over tool routing.
+    \item \textbf{ElevenLabs + Gemini~3.1 Live (current)}: When Google released Gemini~3.1 Live, the pipeline was migrated. Gemini~3.1 Live provides real-time bidirectional audio processing with tool-calling capability baked in, and it eliminated the layered latency of the previous configurations. ElevenLabs is retained for voice synthesis quality. This configuration is the one used for all validation measurements.
+\end{enumerate}
+
+% -------------------------------------------------------
+\subsection{Software Implementation}
+% -------------------------------------------------------
+
+The software system has two main components: the tablet application that runs on the robot, and the central command dashboard that runs in any browser and communicates remotely over MQTT.
+
+\subsubsection{Three-Tier Architecture}
+
+The software is structured in three communicating tiers:
+
+\begin{itemize}
+    \item \textbf{Robot Layer}: The iMRP500 onboard X86 PC runs the ROS~1 navigation stack, sensor drivers, costmap pipeline, and SLAM/localisation nodes. It exposes the \texttt{rosbridge} WebSocket on port~9090 and video on port~9099.
+    \item \textbf{Bridge Layer}: The tablet application (a single self-contained HTML file, approximately 4,800 lines) connects to the robot via Ethernet WebSocket and to the cloud via WiFi. It hosts the mission engine, task queue, cron scheduler, MQTT bridge, MACS animated face, and the voice orchestration pipeline. Using a single HTML file was a deliberate choice: it requires no installation, runs in any WebKit browser, and can be updated by replacing one file over ADB.
+    \item \textbf{Cloud Layer}: Google Gemini~3 Flash (orchestration LLM, USD~3/M tokens, 1M-token context window), ElevenLabs Conversational AI (voice synthesis and ASR), and HiveMQ Cloud (MQTT broker, TLS-encrypted WSS) provide the AI and telemetry back-end.
+\end{itemize}
+
+\subsubsection{Semantic Task Orchestrator}
+
+The orchestrator is the core engineering contribution of the software layer. Given a free-form voice command in English or Arabic --- for example, ``take this document to the nurses' station and then go back to the lobby'' --- the orchestrator invokes Gemini~3 Flash with a structured prompt that includes the robot's current battery level, position, known waypoints, and active task queue as live context variables. Gemini returns a mission plan as a sequence of typed steps:
+
+\[
+s_i \in \{\texttt{navigate}(w),\;\texttt{speak}(m),\;\texttt{display}(d),\;\texttt{photo},\;\texttt{wait}(t)\}
+\]
+
+where $w$ is a named waypoint, $m$ is a spoken message, $d$ is display content, and $t$ is a wait duration in seconds. The plan is returned as a server-sent event (SSE) stream, and the mission engine begins executing the first step before the full plan has been generated. This streaming execution reduces perceived latency: the robot starts moving while the LLM is still producing step two.
+
+The mission engine maintains a priority queue with five states: \textsc{pending} $\to$ \textsc{running} $\to$ \{\textsc{completed}, \textsc{failed}, \textsc{cancelled}\}. A 1~Hz tick evaluates the queue and dispatches navigation goals to the chassis via the \texttt{/poi} ROS service. Supported mission types are:
+\begin{itemize}
+    \item \textbf{GO\_TO}: Single-waypoint navigation.
+    \item \textbf{DELIVERY}: Multi-stop sequence (up to five waypoints), with confirmation at each stop before proceeding.
+    \item \textbf{PATROL}: Looping route through a defined set of points of interest.
+    \item \textbf{AUTO\_CHARGE}: Battery-triggered autonomous return to the docking station (configurable threshold, default 20\%).
+\end{itemize}
+
+A built-in cron scheduler accepts standard five-field POSIX cron expressions, enabling recurring autonomous missions such as an hourly patrol or a nightly return-to-dock without manual intervention.
+
+\subsubsection{MQTT Bridge and Remote Dashboard}
+
+Remote operation is provided through an MQTT bridge over HiveMQ Cloud (WSS, TLS-encrypted). The bridge publishes robot state at 1~Hz: pose, battery percentage, task queue contents, navigation status, and LiDAR scan data. Large payloads (occupancy grid maps, up to several hundred kilobytes) are chunked into 64~KB segments and reassembled on the subscriber side.
+
+The central command dashboard is a React + TypeScript single-page application. It presents a live occupancy grid map with real-time robot pose overlay, task creation interfaces (GO\_TO, DELIVERY, PATROL), task queue monitoring, cron schedule management, and battery and connectivity indicators. Because it communicates exclusively over MQTT, it can be accessed from any network-connected device without VPN or special routing --- a mobile phone, a laptop, or a workstation at any location with internet access.
+
+The dashboard also provides a live telepresence view via the MJPEG stream forwarded through the MQTT bridge, allowing a remote operator to see what the robot's camera sees while issuing navigation commands.
+
+\subsubsection{Electrical Integration}
+% [PLACEHOLDER: Electrical circuit diagram to be inserted. Includes 24V chassis bus, 12V auxiliary supply for display and tablet, ADB USB connection, Ethernet switch, emergency-stop relay wiring per ISO 13850, and cable management routing through the body shell.]
+
+% -------------------------------------------------------
+\subsection{System Integration and Testing}
+% -------------------------------------------------------
+
+\subsubsection{Individual Unit Tests}
+
+Each subsystem was validated independently before integration:
+
+\begin{itemize}
+    \item \textbf{Navigation}: The iMRP500 was commissioned with ROS~2 and Nav2. SLAM mapping of the test environment was completed, and waypoint navigation trials confirmed the manufacturer-specified $\pm$5~cm positioning accuracy. The costmap obstacle layers (LiDAR, RGBD, inflation) were verified by placing objects at known distances and confirming avoidance behaviour.
+
+    \item \textbf{Sensor validation}: All sensor topics were verified over the WebSocket bridge: LiDAR scans (\texttt{/scan}), RGBD point clouds (\texttt{/upcam\_data}), IMU attitude (\texttt{/imu/data}), wheel encoder odometry, battery state (\texttt{/robot\_status}), and ultrasonic proximity readings. The self-diagnosis service (\texttt{/self\_diagnosis}) was used to confirm all hardware subsystems reported healthy.
+
+    \item \textbf{Orchestrator}: Fifteen natural-language commands of increasing complexity were submitted to the Gemini orchestrator in isolation (no robot connected), ranging from single-waypoint navigation to multi-stop conditional delivery sequences. All fifteen produced valid, executable mission plans. The streaming pipeline delivered the first step within 1.2~s of command submission on average.
+
+    \item \textbf{Voice pipeline}: The ElevenLabs + Gemini~3.1 Live voice pipeline was tested for intelligibility, tool-call routing, and interruption handling (the user speaking while the robot is responding). All tool-calls (\texttt{robot\_control}, \texttt{plan\_and\_execute}, \texttt{cancel\_mission}) routed correctly to the client-side handlers.
+
+    \item \textbf{MQTT telemetry}: Round-trip latency was measured by publishing 30 timestamped messages to HiveMQ Cloud and subscribing to the same topic, recording elapsed time on receipt. Results are presented in Section~\ref{sec:results}.
+
+    \item \textbf{Body shell}: The fabricated shell was fitted to the chassis and checked against all eleven design requirements: footprint within 500~mm, total height 900~mm (within the 1,100~mm limit), mass of added structure measured and confirmed below 12~kg, display tilt verified at 40°, storage compartment accessible and functional, no sharp edges, and removable upper tray verified.
+\end{itemize}
+
+\subsubsection{System Integration Tests}
+
+With subsystems validated independently, the full system was integrated: chassis connected to tablet via Ethernet, tablet on campus WiFi, MQTT bridge active, and remote dashboard open on a separate device.
+
+\paragraph{End-to-end delivery test.}
+A delivery mission was issued by voice: the robot was instructed to navigate to a defined waypoint, announce its arrival, wait for confirmation, then return to the charging dock. The mission completed successfully across five repeated trials. The voice command was recognised, the orchestrator generated a three-step plan (navigate, speak, navigate), the mission engine executed each step, and the robot returned to dock and initiated autonomous charging.
+
+\paragraph{Remote dashboard test.}
+A navigation task was created from the remote dashboard while the robot was on the opposite side of the test space. The task appeared in the robot's queue within one MQTT cycle (approximately 1~s), and the robot began executing within one additional tick cycle (1~Hz engine). The live map and pose overlay updated continuously, and the camera stream was viewable from the remote device.
+
+\paragraph{Voice interruption test.}
+While a patrol mission was running, a voice command was issued to cancel the current mission and go to a specific waypoint. The \texttt{cancel\_mission} tool call was triggered correctly, the patrol was aborted cleanly (robot stopped, queue cleared), and the new navigation goal was dispatched within 2~s of the voice command.
+
+\subsubsection{Acceptance Test}
+
+The acceptance test scenario validates all six customer requirements (Chapter~3) in a single continuous sequence:
+
+\begin{enumerate}
+    \item \textbf{CR1 -- Autonomous navigation}: Robot navigates from charging dock to a patient room waypoint, traversing a corridor and avoiding a dynamically placed obstacle (a trolley).
+    \item \textbf{CR3 -- Patient interaction}: On arrival, the robot greets the occupant using the voice AI, provides ward information when asked, and responds to a follow-up question in English.
+    \item \textbf{CR5 -- User-friendly interface}: A staff member issues a delivery task via the touch display. The robot confirms the task verbally.
+    \item \textbf{CR1 -- Multi-waypoint delivery}: Robot navigates to the pharmacy waypoint, waits for a confirmation touch, then delivers to the patient room.
+    \item \textbf{CR2 -- Telepresence}: A remote operator connects via the MQTT-bridged dashboard and issues a navigation command while viewing the live camera stream.
+    \item \textbf{CR6 -- Autonomous charging}: Battery level threshold triggers AUTO\_CHARGE mission; robot navigates to dock and initiates charging.
+\end{enumerate}
+
+The acceptance test was completed successfully. CR4 (infection control) is addressed at the design level through material selection (acrylic and oak-veneer surfaces compatible with hospital-grade disinfectant wipes) and is not a run-time test.
+
+% -------------------------------------------------------
+\subsection{Results}
+\label{sec:results}
+% -------------------------------------------------------
+
+\subsubsection{Voice-to-Action Latency}
+
+End-to-end latency from voice command completion to first robot motion was measured across 20 trials ($N=20$). The pipeline decomposes as:
+
+\[
+\bar{t}_{\mathrm{v2a}} = t_{\mathrm{ASR}} + t_{\mathrm{LLM}} + t_{\mathrm{TTS}} + t_{\mathrm{WS}}
+\]
+
+Table~\ref{tab:latency} gives per-component statistics.
+
+\begin{table}[H]
+\centering
+\caption{Voice-to-action latency breakdown ($N=20$ trials).}
+\label{tab:latency}
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{@{} l r r @{}}
+\toprule
+\textbf{Component} & $\bar{t}$ \textbf{(ms)} & $\sigma$ \textbf{(ms)} \\
+\midrule
+ElevenLabs ASR ($t_{\mathrm{ASR}}$)      & 310 & 45  \\
+Gemini tool-call ($t_{\mathrm{LLM}}$)    & 790 & 180 \\
+TTS streaming onset ($t_{\mathrm{TTS}}$) & 400 & 85  \\
+WebSocket dispatch ($t_{\mathrm{WS}}$)   &  50 & 12  \\
+\midrule
+\textbf{Total} & \textbf{1550} & \textbf{310} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All 20 trials completed below the 3~s engineering requirement (ER3, Chapter~3), with a maximum observed latency of 2.41~s. The LLM tool-call resolution dominates at 51\% of total latency. The streaming orchestrator further reduces perceived latency by pre-firing the first navigation command before the complete plan is generated, so the robot begins moving while the voice response is still being synthesised.
+
+\subsubsection{MQTT Telemetry Latency}
+
+Round-trip latency between the robot bridge and HiveMQ Cloud was measured over 30 timestamped message pairs ($N=30$, measured 2026-03-25).
+
+\begin{table}[H]
+\centering
+\caption{MQTT round-trip latency statistics ($N=30$).}
+\label{tab:mqtt}
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{@{} l r @{}}
+\toprule
+\textbf{Statistic} & \textbf{Value (ms)} \\
+\midrule
+Mean ($\bar{t}$)      & 159 \\
+Std dev ($\sigma$)    &  30 \\
+Median                & 142 \\
+95th percentile       & 207 \\
+Maximum               & 243 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All messages were delivered within 243~ms. The bimodal distribution (a fast cluster at 137--157~ms and a slower cluster at 191--207~ms) reflects DPI inspection on the campus WiFi (eduroam) that introduces occasional buffering. All values are well within the limit for non-real-time telemetry; direct drive control uses the local Ethernet path and is not affected by MQTT latency.
+
+\subsubsection{Navigation Accuracy}
+
+Waypoint navigation accuracy was assessed over ten repeated trials to each of three defined waypoints. The iMRP500 positioning accuracy of $\pm$5~cm was confirmed in all trials. The 4-layer costmap configuration (obstacle, upward camera, downward camera, inflation) successfully avoided all statically and dynamically placed test obstacles in the acceptance test corridor without false positives causing unnecessary path deviations.
+
+\subsubsection{Orchestrator Validation}
+
+Fifteen natural-language commands of increasing complexity were submitted:
+\begin{itemize}
+    \item Single-waypoint navigation (five commands): all produced correct single-step plans.
+    \item Multi-stop delivery (five commands): all produced correctly ordered multi-step sequences with confirmation steps at intermediate waypoints.
+    \item Conditional return (five commands, e.g., ``if the battery is below 30\% after delivery, go to the dock; otherwise continue patrol''): all five correctly interpreted the conditional and generated branched plans.
+\end{itemize}
+All fifteen commands produced valid, executable mission plans. No hallucinated waypoints or malformed step types were observed.
+
+% -------------------------------------------------------
+\subsection{Standards Compliance}
+% -------------------------------------------------------
+
+The following standards were applied during design and integration:
+
+\begin{itemize}
+    \item \textbf{ISO~13482:2014} (Safety requirements for personal care robots): The 0.8~m/s maximum navigation speed and 0.8~m inflation radius in the costmap satisfy the velocity and proximity limits specified for robots operating in human-shared environments.
+    \item \textbf{ISO~13850} (Emergency stop): The hardware emergency stop relay was tested to confirm that the robot halts within one control cycle ($<$100~ms) on E-stop activation. The soft-stop service (\texttt{/soft\_stop}) provides a software-level equivalent.
+    \item \textbf{ITU-T H.264} (Video compression): The MJPEG camera stream and the MQTT-forwarded video feed use standard compressed formats compatible with web browsers.
+    \item \textbf{IEEE~802.11} (Wireless LAN): The MQTT bridge and cloud AI APIs operate over the standard campus WiFi infrastructure with no modifications to network equipment.
+    \item \textbf{Hospital materials}: Body shell surfaces (acrylic, oak veneer) were selected to be compatible with isopropyl-alcohol-based disinfectant wipes used in clinical environments.
+\end{itemize}
+
+% -------------------------------------------------------
+\subsection{Budget Summary}
+% -------------------------------------------------------
+
+\begin{table}[H]
+\centering
+\caption{Hardware procurement costs (Phase 2).}
+\label{tab:budget}
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{@{} >{\raggedright\arraybackslash}p{6cm} r @{}}
+\toprule
+\textbf{Item} & \textbf{Cost (USD)} \\
+\midrule
+iMRP500 chassis (second-hand)         & 2,000 \\
+10-inch 1080p industrial touch display & 200 \\
+Body panels, structural wood, oak veneer & 800 \\
+Acrylic display frame and surround    & 40 \\
+Cables, fasteners, connectors, misc.  & 200 \\
+\midrule
+\textbf{Total}                        & \textbf{3,240} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+At USD~3,240, TAMRA delivers the same functional envelope as commercial hospital AMRs priced between USD~12,000 and USD~47,500 --- a 73\% cost reduction compared to the nearest commercially available platform with equivalent capability. The open-source software stack (ROS~2, Nav2, standard web technologies) carries no licensing cost.
+
+% -------------------------------------------------------
+\subsection{Conclusion}
+% -------------------------------------------------------
+
+Chapter~5 has documented the full implementation of TAMRA, from the platform transition decision through hardware commissioning, body shell fabrication, software development, and system integration. The iMRP500 was selected after a rigorous eight-platform comparison and reverse-engineered to expose its full sensor suite over a documented WebSocket API. The body shell was designed through a three-stage workflow combining generative concept synthesis, AI-assisted 3D mesh generation, and parametric engineering refinement in Fusion~360, and fabricated locally in Oman within budget and mass constraints. The software stack --- a semantic task orchestrator, voice pipeline, mission engine, MQTT bridge, and remote dashboard --- was developed in parallel with the hardware procurement and completed before integration began.
+
+Measured results confirm voice-to-action latency of $1.55 \pm 0.31$~s (all 20~trials below the 3~s requirement), MQTT round-trip of $159 \pm 30$~ms (all 30~trials below 250~ms), navigation accuracy of $\pm$5~cm, and 100\% plan generation success across 15~orchestrator test commands. The acceptance test scenario, validating all six customer requirements in a single continuous sequence, was completed successfully. The system is realised at USD~3,240 on an open, extensible architecture.
